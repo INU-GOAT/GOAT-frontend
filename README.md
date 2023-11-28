@@ -2,6 +2,8 @@
 
 # npx create-react-app을 이용해 프로젝트만 만들었습니다. 추가 세팅 아무것도 안함 npm 버전은 10.2.4입니다.
 
+# 회원가입 페이지(Signup)를 만들었습니다.
+
 # npm i prop-types후 import PropTypes from "prop-types"; 했음
 
 ## 컴포넌트, interface, type 별칭에는 파스칼 케이스를 쓰기 변수, 배열, 객체, 함수 등 JavaScript 데이터 타입에는 카멜 케이스를 쓰기
