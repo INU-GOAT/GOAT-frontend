@@ -1,8 +1,6 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
-import PropTypes from "prop-types";
-import "./index.css";
-import Login from "./login";
+import ReactDOM from "react-dom";
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<Login></Login>);
+import App from "./App";
+
+ReactDOM.render(<App />, document.getElementById("root"));
