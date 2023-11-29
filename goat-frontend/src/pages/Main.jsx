@@ -10,12 +10,18 @@ import Matching from "./button/Matching";
 
 function Main() {
   const [matching, setMatching] = useState(false);
+  const [btnName, setBtnName] = useState("매칭 시작");
+
   const navigate = useNavigate();
   const startMatch = () => {
     setMatching(true);
     let timer = setTimeout(() => {
-      navigate("/Chat");
+      setMatching(false);
+      setBtnName("매칭 완료!");
     }, 3000);
+    timer = setTimeout(() => {
+      navigate("/Chat");
+    }, 4500);
   };
   return (
     <div className="main">
@@ -29,7 +35,7 @@ function Main() {
         <Gender />
         {matching === false ? (
           <button onClick={startMatch} className="match">
-            매칭 시작
+            {btnName}
           </button>
         ) : (
           <Matching onClick={startMatch} />

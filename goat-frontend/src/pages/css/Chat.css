@@ -1,6 +1,6 @@
 .card {
   position: relative;
-  margin: 50px auto;
+  margin: 30px auto;
   width: 600px;
   display: flex;
   background-color: #fff;
@@ -21,7 +21,7 @@
 }
 
 .chat-window {
-  height: 300px;
+  height: 280px;
   overflow-y: scroll;
 }
 
