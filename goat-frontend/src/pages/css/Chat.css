@@ -1,13 +1,18 @@
 .card {
-  width: 260px;
+  position: relative;
+  margin: 30px auto;
+  width: 600px;
+  display: flex;
   background-color: #fff;
   border: 1px solid #ccc;
+  justify-content: center;
+  flex-direction: column;
   border-radius: 5px;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .chat-header {
-  background-color: #333;
+  background-color: #10b981;
   color: #fff;
   padding: 10px;
   font-size: 18px;
@@ -16,7 +21,7 @@
 }
 
 .chat-window {
-  height: 220px;
+  height: 280px;
   overflow-y: scroll;
 }
 
@@ -44,7 +49,7 @@
 .send-button {
   border: none;
   outline: none;
-  background-color: #333;
+  background-color: #10b981;
   color: #fff;
   font-size: 14px;
   padding: 5px 10px;

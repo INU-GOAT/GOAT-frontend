@@ -3,7 +3,7 @@ import "./css/Chat.css";
 function Chat() {
   return (
     <div class="card">
-      <div class="chat-header">Chat</div>
+      <div class="chat-header">대화방</div>
       <div class="chat-window">
         <ul class="message-list"></ul>
       </div>
@@ -11,10 +11,12 @@ function Chat() {
         <input
           type="text"
           class="message-input"
-          placeholder="Type your message here"
+          placeholder="선수들과 자유롭게 대화를 나누세요"
         />
-        <button class="send-button">Send</button>
+        <button class="send-button">보내기</button>
       </div>
     </div>
   );
 }
+
+export default Chat;

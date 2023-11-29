@@ -1,15 +1,18 @@
 .card-conteiner {
+  width: 300px;
   cursor: default;
-  --color-primary: #275efe;
+  --color-primary: #059669;
   --color-headline: #3f4656;
   --color-text: #99a3ba;
+  margin-top: 25px;
+  margin-bottom: 25px;
 }
 
 .card-content {
   width: 100%;
   max-width: 312px;
   padding: 36px 32px;
-  background: #fff;
+  background: #ffffff;
   border-radius: 10px;
   box-shadow: 0 1px 4px rgba(18, 22, 33, 0.12);
 }
