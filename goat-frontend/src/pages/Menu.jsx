@@ -1,15 +1,37 @@
 import { Outlet, useNavigate } from "react-router-dom";
+import "./css/Menu.css";
 
 function Menu() {
   const navigate = useNavigate();
   return (
-    <div>
+    <div id="wrap">
       <header>
-        <button onClick={() => navigate("/Main")}>GOAT</button>
-        <button>일정관리</button>
-        <button>고객센터</button>
-        <button>클럽</button>
-        <button>마이페이지</button>
+        <nav>
+          <ul class="nav-items">
+            <li>
+              <a
+                onClick={(event) => {
+                  event.preventDefault();
+                  navigate("/Main");
+                }}
+              >
+                GOAT
+              </a>
+            </li>
+            <li>
+              <a onClick={(event) => event.preventDefault()}>일정관리</a>
+            </li>
+            <li>
+              <a onClick={(event) => event.preventDefault()}>클럽</a>
+            </li>
+            <li>
+              <a onClick={(event) => event.preventDefault()}>고객센터</a>
+            </li>
+            <li>
+              <a onClick={(event) => event.preventDefault()}>마이페이지</a>
+            </li>
+          </ul>
+        </nav>
       </header>
       <main>
         <Outlet />

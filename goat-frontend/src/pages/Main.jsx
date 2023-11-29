@@ -14,7 +14,7 @@ function Main() {
       <Gender />
 
       <Time />
-      <button>매칭 시작</button>
+      <button className="match">매칭 시작</button>
       <Matching />
     </div>
   );
