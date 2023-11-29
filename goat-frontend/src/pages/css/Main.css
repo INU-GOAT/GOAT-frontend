@@ -1,0 +1,15 @@
+.main:after {
+  clear: both;
+  display: block;
+  content: "";
+}
+
+.main .rnb {
+  float: right;
+  width: 400px;
+  height: 254px;
+}
+.main .content {
+  float: left;
+  width: 400px;
+}

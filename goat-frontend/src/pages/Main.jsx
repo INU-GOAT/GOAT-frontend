@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import mapImage from "./map.png";
 import "./css/Main.css";
 import Gender from "./button/Gender";
@@ -6,22 +9,35 @@ import Time from "./button/Time";
 import Matching from "./button/Matching";
 
 function Main() {
+  const [matching, setMatching] = useState(false);
+  const navigate = useNavigate();
+  const startMatch = () => {
+    setMatching(true);
+    let timer = setTimeout(() => {
+      navigate("/Chat");
+    }, 3000);
+  };
   return (
-    <div>
-      <h1>GOAT</h1>
-      <img src={mapImage} width={200} />
-      <Sport />
-      <Gender />
-
-      <Time />
-      <button className="match">매칭 시작</button>
-      <Matching />
+    <div className="main">
+      <div className="content">
+        <img src={mapImage} width={500} />
+      </div>
+      <div className="rnb">
+        <Sport />
+        <Time />
+        <Gender />
+        {matching === false ? (
+          <button onClick={startMatch} className="match">
+            매칭 시작
+          </button>
+        ) : (
+          <Matching onClick={startMatch} />
+        )}
+      </div>
     </div>
   );
 }
 
 export default Main;
 
-//메뉴바, 조건설정, 추가예정, 매칭시작 버튼
-//스포츠 종목, 희망 경기 위치, 희망 시간, 희망 성별
-//축구 배드민턴(단식,복식) 농구 풋살
+// 조건 설명 적기

@@ -1,7 +1,7 @@
 .match {
   color: white;
-  background-color: #1d4ed8;
-  --ring-color: #93c5fd;
+  background-color: #10b981;
+  --ring-color: #6ee7b7;
   font-weight: 500;
   border-radius: 0.5rem;
   font-size: 1rem;
@@ -18,7 +18,7 @@
 }
 
 .match:hover {
-  background-color: #1e40af;
+  background-color: #059669;
 }
 
 .match:focus {
@@ -32,15 +32,16 @@
   height: 1.3rem;
   margin-right: 0.75rem;
   color: white;
-  animation: spin_357 1s linear infinite;
+  animation: bounce 1s infinite;
 }
 
-@keyframes spin_357 {
-  from {
-    transform: rotate(0deg);
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(-5px);
   }
 
-  to {
-    transform: rotate(360deg);
+  50% {
+    transform: translateY(5px);
   }
 }
