@@ -1,56 +1,90 @@
-.cta {
+.btn {
+  margin-top: 50px;
+  margin-left: 390px;
+  --color: #4dd4ac;
   position: relative;
-  margin: auto;
-  padding: 12px 18px;
-  transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.5s;
   border: none;
-  background: none;
+  background-color: transparent;
 }
 
-.cta:before {
+.btn div {
+  letter-spacing: 2px;
+  font-weight: bold;
+  background: var(--color);
+  border-radius: 2rem;
+  color: black;
+  padding: 1rem;
+}
+
+.btn::before {
   content: "";
+  z-index: -1;
+  background-color: var(--color);
+  border: 2px solid black;
+  border-radius: 2rem;
+  width: 110%;
+  height: 100%;
   position: absolute;
-  top: 0;
-  left: 0;
-  display: block;
-  border-radius: 50px;
-  background: #b1dae7;
-  width: 45px;
-  height: 45px;
-  transition: all 0.3s ease;
+  transform: rotate(10deg);
+  transition: 0.5s;
+  opacity: 0.2;
 }
 
-.cta span {
+.btn:hover {
+  cursor: pointer;
+  filter: brightness(1.2);
+  transform: scale(1.1);
+}
+
+.btn:hover::before {
+  transform: rotate(0deg);
+  opacity: 1;
+}
+
+.btn svg {
+  transform: translateX(-200%);
+  transition: 0.5s;
+  width: 0;
+  opacity: 0;
+}
+
+.btn:hover svg {
+  width: 25px;
+  transform: translateX(0%);
+  opacity: 1;
+}
+
+.btn:active {
+  filter: brightness(1.4);
+}
+.bg {
+  height: 100vh;
+
+  background-image: url("./background.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+.bg::before {
+  content: "";
+  opacity: 0.5;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  background-color: #000;
+}
+.text {
+  margin-top: 50px;
+  color: #fff;
+  text-align: center;
+  line-height: 50px;
   position: relative;
-  font-family: "Ubuntu", sans-serif;
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  color: #234567;
-}
-
-.cta svg {
-  position: relative;
-  top: 0;
-  margin-left: 10px;
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke: #234567;
-  stroke-width: 2;
-  transform: translateX(-5px);
-  transition: all 0.3s ease;
-}
-
-.cta:hover:before {
-  width: 100%;
-  background: #b1dae7;
-}
-
-.cta:hover svg {
-  transform: translateX(0);
-}
-
-.cta:active {
-  transform: scale(0.95);
 }

@@ -1,11 +1,3 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-:root {
-  --padding: 40px;
-}
 h1 {
   padding: 20px;
   font-size: 1.5em;
@@ -46,4 +38,14 @@ h1 {
   background-color: #ffe4c4;
   color: #547fb2;
   border-radius: 4px;
+}
+.bg {
+  height: 100vh;
+  padding-top: 30px;
+  background-image: url("./background.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top center;
+
+  background-attachment: fixed;
 }
