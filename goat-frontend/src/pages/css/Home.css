@@ -54,3 +54,12 @@
 .cta:active {
   transform: scale(0.95);
 }
+.bg {    
+  height: 100vh;
+  background-image: url("./background.jpg"); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: cover;
+  background-attachment: fixed;
+}
