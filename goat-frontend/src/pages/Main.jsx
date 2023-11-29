@@ -1,7 +1,10 @@
+import mapImage from "./map.png";
+
 function Main() {
   return (
     <div>
       <h1>GOAT</h1>
+      <img src={mapImage} width={200} />
     </div>
   );
 }
