@@ -10,6 +10,7 @@ function Menu() {
           <ul class="nav-items">
             <li>
               <a
+                class="main-items"
                 onClick={(event) => {
                   event.preventDefault();
                   navigate("/Main");
