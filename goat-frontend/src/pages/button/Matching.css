@@ -11,10 +11,12 @@
   padding-top: 0.7rem;
   padding-bottom: 0.7rem;
   text-align: center;
-  margin-right: 0.5rem;
+  margin-top: 0.7rem;
+  margin-left: 9rem;
   display: inline-flex;
   align-items: center;
   border: none;
+  float: left;
 }
 
 .match:hover {

@@ -6,10 +6,12 @@
 
 .main .rnb {
   float: right;
-  width: 400px;
+  width: 330px;
   height: 254px;
 }
+
 .main .content {
   float: left;
+  margin: 5px;
   width: 400px;
 }

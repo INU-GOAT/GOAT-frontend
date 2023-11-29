@@ -2,8 +2,9 @@
   display: table-cell;
   position: relative;
   width: 20px;
-  height: 60px;
+  height: 70px;
   box-sizing: border-box;
+  float: left;
 }
 
 .button-cover {
@@ -62,7 +63,7 @@
 
 .layer {
   width: 100%;
-  background-color: #ebf7fc;
+  background-color: #c8dae2;
   transition: 0.3s ease all;
   z-index: 1;
 }
@@ -106,5 +107,5 @@
 }
 
 #button-3 .checkbox:checked ~ .layer {
-  background-color: #fcebeb;
+  background-color: #e6c9c9;
 }

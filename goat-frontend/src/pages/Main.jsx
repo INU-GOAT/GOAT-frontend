@@ -25,6 +25,7 @@ function Main() {
       <div className="rnb">
         <Sport />
         <Time />
+
         <Gender />
         {matching === false ? (
           <button onClick={startMatch} className="match">
