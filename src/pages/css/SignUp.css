@@ -1,0 +1,48 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+:root {
+  --padding: 60px;
+}
+h1 {
+  padding: 20px;
+  font-size: 1.5em;
+}
+.box {
+  position: relative;
+  margin: 50px auto;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--padding);
+  background-color: #c4ffdd;
+  border-radius: 7px;
+}
+
+.box form input,
+.box form button {
+  padding: 15px;
+  font-size: 1.2em;
+  border: none;
+}
+.box form input {
+  margin-bottom: 25px;
+}
+.box form button {
+  background-color: #ffe4c4;
+  color: #547fb2;
+  border-radius: 4px;
+  margin-bottom: 25px;
+  width: 100%;
+}
+.signUp {
+  padding: 15px;
+  font-size: 1.2em;
+  border: none;
+  background-color: #ffe4c4;
+  color: #547fb2;
+  border-radius: 4px;
+}
