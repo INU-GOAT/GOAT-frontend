@@ -18,7 +18,6 @@ function KakaoLogIn() {
   const kakaoLoginHandler = () => {
     Kakao.Auth.authorize({
       redirectUri,
-      scope: "account_email",
     });
   };
 
