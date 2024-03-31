@@ -1,23 +1,29 @@
-import KakaoLogin from "react-kakao-login";
+import React, { useEffect } from "react";
+
+const { Kakao } = window;
 
 function KakaoLogIn() {
-  const kakaoClientId = "37417980d0926f07576f94eecf89bebf";
-  const kakaoOnSuccess = async (data) => {
-    console.log(data);
-    const idToken = data.response.access_token; // 엑세스 토큰 백엔드로 전달
-    console.log(idToken);
+  const initKakao = () => {
+    if (Kakao && !Kakao.isInitialized()) {
+      Kakao.init("37417980d0926f07576f94eecf89bebf");
+    }
   };
-  const kakaoOnFailure = (error) => {
-    console.log(error);
+
+  useEffect(() => {
+    initKakao();
+  }, []);
+
+  const kakaoLoginHandler = () => {
+    Kakao.Auth.authorize({
+      redirectUri: "http://15.165.113.9:8080/login/oauth2/code/kakao",
+      prompt: "login",
+    });
   };
+
   return (
-    <>
-      <KakaoLogin
-        token={kakaoClientId}
-        onSuccess={kakaoOnSuccess}
-        onFail={kakaoOnFailure}
-      />
-    </>
+    <button onClick={kakaoLoginHandler}>
+      <span>카카오 로그인</span>
+    </button>
   );
 }
 
