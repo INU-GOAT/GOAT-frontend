@@ -9,7 +9,7 @@ function KakaoLogIn() {
 
   const initKakao = () => {
     const { Kakao } = window;
-    const JS_KEY = process.env.REACT_APP_JS_KEY;
+    const JS_KEY = "37417980d0926f07576f94eecf89bebf";
     if (Kakao && !Kakao.isInitialized()) {
       Kakao.init(JS_KEY);
     }
