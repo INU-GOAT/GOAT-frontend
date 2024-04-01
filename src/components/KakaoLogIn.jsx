@@ -2,12 +2,15 @@ import React, { useEffect } from "react";
 
 function KakaoLogIn() {
   const { Kakao } = window;
-
-  const redirectUri = "http://15.165.113.9:8080/login/oauth2/code/kakao";
+  const JS_KEY = process.env.REACT_APP_JS_KEY;
+  const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
+  console.log(JS_KEY);
 
   const initKakao = () => {
+    const { Kakao } = window;
+    const JS_KEY = process.env.REACT_APP_JS_KEY;
     if (Kakao && !Kakao.isInitialized()) {
-      Kakao.init("37417980d0926f07576f94eecf89bebf");
+      Kakao.init(JS_KEY);
     }
   };
 
@@ -17,7 +20,7 @@ function KakaoLogIn() {
 
   const kakaoLoginHandler = () => {
     Kakao.Auth.authorize({
-      redirectUri,
+      REDIRECT_URI,
     });
   };
 
