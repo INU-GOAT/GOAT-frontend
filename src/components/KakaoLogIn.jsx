@@ -5,7 +5,7 @@ const { Kakao } = window;
 function KakaoLogIn() {
   const initKakao = () => {
     if (Kakao && !Kakao.isInitialized()) {
-      Kakao.init(process.env.REACT_APP_JS_KEY);
+      Kakao.init("37417980d0926f07576f94eecf89bebf");
     }
   };
 
@@ -15,7 +15,7 @@ function KakaoLogIn() {
 
   const kakaoLoginHandler = () => {
     Kakao.Auth.authorize({
-      redirectUri: process.env.REACT_APP_JS_KEY,
+      redirectUri: "http://15.165.113.9:8080/login/oauth2/code/kakao",
     });
   };
 
