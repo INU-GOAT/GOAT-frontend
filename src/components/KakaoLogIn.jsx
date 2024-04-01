@@ -2,13 +2,14 @@ import React, { useEffect } from "react";
 
 function KakaoLogIn() {
   const { Kakao } = window;
-  const JS_KEY = process.env.REACT_APP_JS_KEY;
-  const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
+  const JS_KEY = "37417980d0926f07576f94eecf89bebf";
+  const REDIRECT_URI = "http://15.165.113.9:8080/login/oauth2/code/kakao";
   console.log(JS_KEY);
+  console.log(REDIRECT_URI);
 
   const initKakao = () => {
     const { Kakao } = window;
-    const JS_KEY = process.env.REACT_APP_JS_KEY;
+    const JS_KEY = "37417980d0926f07576f94eecf89bebf";
     if (Kakao && !Kakao.isInitialized()) {
       Kakao.init(JS_KEY);
     }
