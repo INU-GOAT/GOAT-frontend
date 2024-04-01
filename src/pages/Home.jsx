@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
 import "./css/Home.css";
-import KakaoLogIn from "./button/KakaoLogIn";
+import KakaoLogIn from "../components/KakaoLogIn";
 
 function Home() {
   const navigate = useNavigate();

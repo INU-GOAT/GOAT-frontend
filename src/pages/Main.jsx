@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import mapImage from "./map.png";
+import mapImage from "../assets/map.png";
 import "./css/Main.css";
-import Gender from "./button/Gender";
-import Sport from "./button/Sport";
-import Time from "./button/Time";
-import Matching from "./button/Matching";
+import Gender from "../components/Gender";
+import Sport from "../components/Sport";
+import Time from "../components/Time";
+import Matching from "../components/Matching";
 
 function Main() {
   const [matching, setMatching] = useState(false);
