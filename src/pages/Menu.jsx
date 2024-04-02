@@ -20,10 +20,16 @@ function Menu() {
               </a>
             </li>
             <li>
-              <a onClick={(event) => event.preventDefault()}>일정관리</a>
+              <a onClick={(event) => {
+                event.preventDefault();
+                navigate("/Schedule");
+                }}>일정관리</a>
             </li>
             <li>
-              <a onClick={(event) => event.preventDefault()}>클럽</a>
+              <a onClick={(event) => {
+                event.preventDefault();
+                navigate("/Club");
+                }}>클럽</a>
             </li>
             <li>
               <a onClick={(event) => event.preventDefault()}>고객센터</a>
