@@ -12,7 +12,7 @@ function LogInHandler() {
   useEffect(() => {
     const LogIn = async () => {
       await axios
-        .post("https://15.165.113.9:8080/api/users/code", { code }, {})
+        .post("http://15.165.113.9:8080/api/users/code", { code }, {})
         .then((res) => {
           console.log(res);
         })
