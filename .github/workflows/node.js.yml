@@ -52,4 +52,3 @@ jobs: # Job 설정
             docker rmi ${{ secrets.USERNAME }}/${{ secrets.PROJECT_NAME }}
             docker pull ${{ secrets.USERNAME }}/${{ secrets.PROJECT_NAME }}
             docker run --network=host -d -p ${{ secrets.DEPLOY_PORT }}:3000 --name ${{ secrets.APPLICATION_NAME }} -e REACT_APP_JS_KEY=${{ secrets.REACT_APP_JS_KEY }} -e REACT_APP_REDIRECT_URI=${{ secrets.REACT_APP_REDIRECT_URI }} ${{ secrets.USERNAME }}/${{ secrets.PROJECT_NAME }}
-

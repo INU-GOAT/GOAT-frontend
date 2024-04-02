@@ -1,10 +1,14 @@
-import { useNavigate } from "react-router-dom";
-import React from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import React, { useEffect } from "react";
 import { SyncLoader } from "react-spinners";
 
 function LogInHandler() {
   const navigate = useNavigate();
-  const code = new URL(window.location.href).searchParams.get("code");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const code = searchParams.get("code");
+  console.log(code);
+
+  useEffect(() => {});
 
   return (
     <div backgroundcolor="#9376E0">
