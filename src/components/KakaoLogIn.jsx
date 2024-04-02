@@ -15,7 +15,7 @@ function KakaoLogIn() {
 
   const kakaoLoginHandler = () => {
     Kakao.Auth.authorize({
-      redirectUri: "http://15.165.113.9:8080/login/oauth2/code/kakao",
+      redirectUri: "http://15.165.113.9:3000/login/oauth2/code/kakao",
     });
   };
 
