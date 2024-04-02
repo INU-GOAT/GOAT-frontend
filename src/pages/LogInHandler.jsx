@@ -12,18 +12,15 @@ function LogInHandler() {
   useEffect(() => {
     const LogIn = async () => {
       await axios
-        .get("https://15.165.113.9:8080/api/users/code", code, {
-          "Content-Type": "application/json",
-          withCredentials: true,
-        })
+        .post("https://15.165.113.9:8080/api/users/code", { code }, {})
         .then((res) => {
           console.log(res);
         })
         .catch((error) => {
           console.error("실패");
         });
-      LogIn();
     };
+    LogIn();
   }, [code]);
 
   return (
