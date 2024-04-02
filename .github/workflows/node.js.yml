@@ -51,4 +51,5 @@ jobs: # Job 설정
             docker rm ${{ secrets.APPLICATION_NAME }}
             docker rmi ${{ secrets.USERNAME }}/${{ secrets.PROJECT_NAME }}
             docker pull ${{ secrets.USERNAME }}/${{ secrets.PROJECT_NAME }}
-            docker run --network=host -d -p ${{ secrets.DEPLOY_PORT }}:3000 -e TZ=Asia/Seoul --name ${{ secrets.APPLICATION_NAME }} ${{ secrets.USERNAME }}/${{ secrets.PROJECT_NAME }}
+            docker run --network=host -d -p ${DEPLOY_PORT}:3000 -e TZ=Asia/Seoul -e REACT_APP_JS_KEY=${REACT_APP_JS_KEY} -e REACT_APP_REDIRECT_URI=${REACT_APP_REDIRECT_URI} --name ${APPLICATION_NAME} ${USERNAME}/${PROJECT_NAME}
+
