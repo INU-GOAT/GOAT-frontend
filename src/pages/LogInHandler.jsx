@@ -24,7 +24,7 @@ function LogInHandler() {
         });
       LogIn();
     };
-  }, []);
+  }, [code]);
 
   return (
     <div backgroundcolor="#9376E0">
