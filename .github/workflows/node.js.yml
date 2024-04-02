@@ -16,15 +16,10 @@ jobs: # Job 설정
       - name: Checkout source code. # Repo checkout
         uses: actions/checkout@v3
 
-      # - name: .env setting # .env 환경변수 등록
-      #   run: |
-      #     echo "REACT_APP_JS_KEY=${{ secrets.REACT_APP_JS_KEY }}" >> .env
-      #     echo "REACT_APP_REDIRECT_URI=${{ secrets.REACT_APP_REDIRECT_URI }}" >> .env
-
-      - name: make env file
+      - name: .env setting # .env 환경변수 등록
         run: |
-          touch .env
-          echo "${{secrets.REACT_APP_KEYS}}" > .env
+          echo "REACT_APP_JS_KEY=${{ secrets.REACT_APP_JS_KEY }}" >> .env
+          echo "REACT_APP_REDIRECT_URI=${{ secrets.REACT_APP_REDIRECT_URI }}" >> .env
 
       - name: Install dependencies # 의존 파일 설치
         run: npm install
@@ -56,4 +51,4 @@ jobs: # Job 설정
             docker rm ${{ secrets.APPLICATION_NAME }}
             docker rmi ${{ secrets.USERNAME }}/${{ secrets.PROJECT_NAME }}
             docker pull ${{ secrets.USERNAME }}/${{ secrets.PROJECT_NAME }}
-            docker run --network=host -d -p ${{ secrets.DEPLOY_PORT }}:3000 -e TZ=Asia/Seoul --name ${{ secrets.APPLICATION_NAME }} ${{ secrets.USERNAME }}/${{ secrets.PROJECT_NAME }}
+            docker run --network=host -d -p ${{ secrets.DEPLOY_PORT }}:3000 --name ${{ secrets.APPLICATION_NAME }} -e REACT_APP_JS_KEY=${{ secrets.REACT_APP_JS_KEY }} -e REACT_APP_REDIRECT_URI=${{ secrets.REACT_APP_REDIRECT_URI }} ${{ secrets.USERNAME }}/${{ secrets.PROJECT_NAME }}
