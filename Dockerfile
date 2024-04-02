@@ -9,7 +9,7 @@ COPY package.json .
 RUN npm install
 
 # .env 파일 복사
-COPY ../.env .
+COPY .env .
 
 # 소스 코드 복사
 COPY . .
