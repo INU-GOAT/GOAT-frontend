@@ -24,7 +24,7 @@ function Menu() {
             <li>
               <a onClick={(event) => {
                 event.preventDefault();
-                navigate("/RecordPage");
+                navigate("/Schedule");
                 }}>전적</a>
             </li>
             <li>
