@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import MatchType from '../components/MatchType';
+import MatchType from '../components/Matchtype';
 import TeamInvite from '../components/TeamInvite';
 import Sport from '../components/Sport';
 import Timelist from '../components/Timelist';
