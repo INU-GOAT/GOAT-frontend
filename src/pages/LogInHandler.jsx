@@ -7,29 +7,30 @@ function LogInHandler() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const code = searchParams.get("code");
-  const [accessToken, setAccessToken] = useState(null);
-  const [refreshToken, setRefreshToken] = useState(null);
 
   console.log(code);
 
   useEffect(() => {
     const getToken = async () => {
-      console.log(code);
       await axios
-        .post("http://15.165.113.9:8080/api/users/code", {}, { code: code })
+        .post("http://15.165.113.9:8080/api/users/code", null, {
+          headers: { code: code, withCredentials: true },
+        })
         .then((res) => {
-          console.log(res);
-          setAccessToken(res.data.accessToken);
-          setRefreshToken(res.data.refreshToken);
+          const accessToken = res.data.data.accessToken;
+          const refreshToken = res.data.data.refreshToken;
+          getUserId(accessToken);
         })
         .catch((error) => {
-          console.log(code);
+          console.log(error);
           console.error("getToken 실패");
         });
     };
-    const getUserId = async () => {
+    const getUserId = async (accessToken) => {
       await axios
-        .get(`http://15.165.113.9:8080/api/users?Auth=${accessToken}`)
+        .get("http://15.165.113.9:8080/api/users/code", {
+          headers: { Auth: accessToken, withCredentials: true },
+        })
         .then((res) => {
           console.log(res);
           if (res.data === -1) {
@@ -41,12 +42,13 @@ function LogInHandler() {
           }
         })
         .catch((error) => {
+          console.log(error);
           console.error("getId 실패");
         });
     };
     getToken();
-    getUserId();
-  }, [accessToken, code, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div backgroundcolor="#9376E0">
