@@ -15,7 +15,7 @@ function Menu() {
                 className="main-items"
                 onClick={(event) => {
                   event.preventDefault();
-                  navigate("/Main");
+                  navigate("./Main");
                 }}
               >
                 GOAT
@@ -24,19 +24,19 @@ function Menu() {
             <li>
               <a onClick={(event) => {
                 event.preventDefault();
-                navigate("/Schedule");
+                navigate("./Schedule");
                 }}>전적</a>
             </li>
             <li>
               <a onClick={(event) => {
                 event.preventDefault();
-                navigate("/Club");
+                navigate("./Club");
                 }}>클럽</a>
             </li>
             <li>
               <a onClick={(event) => {
                 event.preventDefault();
-                navigate("/MyPage");
+                navigate("./MyPage");
                 }}>마이페이지</a>
             </li>
           </ul>
