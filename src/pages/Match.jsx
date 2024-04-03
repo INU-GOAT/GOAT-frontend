@@ -4,7 +4,7 @@ import TeamInvite from '../components/Teaminvite';
 import Sport from '../components/Sport';
 import Timelist from '../components/Timelist';
 import Matching from '../components/Matching';
-import './css/match.css';
+import './css/Match.css';
 
 const Match = () => {
   const [matchType, setMatchType] = useState('');
