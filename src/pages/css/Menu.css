@@ -27,14 +27,18 @@ nav {
 }
 
 .nav-items {
-  text-align: center;
+  text-align: right;
 }
 .nav-items > li {
   display: inline-block;
+  margin-left: 20px;
+}
+.nav-items > li:first-child {
+  margin-left: auto;
 }
 .nav-items > li > a {
   line-height: 60px;
-  padding: 0 30px;
+  padding: 0 15px;
   color: rgba(0, 0, 0, 0.4);
 }
 .nav-items > li > a:hover {
