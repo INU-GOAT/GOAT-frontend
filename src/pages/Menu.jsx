@@ -24,19 +24,13 @@ function Menu() {
             <li>
               <a onClick={(event) => {
                 event.preventDefault();
-<<<<<<< HEAD
                 navigate("/RecordPage");
                 }}>전적</a>
-=======
-                navigate("/Schedule");
-                }}>일정관리</a>
->>>>>>> a74768a (일정,클럽생성)
             </li>
             <li>
               <a onClick={(event) => {
                 event.preventDefault();
                 navigate("/ClubPage");
-                navigate("/Club");
                 }}>클럽</a>
             </li>
             <li>
