@@ -1,11 +1,11 @@
 import axios from "axios";
 
 import React from "react";
-import { Navigate, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 const Kakao = window;
 
 function SignOut() {
-  Navigate = useNavigate();
+  const navigate = useNavigate();
 
   const unlinkApp = () => {
     Kakao.API.request({
@@ -26,7 +26,7 @@ function SignOut() {
       .delete("http://15.165.113.9:8080/api/users", { accessToken })
       .then((res) => {
         alert("회원탈퇴완료");
-        Navigate("/Home");
+        navigate("/Home");
       })
       .catch((error) => {
         console.error(error);

@@ -1,6 +1,7 @@
-import React from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
-import './css/Menu.css';
+import React from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import "./css/Menu.css";
+import LogOut from "../components/LogOut";
 
 function Menu() {
   const navigate = useNavigate();
@@ -22,22 +23,34 @@ function Menu() {
               </a>
             </li>
             <li>
-              <a onClick={(event) => {
-                event.preventDefault();
-                navigate("./Schedule");
-                }}>전적</a>
+              <a
+                onClick={(event) => {
+                  event.preventDefault();
+                  navigate("./Schedule");
+                }}
+              >
+                전적
+              </a>
             </li>
             <li>
-              <a onClick={(event) => {
-                event.preventDefault();
-                navigate("./Club");
-                }}>클럽</a>
+              <a
+                onClick={(event) => {
+                  event.preventDefault();
+                  navigate("./Club");
+                }}
+              >
+                클럽
+              </a>
             </li>
             <li>
-              <a onClick={(event) => {
-                event.preventDefault();
-                navigate("./MyPage");
-                }}>마이페이지</a>
+              <a
+                onClick={(event) => {
+                  event.preventDefault();
+                  navigate("./MyPage");
+                }}
+              >
+                마이페이지
+              </a>
             </li>
           </ul>
         </nav>
