@@ -28,7 +28,7 @@ function LogInHandler() {
     };
     const getUserId = async (accessToken) => {
       await axios
-        .get("http://15.165.113.9:8080/api/users/code", {
+        .get("http://15.165.113.9:8080/api/users", {
           headers: { Auth: accessToken, withCredentials: true },
         })
         .then((res) => {
