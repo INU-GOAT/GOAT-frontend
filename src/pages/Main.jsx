@@ -8,6 +8,7 @@ import Sport from "../components/Sport";
 import Time from "../components/Time";
 import Matching from "../components/Matching";
 import KakaoMap from "../components/KaKaoMap";
+import LogOut from "../components/LogOut";
 
 function Main() {
   const [matching, setMatching] = useState(false);
@@ -43,6 +44,7 @@ function Main() {
           <Matching onClick={startMatch} />
         )}
       </div>
+      <LogOut></LogOut>
     </div>
   );
 }

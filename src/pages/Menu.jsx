@@ -52,9 +52,6 @@ function Menu() {
                 마이페이지
               </a>
             </li>
-            <li>
-              <LogOut />
-            </li>
           </ul>
         </nav>
       </header>

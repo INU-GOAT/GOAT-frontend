@@ -9,6 +9,7 @@ function SignUp() {
 
   const [age, setAge] = useState(null);
   const [gender, setGender] = useState(null);
+  const [nickname, setNickname] = useState(null);
   const [preferSport, setPreferSport] = useState(null);
   const [soccerTier, setSoccerTier] = useState(null);
   const [basketballTier, setBasketballTier] = useState(null);
@@ -26,6 +27,7 @@ function SignUp() {
         {
           age,
           gender,
+          nickname,
           prefer_sport: preferSport,
           soccer_tier: soccerTier,
           basketball_tier: basketballTier,
@@ -52,6 +54,15 @@ function SignUp() {
     <div className="box">
       <h1>회원가입</h1>
       <form onSubmit={signUpHandler}>
+        <p />
+        <label>닉네임</label>
+        <input
+          onChange={(event) => {
+            setNickname(event.target.value);
+          }}
+          required
+        ></input>
+        <p />
         <p />
         <label>나이대</label>
         <input
