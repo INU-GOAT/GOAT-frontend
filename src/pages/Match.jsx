@@ -33,10 +33,10 @@ const Match = () => {
       {matchType === '팀' && <TeamInvite />}
       <div>
         <h3>종목 선택</h3>
-        <Sport sport="축구" onClick={handleSportClick} />
-        <Sport sport="농구" onClick={handleSportClick} />
-        <Sport sport="배드민턴" onClick={handleSportClick} />
-        <Sport sport="탁구" onClick={handleSportClick} />
+        <Sport sport="축구" isSelected={selectedSport === '축구'} onClick={handleSportClick} />
+        <Sport sport="농구" isSelected={selectedSport === '농구'} onClick={handleSportClick} />
+        <Sport sport="배드민턴" isSelected={selectedSport === '배드민턴'} onClick={handleSportClick} />
+        <Sport sport="탁구" isSelected={selectedSport === '탁구'} onClick={handleSportClick} />
       </div>
       <div>
         <h3>시간 선택</h3>
