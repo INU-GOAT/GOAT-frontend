@@ -27,14 +27,14 @@ nav {
 }
 
 .nav-items {
-  text-align: right;
+  text-align: center;
 }
 .nav-items > li {
   display: inline-block;
   margin-left: 20px;
 }
 .nav-items > li:first-child {
-  margin-left: auto;
+  margin-left: 0;
 }
 .nav-items > li > a {
   line-height: 60px;
@@ -43,20 +43,4 @@ nav {
 }
 .nav-items > li > a:hover {
   color: rgba(0, 0, 0, 0.8);
-}
-
-/* Media Query for Small Screens */
-@media (max-width: 768px) {
-  .nav-items {
-    display: none;
-  }
-
-  .nav-toggle {
-    display: block;
-  }
-
-  .nav-toggle:checked ~ .nav-items {
-    display: block;
-    text-align: center;
-  }
 }
