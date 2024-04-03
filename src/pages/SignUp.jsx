@@ -6,7 +6,7 @@ import "./css/SignUp.css";
 
 function SignUp() {
   const { state } = useLocation();
-  console.log(state.accessToken);
+
   const [age, setAge] = useState(null);
   const [gender, setGender] = useState(null);
   const [preferSport, setPreferSport] = useState(null);
@@ -19,7 +19,7 @@ function SignUp() {
 
   const signUpHandler = async (e) => {
     e.preventDefault();
-
+    console.log(state.accessToken);
     await axios
       .post(
         "http://15.165.113.9:8080/api/users",
@@ -32,7 +32,11 @@ function SignUp() {
           badminton_tier: badmintonTier,
           tableTennis_tier: tableTennisTier,
         },
-        { "Content-Type": "application/json", Auth: state.accessToken }
+        {
+          "Content-Type": "application/json",
+          headers: { Auth: state.accessToken },
+          withCredentials: true,
+        }
       )
       .then((res) => {
         console.log(res);
