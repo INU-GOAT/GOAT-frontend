@@ -28,12 +28,12 @@ function LogInHandler() {
     };
     const getUserId = async (accessToken) => {
       await axios
-        .get("http://15.165.113.9:8080/api/users/code", {
+        .get("http://15.165.113.9:8080/api/users", {
           headers: { Auth: accessToken, withCredentials: true },
         })
         .then((res) => {
           console.log(res);
-          if (res.data === -1) {
+          if (res.data.data === -1) {
             alert("회원가입이 필요합니다.");
             navigate("/SignUp");
           } else {
