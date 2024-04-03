@@ -16,6 +16,7 @@ function KakaoLogIn() {
   const kakaoLoginHandler = () => {
     Kakao.Auth.authorize({
       redirectUri: process.env.REACT_APP_REDIRECT_URI,
+      prompt: "login",
     });
   };
 
