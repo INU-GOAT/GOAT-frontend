@@ -7,8 +7,6 @@ function LogInHandler() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const code = searchParams.get("code");
-  const [accessToken, setAccessToken] = useState(null);
-  const [refreshToken, setRefreshToken] = useState(null);
 
   console.log(code);
 
@@ -21,17 +19,17 @@ function LogInHandler() {
         })
         .then((res) => {
           console.log(res);
-          setAccessToken(res.data.accessToken);
+          const accessToken = res.data.accessToken;
           console.log(accessToken);
-          setRefreshToken(res.data.refreshToken);
-          getUserId();
+          const refreshToken = res.data.refreshToken;
+          getUserId(accessToken);
         })
         .catch((error) => {
           console.log(error);
           console.error("getToken 실패");
         });
     };
-    const getUserId = async () => {
+    const getUserId = async (accessToken) => {
       console.log(accessToken);
       await axios
         .get(`http://15.165.113.9:8080/api/users?Auth=${accessToken}`)
