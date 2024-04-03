@@ -22,6 +22,7 @@ function LogInHandler() {
         .then((res) => {
           console.log(res);
           setAccessToken(res.data.accessToken);
+          console.log(accessToken);
           setRefreshToken(res.data.refreshToken);
           getUserId();
         })
@@ -31,6 +32,7 @@ function LogInHandler() {
         });
     };
     const getUserId = async () => {
+      console.log(accessToken);
       await axios
         .get(`http://15.165.113.9:8080/api/users?Auth=${accessToken}`)
         .then((res) => {
@@ -44,6 +46,7 @@ function LogInHandler() {
           }
         })
         .catch((error) => {
+          console.log(error);
           console.error("getId 실패");
         });
     };
