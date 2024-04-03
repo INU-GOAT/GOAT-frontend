@@ -14,7 +14,7 @@ function LogInHandler() {
     const getToken = async () => {
       await axios
         .post("http://15.165.113.9:8080/api/users/code", null, {
-          headers: { code: code, withCredentials: true },
+          headers: { code: code },
         })
         .then((res) => {
           const accessToken = res.data.data.accessToken;
@@ -29,7 +29,7 @@ function LogInHandler() {
     const getUserId = async (accessToken) => {
       await axios
         .get("http://15.165.113.9:8080/api/users", {
-          headers: { Auth: accessToken, withCredentials: true },
+          headers: { Auth: accessToken },
         })
         .then((res) => {
           console.log(res);
