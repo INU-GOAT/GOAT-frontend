@@ -1,104 +1,111 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import "./css/SignUp.css";
 
 function SignUp() {
-  const [id, setId] = useState("");
-  const [pw, setPw] = useState("");
-  const [pwCheck, setPwCheck] = useState("");
-  const [name, setName] = useState("");
-  const [nickName, setNickName] = useState("");
-  const [age, setAge] = useState("");
-  //const [gender, setGender] = useState("");
-  const [phone, setPhone] = useState("");
+  const [age, setAge] = useState(null);
+  const [gender, setGender] = useState(null);
+  const [preferSport, setPreferSport] = useState(null);
+  const [soccerTier, setSoccerTier] = useState(null);
+  const [basketballTier, setBasketballTier] = useState(null);
+  const [badmintonTier, setBadmintonTier] = useState(null);
+  const [tableTennisTier, setTableTennisTier] = useState(null);
+
   const navigate = useNavigate();
+
+  const signUpHandler = async (e) => {
+    e.preventDefault();
+
+    await axios
+      .post(
+        "http://15.165.113.9:8080/api/users",
+        {
+          age,
+          gender,
+          prefer_sport: preferSport,
+          soccer_tier: soccerTier,
+          basketball_tier: basketballTier,
+          badminton_tier: badmintonTier,
+          tableTennis_tier: tableTennisTier,
+        },
+        { "Content-Type": "application/json" }
+      )
+      .then((res) => {
+        console.log(res);
+        //필요한 값 사용하기
+        navigate("/Main");
+      })
+      .catch((error) => {
+        console.error("회원가입 실패");
+      });
+  };
 
   return (
     <div className="box">
       <h1>회원가입</h1>
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-
-          console.log(id, pw);
-          navigate("/LogIn");
-        }}
-      >
+      <form onSubmit={signUpHandler}>
         <p />
-        <label>아이디</label>
-        <input
-          onChange={(event) => {
-            setId(event.target.value);
-          }}
-          required
-          type="text"
-          value={id}
-        ></input>
-        <p />
-        <label>비밀번호</label>
-        <input
-          onChange={(event) => {
-            setPw(event.target.value);
-          }}
-          required
-          type="password"
-          value={pw}
-        ></input>
-        <p />
-        <label>비밀번호 확인</label>
-        <input
-          onChange={(event) => {
-            setPwCheck(event.target.value);
-          }}
-          required
-          type="password"
-          value={pwCheck}
-        ></input>
-        <p />
-        <label>이름</label>
-        <input
-          onChange={(event) => {
-            setName(event.target.value);
-          }}
-          required
-          type="text"
-          value={name}
-        ></input>
-        <p />
-        <label>닉네임</label>
-        <input
-          onChange={(event) => {
-            setNickName(event.target.value);
-          }}
-          required
-          type="text"
-          value={nickName}
-        ></input>
-        <p />
-        <label>나이</label>
+        <label>나이대</label>
         <input
           onChange={(event) => {
             setAge(event.target.value);
           }}
           required
           type="text"
-          value={age}
         ></input>
-        <p /> <label for="gender">성별</label>
-        <input type="radio" id="gender" name="gender" value="male"></input>
-        <label for="male">남성</label>
-        <input type="radio" id="gender" name="gender" value="femal"></input>
-        <label for="female">여성</label>
         <p />
-        <label>전화번호</label>
+        <label>성별</label>
         <input
           onChange={(event) => {
-            setPhone(event.target.value);
+            setGender(event.target.value);
+          }}
+          required
+        ></input>
+        <p />
+        <label>선호 스포츠</label>
+        <input
+          onChange={(event) => {
+            setPreferSport(event.target.value);
+          }}
+          required
+        ></input>
+        <p />
+        <label>축구실력</label>
+        <input
+          onChange={(event) => {
+            setSoccerTier(event.target.value);
           }}
           required
           type="text"
-          value={phone}
+        ></input>
+        <p />
+        <label>농구실력</label>
+        <input
+          onChange={(event) => {
+            setBasketballTier(event.target.value);
+          }}
+          required
+          type="text"
+        ></input>
+        <p />
+        <label>배드민턴실력</label>
+        <input
+          onChange={(event) => {
+            setBadmintonTier(event.target.value);
+          }}
+          required
+          type="text"
+        ></input>
+
+        <label>탁구실력</label>
+        <input
+          onChange={(event) => {
+            setTableTennisTier(event.target.value);
+          }}
+          required
+          type="text"
         ></input>
         <button>가입하기</button>
       </form>
