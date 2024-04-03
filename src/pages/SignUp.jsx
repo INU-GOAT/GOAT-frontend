@@ -35,7 +35,6 @@ function SignUp() {
         {
           "Content-Type": "application/json",
           headers: { Auth: state.accessToken },
-          withCredentials: true,
         }
       )
       .then((res) => {
