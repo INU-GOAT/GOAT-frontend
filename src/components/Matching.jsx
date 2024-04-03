@@ -1,19 +1,17 @@
-import "./Matching.css";
-function Matching() {
+import React from 'react';
+
+const Matching = ({ onStartMatching, matchType, selectedSport, selectedTime }) => {
+  const handleStartMatching = () => {
+    if (!matchType || !selectedSport || !selectedTime) {
+      alert('매치 실패: 매치 유형, 종목, 시간을 선택하세요.');
+      return;
+    }
+    onStartMatching();
+  };
+
   return (
-    <button className="match" type="button" disabled="">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 100 101"
-        class="inline w-4 h-4 mr-3 text-white animate-bounce"
-        role="status"
-        aria-hidden="true"
-      >
-        <circle fill="#34D399" r="45" cy="50" cx="50"></circle>
-      </svg>
-      매칭중...
-    </button>
+    <button onClick={handleStartMatching}>매칭 시작</button>
   );
-}
+};
+
 export default Matching;
