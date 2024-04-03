@@ -12,15 +12,12 @@ function LogInHandler() {
 
   useEffect(() => {
     const getToken = async () => {
-      console.log(code);
       await axios
         .post("http://15.165.113.9:8080/api/users/code", null, {
           headers: { code: code, withCredentials: true },
         })
         .then((res) => {
-          console.log(res);
           const accessToken = res.data.data.accessToken;
-          console.log(accessToken);
           const refreshToken = res.data.data.refreshToken;
           getUserId(accessToken);
         })
@@ -30,9 +27,10 @@ function LogInHandler() {
         });
     };
     const getUserId = async (accessToken) => {
-      console.log(accessToken);
       await axios
-        .get(`http://15.165.113.9:8080/api/users?Auth=${accessToken}`)
+        .get("http://15.165.113.9:8080/api/users/code", {
+          headers: { Auth: accessToken, withCredentials: true },
+        })
         .then((res) => {
           console.log(res);
           if (res.data === -1) {
