@@ -29,6 +29,9 @@ function LogInHandler() {
           console.error("getToken 실패");
         });
     };
+    getToken();
+  }, [code]);
+  useEffect(() => {
     const getUserId = async () => {
       await axios
         .get(`http://15.165.113.9:8080/api/users?Auth=${accessToken}`)
@@ -46,9 +49,8 @@ function LogInHandler() {
           console.error("getId 실패");
         });
     };
-    getToken();
     getUserId();
-  }, [accessToken, code, navigate]);
+  }, [accessToken, navigate]);
 
   return (
     <div backgroundcolor="#9376E0">
