@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import MatchType from '../components/Matchtype';
-import TeamInvite from '../components/TeamInvite';
+import TeamInvite from '../components/Teaminvite';
 import Sport from '../components/Sport';
 import Timelist from '../components/Timelist';
 import Matching from '../components/Matching';
