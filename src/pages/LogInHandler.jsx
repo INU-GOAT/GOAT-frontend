@@ -16,14 +16,16 @@ function LogInHandler() {
     const getToken = async () => {
       console.log(code);
       await axios
-        .post("http://15.165.113.9:8080/api/users/code", { code })
+        .post("http://15.165.113.9:8080/api/users/code", null, {
+          headers: { code: code, withCredentials: true },
+        })
         .then((res) => {
           console.log(res);
           setAccessToken(res.data.accessToken);
           setRefreshToken(res.data.refreshToken);
         })
         .catch((error) => {
-          console.log(code);
+          console.log(error);
           console.error("getToken 실패");
         });
     };
