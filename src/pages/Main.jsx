@@ -7,6 +7,7 @@ import Gender from "../components/Gender";
 import Sport from "../components/Sport";
 import Time from "../components/Time";
 import Matching from "../components/Matching";
+import KakaoMap from "../components/KaKaoMap";
 
 function Main() {
   const [matching, setMatching] = useState(false);
@@ -26,7 +27,8 @@ function Main() {
   return (
     <div className="main">
       <div className="content">
-        <img src={mapImage} width={500} />
+        {/* <img src={mapImage} width={500} /> */}
+        <KakaoMap />
       </div>
       <div className="rnb">
         <Sport />
