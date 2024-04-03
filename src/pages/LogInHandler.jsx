@@ -33,7 +33,7 @@ function LogInHandler() {
         })
         .then((res) => {
           console.log(res);
-          if (res.data === -1) {
+          if (res.data.data === -1) {
             alert("회원가입이 필요합니다.");
             navigate("/SignUp");
           } else {
