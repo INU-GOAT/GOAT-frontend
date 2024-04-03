@@ -19,9 +19,9 @@ function LogInHandler() {
         })
         .then((res) => {
           console.log(res);
-          const accessToken = res.data.accessToken;
+          const accessToken = res.data.data.accessToken;
           console.log(accessToken);
-          const refreshToken = res.data.refreshToken;
+          const refreshToken = res.data.data.refreshToken;
           getUserId(accessToken);
         })
         .catch((error) => {
