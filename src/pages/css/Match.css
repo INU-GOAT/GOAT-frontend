@@ -54,3 +54,21 @@
     width: 100%;
     margin-bottom: 20px;
   }
+
+.match-type-buttons button,
+.sport-button {
+  display: inline-block;
+  width: 100px;
+  height: 40px;
+  margin-right: 10px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  text-align: center;
+  line-height: 40px;
+}
+
+.match-type-buttons button:last-child,
+.sport-button:last-child {
+  margin-right: 0;
+}
