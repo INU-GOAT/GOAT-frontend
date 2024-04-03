@@ -35,7 +35,7 @@ function LogInHandler() {
           console.log(res);
           if (res.data.data === -1) {
             alert("회원가입이 필요합니다.");
-            navigate("/SignUp");
+            navigate("/SignUp", { state: { accessToken } });
           } else {
             //id 값 이용 코드 추가 작성하기
             navigate("/Main");

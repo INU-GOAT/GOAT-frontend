@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import "./css/SignUp.css";
 
 function SignUp() {
+  const { state } = useLocation();
+  console.log(state.accessToken);
   const [age, setAge] = useState(null);
   const [gender, setGender] = useState(null);
   const [preferSport, setPreferSport] = useState(null);
@@ -30,7 +32,7 @@ function SignUp() {
           badminton_tier: badmintonTier,
           tableTennis_tier: tableTennisTier,
         },
-        { "Content-Type": "application/json" }
+        { "Content-Type": "application/json", Auth: state.accessToken }
       )
       .then((res) => {
         console.log(res);
@@ -38,6 +40,7 @@ function SignUp() {
         navigate("/Main");
       })
       .catch((error) => {
+        console.error(error);
         console.error("회원가입 실패");
       });
   };
