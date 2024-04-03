@@ -34,7 +34,7 @@ nav {
   margin-left: 20px;
 }
 .nav-items > li:first-child {
-  margin-left: 0; /* 첫 번째 항목의 왼쪽 여백을 0으로 설정 */
+  margin-left: 0;
 }
 .nav-items > li > a {
   line-height: 60px;
