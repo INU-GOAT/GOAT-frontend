@@ -14,14 +14,16 @@ function LogInHandler() {
 
   useEffect(() => {
     const getToken = async () => {
+      console.log(code);
       await axios
-        .post("http://15.165.113.9:8080/api/users/code", { code }, {})
+        .post("http://15.165.113.9:8080/api/users/code", { code: code })
         .then((res) => {
           console.log(res);
           setAccessToken(res.data.accessToken);
           setRefreshToken(res.data.refreshToken);
         })
         .catch((error) => {
+          console.log(code);
           console.error("getToken 실패");
         });
     };
