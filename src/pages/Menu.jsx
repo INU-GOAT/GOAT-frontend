@@ -30,7 +30,7 @@ function Menu() {
             <li>
               <a onClick={(event) => {
                 event.preventDefault();
-                navigate("/ClubPage");
+                navigate("/Club");
                 }}>클럽</a>
             </li>
             <li>
