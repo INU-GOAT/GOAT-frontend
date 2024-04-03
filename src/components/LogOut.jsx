@@ -5,12 +5,13 @@ const Kakao = window;
 
 function LogOut() {
   Navigate = useNavigate();
+
   const kakaoLogOut = () => {
     Kakao.Auth.logout()
       .then(function (response) {
         console.log(Kakao.Auth.getAccessToken()); // null
         //쿠키 지우기
-        Navigate("/Home");
+        Navigate("/");
       })
       .catch(function (error) {
         console.log("Not logged in.");
