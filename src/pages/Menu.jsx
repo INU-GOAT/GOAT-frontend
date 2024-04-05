@@ -52,6 +52,16 @@ function Menu() {
                 마이페이지
               </a>
             </li>
+            <li>
+              <a
+                onClick={(event) => {
+                  event.preventDefault();
+                  navigate(LogOut);
+                }}
+              >
+                로그아웃
+              </a>
+            </li>
           </ul>
         </nav>
       </header>

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import MatchType from '../components/MatchType';
-import TeamInvite from '../components/TeamInvite';
+import MatchType from '../components/Matchtype';
+import TeamInvite from '../components/Teaminvite';
 import Sport from '../components/Sport';
 import Timelist from '../components/Timelist';
 import Matching from '../components/Matching';
-import './css/match.css';
+import './css/Match.css';
 
 const Match = () => {
   const [matchType, setMatchType] = useState('');
@@ -33,10 +33,10 @@ const Match = () => {
       {matchType === '팀' && <TeamInvite />}
       <div>
         <h3>종목 선택</h3>
-        <Sport sport="축구" onClick={handleSportClick} />
-        <Sport sport="농구" onClick={handleSportClick} />
-        <Sport sport="배드민턴" onClick={handleSportClick} />
-        <Sport sport="탁구" onClick={handleSportClick} />
+        <Sport sport="축구" isSelected={selectedSport === '축구'} onClick={handleSportClick} />
+        <Sport sport="농구" isSelected={selectedSport === '농구'} onClick={handleSportClick} />
+        <Sport sport="배드민턴" isSelected={selectedSport === '배드민턴'} onClick={handleSportClick} />
+        <Sport sport="탁구" isSelected={selectedSport === '탁구'} onClick={handleSportClick} />
       </div>
       <div>
         <h3>시간 선택</h3>
