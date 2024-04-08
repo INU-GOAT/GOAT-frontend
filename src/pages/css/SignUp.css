@@ -2,10 +2,12 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  color: #eaebff;
 }
 :root {
   --padding: 60px;
 }
+
 h1 {
   padding: 20px;
   font-size: 1.5em;
@@ -18,7 +20,7 @@ h1 {
   flex-direction: column;
   justify-content: center;
   padding: var(--padding);
-  background-color: #c4ffdd;
+  background-color: #9376e0;
   border-radius: 7px;
 }
 
@@ -32,8 +34,8 @@ h1 {
   margin-bottom: 25px;
 }
 .box form button {
-  background-color: #ffe4c4;
-  color: #547fb2;
+  background-color: #eaebff;
+  color: #9376e0;
   border-radius: 4px;
   margin-bottom: 25px;
   width: 100%;
@@ -42,7 +44,7 @@ h1 {
   padding: 15px;
   font-size: 1.2em;
   border: none;
-  background-color: #ffe4c4;
-  color: #547fb2;
+  background-color: #eaebff;
+  color: #9376e0;
   border-radius: 4px;
 }
