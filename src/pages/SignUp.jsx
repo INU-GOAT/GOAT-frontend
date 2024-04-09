@@ -18,7 +18,6 @@ function SignUp() {
 
   const signUpHandler = async (e) => {
     e.preventDefault();
-    console.log(state.accessToken);
     await axios
       .post(
         "http://15.165.113.9:8080/api/users",
