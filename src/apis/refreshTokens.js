@@ -9,8 +9,8 @@ const refreshTokens = async () => {
     console.log(result);
     localStorage.setItem("accessToken", result.data.accessToken);
     localStorage.setItem("refreshToken", result.data.refreshToken);
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     console.error("refreshTokens 실패");
   }
 };

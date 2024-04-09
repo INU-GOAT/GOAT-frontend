@@ -9,15 +9,17 @@ function SignOut() {
   const navigate = useNavigate();
 
   const unlinkApp = () => {
-    Kakao.API.request({
-      url: "/v1/user/unlink",
-    })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    axios.post(
+      "https://kapi.kakao.com/v1/user/unlink",
+      {
+        target_id_type: "user_id",
+        target_id: sessionStorage.getItem("id"),
+      },
+      {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: "KakaoAK b14a35797a307e94557e9076d3068a57",
+      }
+    );
   };
 
   const deleteUser = async () => {
