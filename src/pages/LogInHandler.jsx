@@ -1,7 +1,8 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { SyncLoader } from "react-spinners";
-import axios from "axios";
+
+import userAxios from "../apis/userAxios";
 
 function LogInHandler() {
   const navigate = useNavigate();
@@ -12,13 +13,14 @@ function LogInHandler() {
 
   useEffect(() => {
     const getToken = async () => {
-      await axios
-        .post("http://15.165.113.9:8080/api/users/code", null, {
+      await userAxios
+        .post("/code", null, {
           headers: { code: code },
         })
         .then((res) => {
-          const accessToken = res.data.data.accessToken;
-          const refreshToken = res.data.data.refreshToken;
+          console.log(res);
+          const accessToken = res.data.accessToken;
+          const refreshToken = res.data.refreshToken;
           getUserId(accessToken);
         })
         .catch((error) => {
@@ -27,13 +29,13 @@ function LogInHandler() {
         });
     };
     const getUserId = async (accessToken) => {
-      await axios
-        .get("http://15.165.113.9:8080/api/users", {
+      await userAxios
+        .get("", {
           headers: { Auth: accessToken },
         })
         .then((res) => {
           console.log(res);
-          if (res.data.data === -1) {
+          if (res.data === -1) {
             alert("회원가입이 필요합니다.");
             navigate("/SignUp", { state: { accessToken } });
           } else {
