@@ -3,6 +3,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import "./css/SignUp.css";
+import userAxios from "../apis/userAxios";
+import setSession from "../utils/setSession";
+import getUsers from "../apis/getUsers";
 //폼 다시 만들기
 function SignUp() {
   const [age, setAge] = useState(null);
@@ -18,9 +21,10 @@ function SignUp() {
 
   const signUpHandler = async (e) => {
     e.preventDefault();
-    await axios
+
+    await userAxios
       .post(
-        "http://15.165.113.9:8080/api/users",
+        "",
         {
           age,
           gender,
@@ -37,7 +41,8 @@ function SignUp() {
       )
       .then((res) => {
         console.log(res);
-        //필요한 값 사용하기
+        const data = getUsers();
+        setSession(data);
         navigate("/Main");
       })
       .catch((error) => {

@@ -2,6 +2,7 @@ import axios from "axios";
 
 import React from "react";
 import { useNavigate } from "react-router";
+import userAxios from "../apis/userAxios";
 const Kakao = window;
 
 function SignOut() {
@@ -20,10 +21,8 @@ function SignOut() {
   };
 
   const deleteUser = async () => {
-    //유저 토큰 가져오기
-    const accessToken = "";
-    await axios
-      .delete("http://15.165.113.9:8080/api/users", { accessToken })
+    await userAxios
+      .delete()
       .then((res) => {
         alert("회원탈퇴완료");
         navigate("/Home");
@@ -34,11 +33,11 @@ function SignOut() {
       });
   };
 
-  //토큰?세션?쿠키? 삭제하기
-
   const signOuthandler = () => {
     unlinkApp();
     deleteUser();
+    localStorage.clear();
+    sessionStorage.clear();
   };
   return <button onClick={signOuthandler}>SignOut</button>;
 }

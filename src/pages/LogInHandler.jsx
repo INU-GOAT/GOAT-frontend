@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { SyncLoader } from "react-spinners";
 
 import userAxios from "../apis/userAxios";
+import setSession from "./../utils/setSession";
 
 function LogInHandler() {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ function LogInHandler() {
   console.log(code);
 
   useEffect(() => {
+    //await 바꾸기
     const getToken = async () => {
       await userAxios
         .post("/code", null, {
@@ -38,7 +40,7 @@ function LogInHandler() {
             alert("회원가입이 필요합니다.");
             navigate("/SignUp");
           } else {
-            //id 값 이용 코드 추가 작성하기
+            setSession(res.data);
             navigate("/Main");
           }
         })
