@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import "./css/SignUp.css";
-
+//폼 다시 만들기
 function SignUp() {
   const { state } = useLocation();
 
