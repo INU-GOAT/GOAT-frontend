@@ -6,6 +6,7 @@ import Main from "./pages/Main";
 import Menu from "./pages/Menu";
 import Chat from "./pages/Chat";
 import LogInHandler from "./pages/LogInHandler";
+import MyPage from "./pages/MyPage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/Chat" element={<Chat />} />
         </Route>
         <Route path="/SignUp" element={<SignUp />} />
+        <Route path="/MyPage" element={<MyPage />} />
       </Routes>
     </BrowserRouter>
   );

@@ -39,9 +39,9 @@ function SignUp() {
           "Content-Type": "application/json",
         }
       )
-      .then((res) => {
+      .then(async (res) => {
         console.log(res);
-        const data = getUsers();
+        const data = await getUsers();
         setSession(data);
         navigate("/Main");
       })

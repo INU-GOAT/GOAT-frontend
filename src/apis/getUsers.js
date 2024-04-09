@@ -11,7 +11,7 @@ const getUsers = async () => {
       await refreshTokens();
 
       error.config.headers.Auth = localStorage.getItem("accessToken");
-      return (await axios.get(error.config.url, error.config)).data;
+      return;
     }
     console.error(error);
     console.error("getUser 실패");
