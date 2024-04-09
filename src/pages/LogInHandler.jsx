@@ -19,25 +19,24 @@ function LogInHandler() {
         })
         .then((res) => {
           console.log(res);
-          const accessToken = res.data.accessToken;
-          const refreshToken = res.data.refreshToken;
-          getUserId(accessToken);
+
+          localStorage.setItem("accessToken", res.data.accessToken);
+          localStorage.setItem("refreshToken", res.data.refreshToken);
+          getUserId();
         })
         .catch((error) => {
           console.log(error);
           console.error("getToken 실패");
         });
     };
-    const getUserId = async (accessToken) => {
+    const getUserId = async () => {
       await userAxios
-        .get("", {
-          headers: { Auth: accessToken },
-        })
+        .get()
         .then((res) => {
           console.log(res);
           if (res.data === -1) {
             alert("회원가입이 필요합니다.");
-            navigate("/SignUp", { state: { accessToken } });
+            navigate("/SignUp");
           } else {
             //id 값 이용 코드 추가 작성하기
             navigate("/Main");

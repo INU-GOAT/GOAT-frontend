@@ -5,8 +5,6 @@ import axios from "axios";
 import "./css/SignUp.css";
 //폼 다시 만들기
 function SignUp() {
-  const { state } = useLocation();
-
   const [age, setAge] = useState(null);
   const [gender, setGender] = useState(null);
   const [nickname, setNickname] = useState(null);
@@ -36,7 +34,6 @@ function SignUp() {
         },
         {
           "Content-Type": "application/json",
-          headers: { Auth: state.accessToken },
         }
       )
       .then((res) => {
