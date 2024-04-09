@@ -16,8 +16,10 @@ function SignOut() {
         target_id: sessionStorage.getItem("id"),
       },
       {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Authorization: "KakaoAK b14a35797a307e94557e9076d3068a57",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: "KakaoAK b14a35797a307e94557e9076d3068a57",
+        },
       }
     );
   };
