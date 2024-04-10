@@ -18,8 +18,8 @@ function SignOut() {
       });
   };
 
-  const signOuthandler = () => {
-    deleteUser();
+  const signOuthandler = async () => {
+    await deleteUser();
     localStorage.clear();
     sessionStorage.clear();
   };
