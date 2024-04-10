@@ -10,7 +10,7 @@ function SignOut() {
       .delete()
       .then((res) => {
         alert("회원탈퇴완료");
-        navigate("/Home");
+        navigate("/");
       })
       .catch((error) => {
         console.error(error);
