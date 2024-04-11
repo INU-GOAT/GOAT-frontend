@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
 import SignUp from "./pages/SignUp";
 import Home from "./pages/Home";
@@ -8,19 +8,37 @@ import Chat from "./pages/Chat";
 import LogInHandler from "./pages/LogInHandler";
 import MyPage from "./pages/MyPage";
 import { useEffect } from "react";
+import getUser from "./apis/getUser";
+import setUser from "./utils/setUser";
 
 function App() {
+  useEffect(() => {
+    if (localStorage.getItem("isLogin") === "true") {
+      const data = getUser();
+      setUser(data);
+    }
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login/oauth2/code/kakao" element={<LogInHandler />} />
-        <Route element={<Menu />}>
-          <Route path="/Main" element={<Main />} />
-          <Route path="/Chat" element={<Chat />} />
-        </Route>
-        <Route path="/SignUp" element={<SignUp />} />
-        <Route path="/MyPage" element={<MyPage />} />
+        {localStorage.getItem("isLogin") === "true" ? (
+          <>
+            <Route element={<Menu />}>
+              <Route path="/Main" element={<Main />} />
+              <Route path="/Chat" element={<Chat />} />
+            </Route>
+            <Route path="/MyPage" element={<MyPage />} />
+            <Route path="*" element={<Navigate to="/Main" />} />
+          </>
+        ) : (
+          <>
+            <Route path="/" element={<Home />} />
+            <Route path="/login/oauth2/code/kakao" element={<LogInHandler />} />
+            <Route path="/SignUp" element={<SignUp />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </>
+        )}
       </Routes>
     </BrowserRouter>
   );

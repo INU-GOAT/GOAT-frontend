@@ -43,11 +43,13 @@ function SignUp() {
         console.log(res);
         const data = await getUser();
         setUser(data);
+        localStorage.setItem("isLogin", true);
         navigate("/Main");
       })
       .catch((error) => {
         console.error(error);
-        console.error("회원가입 실패");
+        alert("회원가입 실패");
+        navigate("/");
       });
   };
 

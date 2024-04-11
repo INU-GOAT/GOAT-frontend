@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { SyncLoader } from "react-spinners";
 
 import userAxios from "../apis/userAxios";
-import setSession from "../utils/setUser";
+import setUser from "../utils/setUser";
 
 function LogInHandler() {
   const navigate = useNavigate();
@@ -40,7 +40,8 @@ function LogInHandler() {
             alert("회원가입이 필요합니다.");
             navigate("/SignUp");
           } else {
-            setSession(res.data);
+            localStorage.setItem("isLogin", true);
+            setUser(res.data);
             navigate("/Main");
           }
         })

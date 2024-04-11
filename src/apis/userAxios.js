@@ -42,6 +42,11 @@ userAxios.interceptors.response.use(
         await refreshTokens();
         return userAxios(error.config);
       }
+    } else if (error.response.data.msg === "토큰의 값이 존재하지 않습니다.") {
+      alert("토큰의 값이 존재하지 않습니다.");
+      localStorage.clear();
+      const navigate = useNavigate();
+      navigate("/");
     }
     return Promise.reject(error);
   }
