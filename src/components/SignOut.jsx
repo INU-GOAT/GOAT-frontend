@@ -21,7 +21,6 @@ function SignOut() {
   const signOuthandler = async () => {
     await deleteUser();
     localStorage.clear();
-    sessionStorage.clear();
   };
   return <button onClick={signOuthandler}>SignOut</button>;
 }

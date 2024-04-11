@@ -1,4 +1,6 @@
 import axios from "axios";
+import refreshTokens from "./refreshTokens";
+import { useNavigate } from "react-router-dom";
 
 const userAxios = axios.create({
   baseURL: "http://15.165.113.9:8080/api/users",
@@ -16,9 +18,9 @@ userAxios.interceptors.request.use(
     }
     return config;
   },
-  (err) => {
+  (error) => {
     //요청 에러 시 수행 로직
-    return Promise.reject(err);
+    return Promise.reject(error);
   }
 );
 
@@ -29,7 +31,18 @@ userAxios.interceptors.response.use(
     const res = response.data;
     return res;
   },
-  (err) => {
-    return Promise.reject(err);
+  async (error) => {
+    if (error.response.status === 401) {
+      if (error.response.data.msg === "만료된 토큰입니다.") {
+        localStorage.clear();
+        const navigate = useNavigate();
+        alert("토큰이 만료되어 로그아웃 되었습니다.");
+        navigate("/");
+      } else {
+        await refreshTokens();
+        return userAxios(error.config);
+      }
+    }
+    return Promise.reject(error);
   }
 );

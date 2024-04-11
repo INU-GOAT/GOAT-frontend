@@ -7,6 +7,7 @@ import Menu from "./pages/Menu";
 import Chat from "./pages/Chat";
 import LogInHandler from "./pages/LogInHandler";
 import MyPage from "./pages/MyPage";
+import { useEffect } from "react";
 
 function App() {
   return (

@@ -4,8 +4,8 @@ import axios from "axios";
 
 import "./css/SignUp.css";
 import userAxios from "../apis/userAxios";
-import setSession from "../utils/setSession";
-import getUsers from "../apis/getUsers";
+import getUser from "../apis/getUser";
+import setUser from "../utils/setUser";
 //폼 다시 만들기
 function SignUp() {
   const [age, setAge] = useState(null);
@@ -41,8 +41,8 @@ function SignUp() {
       )
       .then(async (res) => {
         console.log(res);
-        const data = await getUsers();
-        setSession(data);
+        const data = await getUser();
+        setUser(data);
         navigate("/Main");
       })
       .catch((error) => {
@@ -132,5 +132,3 @@ function SignUp() {
 }
 
 export default SignUp;
-
-//수정 해야 할 부분 : 유효성 검사, 성멸선택, 나이

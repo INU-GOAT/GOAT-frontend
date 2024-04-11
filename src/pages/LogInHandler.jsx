@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { SyncLoader } from "react-spinners";
 
 import userAxios from "../apis/userAxios";
-import setSession from "./../utils/setSession";
+import setSession from "../utils/setUser";
 
 function LogInHandler() {
   const navigate = useNavigate();
