@@ -43,7 +43,7 @@ function SignUp() {
         console.log(res);
         const data = await getUser();
         setUser(data);
-        localStorage.setItem("isLogin", true);
+        await localStorage.setItem("isLogin", true);
         navigate("/Main");
       })
       .catch((error) => {

@@ -13,9 +13,12 @@ import setUser from "./utils/setUser";
 
 function App() {
   useEffect(() => {
+    console.log("앱 effect");
     if (localStorage.getItem("isLogin") === "true") {
-      const data = getUser();
-      setUser(data);
+      getUser().then((res) => {
+        console.log(res);
+        setUser(res);
+      });
     }
   }, []);
 

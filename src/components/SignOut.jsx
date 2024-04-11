@@ -10,6 +10,7 @@ function SignOut() {
       .delete()
       .then((res) => {
         alert("회원탈퇴완료");
+        localStorage.clear();
         navigate("/");
       })
       .catch((error) => {
@@ -20,7 +21,6 @@ function SignOut() {
 
   const signOuthandler = async () => {
     await deleteUser();
-    localStorage.clear();
   };
   return <button onClick={signOuthandler}>SignOut</button>;
 }
