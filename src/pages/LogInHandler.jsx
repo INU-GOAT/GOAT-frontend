@@ -14,7 +14,7 @@ function LogInHandler() {
   console.log(code);
 
   useEffect(() => {
-    const { setIsLogin } = isLoginStore;
+    const { setIsLogin } = isLoginStore();
     //await 바꾸기
     const getToken = async () => {
       await userAxios

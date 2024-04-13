@@ -4,7 +4,7 @@ import { isLoginStore } from "../utils/store";
 
 function LogOut() {
   const navigate = useNavigate();
-  const { setIsLogin } = isLoginStore;
+  const { setIsLogin } = isLoginStore();
   const logOut = () => {
     localStorage.clear();
     setIsLogin(false);

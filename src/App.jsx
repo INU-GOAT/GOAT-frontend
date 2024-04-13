@@ -8,12 +8,15 @@ import Chat from "./pages/Chat";
 import LogInHandler from "./pages/LogInHandler";
 import MyPage from "./pages/MyPage";
 import isLoginStore from "./utils/store";
+import { useEffect } from "react";
 
 function App() {
   const { isLogin, setIsLogin } = isLoginStore();
-  if (localStorage.getItem("isLogin") === "true") {
-    setIsLogin(true);
-  }
+  useEffect(() => {
+    if (localStorage.getItem("isLogin") === "true") {
+      setIsLogin(true);
+    }
+  }, [setIsLogin]);
   return (
     <BrowserRouter>
       <Routes>

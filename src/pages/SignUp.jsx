@@ -17,7 +17,7 @@ function SignUp() {
   const [basketballTier, setBasketballTier] = useState(null);
   const [badmintonTier, setBadmintonTier] = useState(null);
   const [tableTennisTier, setTableTennisTier] = useState(null);
-  const { setIsLogin } = isLoginStore;
+  const { setIsLogin } = isLoginStore();
   const navigate = useNavigate();
 
   const signUpHandler = async (e) => {

@@ -5,7 +5,7 @@ import { isLoginStore } from "../utils/store";
 
 function SignOut() {
   const navigate = useNavigate();
-  const { setIsLogin } = isLoginStore;
+  const { setIsLogin } = isLoginStore();
   const deleteUser = async () => {
     await userAxios
       .delete()

@@ -6,3 +6,5 @@ export const isLoginStore = create((set) => ({
 }));
 
 //사용한 곳 app, 로그인, 로그아웃, 회원가입, 회원탈퇴
+
+export default isLoginStore;
