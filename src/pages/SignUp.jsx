@@ -3,10 +3,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import "./css/SignUp.css";
+import userAxios from "../apis/userAxios";
+import getUser from "../apis/getUser";
+import setUser from "../utils/setUser";
+import { isLoginStore } from "../utils/store";
 //폼 다시 만들기
 function SignUp() {
-  const { state } = useLocation();
-
   const [age, setAge] = useState(null);
   const [gender, setGender] = useState(null);
   const [nickname, setNickname] = useState(null);
@@ -15,15 +17,15 @@ function SignUp() {
   const [basketballTier, setBasketballTier] = useState(null);
   const [badmintonTier, setBadmintonTier] = useState(null);
   const [tableTennisTier, setTableTennisTier] = useState(null);
-
+  const { setIsLogin } = isLoginStore();
   const navigate = useNavigate();
 
   const signUpHandler = async (e) => {
     e.preventDefault();
-    console.log(state.accessToken);
-    await axios
+
+    await userAxios
       .post(
-        "http://15.165.113.9:8080/api/users",
+        "",
         {
           age,
           gender,
@@ -36,17 +38,20 @@ function SignUp() {
         },
         {
           "Content-Type": "application/json",
-          headers: { Auth: state.accessToken },
         }
       )
-      .then((res) => {
+      .then(async (res) => {
         console.log(res);
-        //필요한 값 사용하기
+        const data = await getUser();
+        setUser(data);
+        localStorage.setItem("isLogin", true);
+        setIsLogin(true);
         navigate("/Main");
       })
       .catch((error) => {
         console.error(error);
-        console.error("회원가입 실패");
+        alert("회원가입 실패");
+        navigate("/");
       });
   };
 
@@ -131,5 +136,3 @@ function SignUp() {
 }
 
 export default SignUp;
-
-//수정 해야 할 부분 : 유효성 검사, 성멸선택, 나이

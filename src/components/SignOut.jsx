@@ -1,32 +1,19 @@
-import axios from "axios";
-
 import React from "react";
 import { useNavigate } from "react-router";
-const Kakao = window;
+import userAxios from "../apis/userAxios";
+import { isLoginStore } from "../utils/store";
 
 function SignOut() {
   const navigate = useNavigate();
-
-  const unlinkApp = () => {
-    Kakao.API.request({
-      url: "/v1/user/unlink",
-    })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-
+  const { setIsLogin } = isLoginStore();
   const deleteUser = async () => {
-    //유저 토큰 가져오기
-    const accessToken = "";
-    await axios
-      .delete("http://15.165.113.9:8080/api/users", { accessToken })
+    await userAxios
+      .delete()
       .then((res) => {
         alert("회원탈퇴완료");
-        navigate("/Home");
+        localStorage.clear();
+        setIsLogin(false);
+        navigate("/");
       })
       .catch((error) => {
         console.error(error);
@@ -34,11 +21,8 @@ function SignOut() {
       });
   };
 
-  //토큰?세션?쿠키? 삭제하기
-
-  const signOuthandler = () => {
-    unlinkApp();
-    deleteUser();
+  const signOuthandler = async () => {
+    await deleteUser();
   };
   return <button onClick={signOuthandler}>SignOut</button>;
 }

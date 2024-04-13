@@ -1,24 +1,16 @@
 import React from "react";
 import { useNavigate } from "react-router";
-
-const { Kakao } = window;
+import { isLoginStore } from "../utils/store";
 
 function LogOut() {
   const navigate = useNavigate();
-
-  console.log(Kakao.Auth.getAccessToken());
-  const kakaoLogOut = () => {
-    Kakao.Auth.logout()
-      .then(function (response) {
-        console.log(Kakao.Auth.getAccessToken()); // null
-        //쿠키 지우기
-        navigate("/");
-      })
-      .catch(function (error) {
-        console.log("Not logged in.");
-      });
+  const { setIsLogin } = isLoginStore();
+  const logOut = () => {
+    localStorage.clear();
+    setIsLogin(false);
+    navigate("/");
   };
-  return <button onClick={kakaoLogOut}>로그아웃</button>;
+  return <button onClick={logOut}>로그아웃</button>;
 }
 
 export default LogOut;
