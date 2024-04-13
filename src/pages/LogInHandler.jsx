@@ -10,11 +10,10 @@ function LogInHandler() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const code = searchParams.get("code");
-
+  const { setIsLogin } = isLoginStore();
   console.log(code);
 
   useEffect(() => {
-    const { setIsLogin } = isLoginStore();
     //await 바꾸기
     const getToken = async () => {
       await userAxios
