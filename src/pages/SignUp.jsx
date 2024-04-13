@@ -6,6 +6,7 @@ import "./css/SignUp.css";
 import userAxios from "../apis/userAxios";
 import getUser from "../apis/getUser";
 import setUser from "../utils/setUser";
+import { isLoginStore } from "../utils/store";
 //폼 다시 만들기
 function SignUp() {
   const [age, setAge] = useState(null);
@@ -16,7 +17,7 @@ function SignUp() {
   const [basketballTier, setBasketballTier] = useState(null);
   const [badmintonTier, setBadmintonTier] = useState(null);
   const [tableTennisTier, setTableTennisTier] = useState(null);
-
+  const { setIsLogin } = isLoginStore;
   const navigate = useNavigate();
 
   const signUpHandler = async (e) => {
@@ -44,6 +45,7 @@ function SignUp() {
         const data = await getUser();
         setUser(data);
         localStorage.setItem("isLogin", true);
+        setIsLogin(true);
         navigate("/Main");
       })
       .catch((error) => {

@@ -7,25 +7,33 @@ import Menu from "./pages/Menu";
 import Chat from "./pages/Chat";
 import LogInHandler from "./pages/LogInHandler";
 import MyPage from "./pages/MyPage";
-import { useEffect } from "react";
-import getUser from "./apis/getUser";
-import setUser from "./utils/setUser";
+import isLoginStore from "./utils/store";
 
 function App() {
+  const { isLogin, setIsLogin } = isLoginStore();
+  if (localStorage.getItem("isLogin") === "true") {
+    setIsLogin(true);
+  }
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<Menu />}>
-          <Route path="/Main" element={<Main />} />
-          <Route path="/Chat" element={<Chat />} />
-        </Route>
-        <Route path="/MyPage" element={<MyPage />} />
-
-        <Route path="/" element={<Home />} />
-        <Route path="/login/oauth2/code/kakao" element={<LogInHandler />} />
-        <Route path="/SignUp" element={<SignUp />} />
-
-        <Route path="*" element={<Navigate to="/" />} />
+        {isLogin === true ? (
+          <>
+            <Route element={<Menu />}>
+              <Route path="/Main" element={<Main />} />
+              <Route path="/Chat" element={<Chat />} />
+            </Route>
+            <Route path="/MyPage" element={<MyPage />} />
+            <Route path="*" element={<Navigate to="/Main" />} />
+          </>
+        ) : (
+          <>
+            <Route path="/" element={<Home />} />
+            <Route path="/login/oauth2/code/kakao" element={<LogInHandler />} />
+            <Route path="/SignUp" element={<SignUp />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </>
+        )}
       </Routes>
     </BrowserRouter>
   );

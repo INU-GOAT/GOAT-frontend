@@ -4,6 +4,7 @@ import { SyncLoader } from "react-spinners";
 
 import userAxios from "../apis/userAxios";
 import setUser from "../utils/setUser";
+import { isLoginStore } from "../utils/store";
 
 function LogInHandler() {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ function LogInHandler() {
   console.log(code);
 
   useEffect(() => {
+    const { setIsLogin } = isLoginStore;
     //await 바꾸기
     const getToken = async () => {
       await userAxios
@@ -41,6 +43,7 @@ function LogInHandler() {
             navigate("/SignUp");
           } else {
             localStorage.setItem("isLogin", true);
+            setIsLogin(true);
             setUser(res.data);
             navigate("/Main");
           }
