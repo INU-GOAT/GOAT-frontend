@@ -32,7 +32,9 @@ userAxios.interceptors.response.use(
     return res;
   },
   async (error) => {
+    console.log(error + "에러");
     if (error.response.status === 401) {
+      console.log(error + "401");
       if (error.response.data.msg === "만료된 토큰입니다.") {
         localStorage.clear();
         const navigate = useNavigate();
