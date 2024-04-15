@@ -9,6 +9,7 @@ import LogInHandler from "./pages/LogInHandler";
 import MyPage from "./pages/MyPage";
 import isLoginStore from "./utils/store";
 import { useEffect } from "react";
+import UserResponse from "./apis/UserResponse";
 
 function App() {
   const { isLogin, setIsLogin } = isLoginStore();
@@ -19,6 +20,7 @@ function App() {
   }, [setIsLogin]);
   return (
     <BrowserRouter>
+      <UserResponse />
       <Routes>
         {isLogin === true ? (
           <>
