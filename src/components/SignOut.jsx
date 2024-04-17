@@ -7,7 +7,8 @@ import { Button } from "@mui/material";
 function SignOut() {
   const navigate = useNavigate();
   const { setIsLogin } = isLoginStore();
-  const deleteUser = async () => {
+
+  const signOuthandler = async () => {
     await userAxios
       .delete()
       .then((res) => {
@@ -20,10 +21,6 @@ function SignOut() {
         console.error(error);
         alert("회원탈퇴실패");
       });
-  };
-
-  const signOuthandler = async () => {
-    await deleteUser();
   };
   return (
     <Button color="error" variant="contained" onClick={signOuthandler}>

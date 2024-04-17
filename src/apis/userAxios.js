@@ -15,7 +15,7 @@ userAxios.interceptors.request.use(
     //요청 보내기 전에 수행 로직
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
-      config.headers.auth = accessToken;
+      config.headers.Auth = accessToken;
     }
     return config;
   },
