@@ -16,7 +16,7 @@ function UserResponse() {
         const res = response.data;
         return res;
       },
-      async (error) => {
+      (error) => {
         console.log(error + "에러");
         console.log(error.response);
         if (error.response.status === 401) {
@@ -27,7 +27,7 @@ function UserResponse() {
             setIsLogin(false);
             navigate("/");
           } else if (error.response.data.msg === "인증이 실패하였습니다.") {
-            await refreshTokens(error.config);
+            refreshTokens(error.config);
           }
         } else if (
           error.response.data.msg === "토큰의 값이 존재하지 않습니다."
