@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router";
 import userAxios from "../apis/userAxios";
 import isLoginStore from "../utils/store";
+import { Button } from "@mui/material";
 
 function SignOut() {
   const navigate = useNavigate();
@@ -24,7 +25,11 @@ function SignOut() {
   const signOuthandler = async () => {
     await deleteUser();
   };
-  return <button onClick={signOuthandler}>SignOut</button>;
+  return (
+    <Button color="error" variant="contained" onClick={signOuthandler}>
+      회원탈퇴
+    </Button>
+  );
 }
 
 export default SignOut;

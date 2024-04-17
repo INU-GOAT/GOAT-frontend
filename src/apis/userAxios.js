@@ -16,11 +16,13 @@ userAxios.interceptors.request.use(
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
       config.headers.Auth = accessToken;
+      config.headers.auth = accessToken;
     }
     return config;
   },
   (error) => {
     //요청 에러 시 수행 로직
+    console.log(error);
     return Promise.reject(error);
   }
 );
