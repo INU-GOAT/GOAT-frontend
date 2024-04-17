@@ -17,6 +17,7 @@ userAxios.interceptors.request.use(
     if (accessToken) {
       config.headers.Auth = accessToken;
     }
+    console.log(config);
     return config;
   },
   (error) => {

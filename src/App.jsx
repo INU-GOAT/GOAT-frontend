@@ -27,8 +27,9 @@ function App() {
             <Route element={<Menu />}>
               <Route path="/Main" element={<Main />} />
               <Route path="/Chat" element={<Chat />} />
+              <Route path="/MyPage" element={<MyPage />} />
             </Route>
-            <Route path="/MyPage" element={<MyPage />} />
+
             <Route path="*" element={<Navigate to="/Main" />} />
           </>
         ) : (
