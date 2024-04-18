@@ -5,6 +5,7 @@ import { axios } from "axios";
 const getUser = async () => {
   try {
     const result = await userAxios.get();
+    console.log(result.data);
     return result.data;
   } catch (error) {
     console.error(error);
