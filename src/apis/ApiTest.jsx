@@ -8,14 +8,14 @@ function ApiTest() {
       const result = await userAxios.post(
         "",
         {
-          age: localStorage.get("age"),
-          gender: localStorage.get("gender"),
-          nickname: localStorage.get("nickName"),
-          prefer_sport: localStorage.get("preferSport"),
-          soccer_tier: localStorage.get("soccerTier"),
-          basketball_tier: localStorage.get("basketballTier"),
-          badminton_tier: localStorage.get("badmintonTier"),
-          tableTennis_tier: localStorage.get("tableTennisTier"),
+          age: localStorage.getItem("age"),
+          gender: localStorage.getItem("gender"),
+          nickname: localStorage.getItem("nickName"),
+          prefer_sport: localStorage.getItem("preferSport"),
+          soccer_tier: localStorage.getItem("soccerTier"),
+          basketball_tier: localStorage.getItem("basketballTier"),
+          badminton_tier: localStorage.getItem("badmintonTier"),
+          tableTennis_tier: localStorage.getItem("tableTennisTier"),
         },
         {
           "Content-Type": "application/json",
@@ -32,14 +32,14 @@ function ApiTest() {
       const result = await userAxios.put(
         "",
         {
-          age: localStorage.get("age"),
-          gender: localStorage.get("gender"),
-          nickname: localStorage.get("nickName"),
-          prefer_sport: localStorage.get("preferSport"),
-          soccer_tier: localStorage.get("soccerTier"),
-          basketball_tier: localStorage.get("basketballTier"),
-          badminton_tier: localStorage.get("badmintonTier"),
-          tableTennis_tier: localStorage.get("tableTennisTier"),
+          age: localStorage.getItem("age"),
+          gender: localStorage.getItem("gender"),
+          nickname: localStorage.getItem("nickName"),
+          prefer_sport: localStorage.getItem("preferSport"),
+          soccer_tier: localStorage.getItem("soccerTier"),
+          basketball_tier: localStorage.getItem("basketballTier"),
+          badminton_tier: localStorage.getItem("badmintonTier"),
+          tableTennis_tier: localStorage.getItem("tableTennisTier"),
         },
         {
           "Content-Type": "application/json",
@@ -63,12 +63,28 @@ function ApiTest() {
       alert("회원탈퇴실패");
     }
   };
+  const refresh = async () => {
+    const refreshToken = localStorage.getItem("refreshToken");
+    try {
+      const result = await userAxios.post("/refresh", null, {
+        headers: { refresh: refreshToken },
+      });
+      console.log(result);
+      localStorage.setItem("accessToken", result.data.accessToken);
+      localStorage.setItem("refreshToken", result.data.refreshToken);
+    } catch (error) {
+      console.error(error);
+      console.error("refreshTokens 실패");
+    }
+  };
+
   return (
     <>
       <button onClick={getUser}>get</button>
       <button onClick={putUser}>put</button>
       <button onClick={postUser}>post</button>
       <button onClick={deleteUser}>delete</button>
+      <button onClick={refresh}>refresh</button>
     </>
   );
 }
