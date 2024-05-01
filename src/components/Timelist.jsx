@@ -27,7 +27,7 @@ function Timelist() {
   const sliderMaxValue = timeSlots.length - 1;
 
   const handleChange = (_, newValue) => {
-    if (now.getTime() >= timeSlots[newValue].getTime()) return; // 현재 시간 이전의 시간으로 이동할 수 없도록 설정
+    if (now.getTime() >= timeSlots[newValue].getTime()) return;
     setSliderValue(newValue);
   };
 
