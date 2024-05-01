@@ -73,10 +73,10 @@ function SignUp() {
   const [gender, setGender] = useState(null);
   const [nickname, setNickname] = useState(null);
   const [preferSport, setPreferSport] = useState(null);
-  const [soccerTier, setSoccerTier] = useState(1);
-  const [basketballTier, setBasketballTier] = useState(1);
-  const [badmintonTier, setBadmintonTier] = useState(1);
-  const [tableTennisTier, setTableTennisTier] = useState(1);
+  // const [soccerTier, setSoccerTier] = useState(1);
+  // const [basketballTier, setBasketballTier] = useState(1);
+  // const [badmintonTier, setBadmintonTier] = useState(1);
+  // const [tableTennisTier, setTableTennisTier] = useState(1);
   const [tier, setTier] = useState(null);
   const [step, setStep] = useState(1);
 
@@ -95,11 +95,30 @@ function SignUp() {
   };
   const signUpHandler = async (e) => {
     e.preventDefault();
-    if (preferSport === "soccer") setSoccerTier(tier);
-    else if (preferSport === "basketBall") setBasketballTier(tier);
-    else if (preferSport === "badminton") setBadmintonTier(tier);
-    else if (preferSport === "tableTennis") setTableTennisTier(tier);
+    let soccerTier = 1,
+      basketballTier = 1,
+      badmintonTier = 1,
+      tableTennisTier = 1;
+    if (preferSport === "soccer") {
+      soccerTier = +tier;
+    } else if (preferSport === "basketBall") {
+      basketballTier = +tier;
+    } else if (preferSport === "badminton") {
+      badmintonTier = +tier;
+    } else if (preferSport === "tableTennis") {
+      tableTennisTier = +tier;
+    }
 
+    console.log({
+      age: age,
+      gender: gender,
+      nickname: nickname,
+      prefer_sport: preferSport,
+      soccer_tier: soccerTier,
+      basketball_tier: basketballTier,
+      badminton_tier: badmintonTier,
+      tableTennis_tier: tableTennisTier,
+    });
     await userAxios
       .post(
         "",
