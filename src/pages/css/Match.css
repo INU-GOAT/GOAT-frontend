@@ -4,68 +4,36 @@
     padding: 0;
     box-sizing: border-box;
   }
-  
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-  }
-  
-  .container {
+
+.match-container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-  }
-  
-  h2 {
+}
+
+.match-title {
+    font-size: 24px;
     margin-bottom: 20px;
-  }
-  
-  button {
-    padding: 10px 20px;
+}
+
+.match-type-buttons {
+    margin-bottom: 20px;
+}
+
+.match-type-buttons button {
+    display: inline-block;
+    width: 100px;
+    height: 40px;
+    margin-right: 10px;
     border: none;
     background-color: #007bff;
     color: #fff;
-    cursor: pointer;
-    margin-right: 10px;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
-  input[type="text"] {
-    padding: 10px;
-    margin-bottom: 10px;
-    width: calc(100% - 40px);
-  }
-  
-  ul {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 20px;
-  }
-  
-  li {
-    margin-bottom: 5px;
-  }
-  
-  select {
-    padding: 10px;
-    width: 100%;
-    margin-bottom: 20px;
-  }
+    text-align: center;
+    line-height: 40px;
+}
 
-.match-type-buttons button,
-.sport-button {
-  display: inline-block;
-  width: 100px;
-  height: 40px;
-  margin-right: 10px;
-  border: none;
-  background-color: #007bff;
-  color: #fff;
-  text-align: center;
-  line-height: 40px;
+.match-type-buttons button:last-child {
+    margin-right: 0;
 }
 
 .match-type-buttons button:last-child,
