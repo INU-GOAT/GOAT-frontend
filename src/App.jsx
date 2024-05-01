@@ -5,6 +5,8 @@ import Home from "./pages/Home";
 import Main from "./pages/Main";
 import Menu from "./pages/Menu";
 import Chat from "./pages/Chat";
+import Schedule from "./pages/Schedule";
+import Club from "./pages/Club";
 import LogInHandler from "./pages/LogInHandler";
 import MyPage from "./pages/MyPage";
 import isLoginStore from "./utils/store";
@@ -25,8 +27,11 @@ function App() {
             <Route element={<Menu />}>
               <Route path="/Main" element={<Main />} />
               <Route path="/Chat" element={<Chat />} />
+              <Route path="/MyPage" element={<MyPage />} />
+              <Route path="/Schedule" element={<Schedule />} />
+              <Route path="/Club" element={<Club />} />
             </Route>
-            <Route path="/MyPage" element={<MyPage />} />
+
             <Route path="*" element={<Navigate to="/Main" />} />
           </>
         ) : (
