@@ -1,5 +1,5 @@
 import { Map } from "react-kakao-maps-sdk"
-import useKakaoLoader from "../components/useKakaoLoader"
+import useKakaoLoader from "../components/useKakaoLoader.jsx"
 
 export default function KakaoMap() {
   useKakaoLoader()

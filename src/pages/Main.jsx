@@ -1,6 +1,6 @@
 import React from 'react';
 import Match from './Match';
-import KakaoMap from "../components/KaKaoMap";
+import KakaoMap from "../components/KaKaoMap.jsx";
 import "./css/Main.css";
 
 function Main() {
