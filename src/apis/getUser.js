@@ -1,6 +1,4 @@
-import refreshTokens from "./refreshTokens";
 import userAxios from "./userAxios";
-import { axios } from "axios";
 
 const getUser = async () => {
   try {
