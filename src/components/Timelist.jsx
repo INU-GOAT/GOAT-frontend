@@ -87,4 +87,4 @@ function Timelist() {
   );
 }
 
-export default Timelist;
+export default Time;
