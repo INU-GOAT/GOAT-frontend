@@ -13,6 +13,7 @@ export default function KakaoMap() {
         lng: 126.570667,
       }}
       level={3} // 지도의 확대 레벨
+	  
     />
   )
 }
