@@ -24,7 +24,7 @@ const Match = () => {
   };
 
   return (
-    <div className="match-container">
+    <div className="container">
       <h2>매치 생성</h2>
       <div className="match-type-buttons">
         <MatchType matchType="솔로" isSelected={matchType === '솔로'} onClick={handleMatchTypeClick} />
