@@ -1,6 +1,7 @@
 import axios from "axios";
 import refreshTokens from "./refreshTokens";
 import { useNavigate } from "react-router-dom";
+import LogOut from "../components/LogOut";
 
 const userAxios = axios.create({
   baseURL: "http://15.165.113.9:8080/api/users",
@@ -16,38 +17,12 @@ userAxios.interceptors.request.use(
     if (accessToken) {
       config.headers.Auth = accessToken;
     }
+    console.log(config);
     return config;
   },
   (error) => {
     //요청 에러 시 수행 로직
-    return Promise.reject(error);
-  }
-);
-
-//응답 인터셉터
-userAxios.interceptors.response.use(
-  (response) => {
-    //응답에 대한 로직
-    const res = response.data;
-    return res;
-  },
-  async (error) => {
-    if (error.response.status === 401) {
-      if (error.response.data.msg === "만료된 토큰입니다.") {
-        localStorage.clear();
-        const navigate = useNavigate();
-        alert("토큰이 만료되어 로그아웃 되었습니다.");
-        navigate("/");
-      } else {
-        await refreshTokens();
-        return userAxios(error.config);
-      }
-    } else if (error.response.data.msg === "토큰의 값이 존재하지 않습니다.") {
-      alert("토큰의 값이 존재하지 않습니다.");
-      localStorage.clear();
-      const navigate = useNavigate();
-      navigate("/");
-    }
+    console.log(error);
     return Promise.reject(error);
   }
 );

@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router";
-import { isLoginStore } from "../utils/store";
+import { isLoginStore } from "./../utils/store";
 
 function LogOut() {
   const navigate = useNavigate();
