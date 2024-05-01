@@ -4,8 +4,8 @@
     padding: 0;
     box-sizing: border-box;
   }
-  
-  body {
+
+  .body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
   }
@@ -16,11 +16,11 @@
     padding: 20px;
   }
   
-  h2 {
+  .h2 {
     margin-bottom: 20px;
   }
   
-  button {
+  .button {
     padding: 10px 20px;
     border: none;
     background-color: #007bff;
@@ -29,43 +29,65 @@
     margin-right: 10px;
   }
   
-  button:hover {
+  .button:hover {
     background-color: #0056b3;
   }
   
-  input[type="text"] {
+  .input[type="text"] {
     padding: 10px;
     margin-bottom: 10px;
     width: calc(100% - 40px);
   }
   
-  ul {
+  .ul {
     list-style: none;
     padding: 0;
     margin-bottom: 20px;
   }
   
-  li {
+  .li {
     margin-bottom: 5px;
   }
   
-  select {
+  .select {
     padding: 10px;
     width: 100%;
     margin-bottom: 20px;
   }
 
-.match-type-buttons button,
-.sport-button {
-  display: inline-block;
-  width: 100px;
-  height: 40px;
-  margin-right: 10px;
-  border: none;
+.match-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.match-type-buttons {
+    margin-bottom: 20px;
+}
+
+.match-type-buttons button {
+    display: inline-block;
+    width: 100px;
+    height: 40px;
+    margin-right: 10px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    text-align: center;
+    line-height: 50%;
+    cursor: pointer;
+}
+
+.match-type-buttons button:not(.selected):hover {
+  background-color: #fff;
+  color: #000;
+}
+
+.match-type-buttons button.selected {
   background-color: #007bff;
-  color: #fff;
-  text-align: center;
-  line-height: 40px;
+}
+
+.match-type-buttons button:last-child {
+    margin-right: 0;
 }
 
 .match-type-buttons button:last-child,

@@ -1,0 +1,14 @@
+.match-type-button {
+    display: inline-block;
+    width: 100px;
+    height: 40px;
+    margin-right: 10px;
+    text-align: center;
+    line-height: 40px;
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .match-type-button:not(.selected) {
+    background-color: #dc3545;
+  }
