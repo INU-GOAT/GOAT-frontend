@@ -1,7 +1,7 @@
 import { Map } from "react-kakao-maps-sdk"
 import useKakaoLoader from "../components/useKakaoLoader.jsx"
 
-<<<<<< baek
+
 function KakaoMap() {
     const { kakao } = window;
     const [clickedLatLng, setClickedLatLng] = useState(null);
@@ -41,7 +41,7 @@ function KakaoMap() {
 }
 
 export default KakaoMap;
-=======
+
 export default function KakaoMap() {
   useKakaoLoader()
 
@@ -63,4 +63,4 @@ export default function KakaoMap() {
     />
   )
 }
->>>>>> main
+
