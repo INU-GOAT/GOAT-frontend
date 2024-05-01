@@ -53,14 +53,7 @@ function Menu() {
               </a>
             </li>
             <li>
-              <a
-                onClick={(event) => {
-                  event.preventDefault();
-                  navigate(<LogOut />);
-                }}
-              >
-                로그아웃
-              </a>
+              <LogOut />
             </li>
           </ul>
         </nav>
