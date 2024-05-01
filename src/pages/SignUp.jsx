@@ -311,9 +311,13 @@ function SignUp() {
                           maxWidth: "40%",
                           outline: "1px solid",
                           outlineColor:
-                            gender === "soccer" ? "primary.main" : "divider",
+                            preferSport === "soccer"
+                              ? "primary.main"
+                              : "divider",
                           backgroundColor:
-                            gender === "soccer" ? "background.default" : "",
+                            preferSport === "soccer"
+                              ? "background.default"
+                              : "",
                         }}
                       >
                         <CardActionArea
@@ -341,11 +345,13 @@ function SignUp() {
                           maxWidth: "40%",
                           outline: "1px solid",
                           outlineColor:
-                            gender === "basketBall"
+                            preferSport === "basketBall"
                               ? "primary.main"
                               : "divider",
                           backgroundColor:
-                            gender === "basketBall" ? "background.default" : "",
+                            preferSport === "basketBall"
+                              ? "background.default"
+                              : "",
                         }}
                       >
                         <CardActionArea
@@ -384,9 +390,13 @@ function SignUp() {
                           maxWidth: "40%",
                           outline: "1px solid",
                           outlineColor:
-                            gender === "badminton" ? "primary.main" : "divider",
+                            preferSport === "badminton"
+                              ? "primary.main"
+                              : "divider",
                           backgroundColor:
-                            gender === "badminton" ? "background.default" : "",
+                            preferSport === "badminton"
+                              ? "background.default"
+                              : "",
                         }}
                       >
                         <CardActionArea
@@ -417,11 +427,11 @@ function SignUp() {
                           flexGrow: 1,
                           outline: "1px solid",
                           outlineColor:
-                            gender === "tableTennis"
+                            preferSport === "tableTennis"
                               ? "primary.main"
                               : "divider",
                           backgroundColor:
-                            gender === "tableTennis"
+                            preferSport === "tableTennis"
                               ? "background.default"
                               : "",
                         }}
