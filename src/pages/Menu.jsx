@@ -1,7 +1,7 @@
 import React from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import "./css/Menu.css";
 import LogOut from "../components/LogOut";
+import "./css/Menu.css";
 
 function Menu() {
   const navigate = useNavigate();
@@ -9,7 +9,7 @@ function Menu() {
   return (
     <div id="wrap">
       <header>
-        <nav>
+        <nav className="header-nav">
           <ul className="nav-items">
             <li>
               <a
@@ -66,4 +66,3 @@ function Menu() {
 }
 
 export default Menu;
-//홈 전적 클럽 마이페이지

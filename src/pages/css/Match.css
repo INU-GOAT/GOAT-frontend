@@ -5,82 +5,44 @@
     box-sizing: border-box;
   }
 
-  .body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-  }
-  
-  .container {
+  .match-container {
     max-width: 800px;
-    margin: 0 auto;
+    margin: 20px auto;
     padding: 20px;
   }
   
-  .h2 {
-    margin-bottom: 20px;
-  }
-  
-  .button {
-    padding: 10px 20px;
-    border: none;
-    background-color: #007bff;
-    color: #fff;
-    cursor: pointer;
-    margin-right: 10px;
-  }
-  
-  .button:hover {
-    background-color: #0056b3;
-  }
-  
-  .input[type="text"] {
-    padding: 10px;
-    margin-bottom: 10px;
-    width: calc(100% - 40px);
-  }
-  
-  .ul {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 20px;
-  }
-  
-  .li {
-    margin-bottom: 5px;
-  }
-  
-  .select {
-    padding: 10px;
-    width: 100%;
-    margin-bottom: 20px;
-  }
-
-.match-title {
+  .match-title {
     font-size: 24px;
     margin-bottom: 20px;
-}
-
-.match-type-buttons {
+  }
+  
+  .match-type-buttons {
     margin-bottom: 20px;
-}
-
-.match-type-buttons button {
+    text-align: center; /* 중앙 정렬 추가 */
+  }
+  
+  .match-type-buttons button {
     display: inline-block;
     width: 100px;
     height: 40px;
     margin-right: 10px;
+    margin-bottom: 10px; /* 버튼 아래 여백 추가 */
     border: none;
     background-color: #007bff;
     color: #fff;
     text-align: center;
-    line-height: 40px;
-}
-
-.match-type-buttons button:last-child {
+    line-height: 40px; /* 버튼 텍스트 가운데 정렬 */
+    cursor: pointer;
+  }
+  
+  .match-type-buttons button:not(.selected):hover {
+    background-color: #0056b3; /* hover 시 색상 변경 */
+  }
+  
+  .match-type-buttons button.selected {
+    background-color: #0056b3; /* 선택된 버튼 색상 변경 */
+  }
+  
+  .match-type-buttons button:last-child {
     margin-right: 0;
-}
-
-.match-type-buttons button:last-child,
-.sport-button:last-child {
-  margin-right: 0;
-}
+  }

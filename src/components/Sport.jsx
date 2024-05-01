@@ -1,7 +1,7 @@
 import React from 'react';
 import { RadioTileGroup, RadioTile } from '@itwin/itwinui-react';
 
-const Sport = ({ selectedSport, onClick }) => (
+const Sport = ({ selectedSport, onClick, disabled }) => (
   <RadioTileGroup className='demo-radio-tile-group'>
     <RadioTile
       label='축구'
@@ -15,6 +15,7 @@ const Sport = ({ selectedSport, onClick }) => (
       }
       checked={selectedSport === '축구'}
       onChange={() => onClick('축구')}
+      disabled={disabled}
     />
     <RadioTile
       label='농구'
@@ -28,6 +29,7 @@ const Sport = ({ selectedSport, onClick }) => (
       }
       checked={selectedSport === '농구'}
       onChange={() => onClick('농구')}
+      disabled={disabled}
     />
     <RadioTile
       label='배드민턴'
@@ -41,6 +43,7 @@ const Sport = ({ selectedSport, onClick }) => (
       }
       checked={selectedSport === '배드민턴'}
       onChange={() => onClick('배드민턴')}
+      disabled={disabled}
     />
     <RadioTile
       label='탁구'
@@ -54,6 +57,7 @@ const Sport = ({ selectedSport, onClick }) => (
       }
       checked={selectedSport === '탁구'}
       onChange={() => onClick('탁구')}
+      disabled={disabled}
     />
   </RadioTileGroup>
 );
