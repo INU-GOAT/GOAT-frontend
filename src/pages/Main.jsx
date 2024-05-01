@@ -1,7 +1,8 @@
-import React from 'react';
-import Match from './Match';
+import React from "react";
+import Match from "./Match";
 import KakaoMap from "../components/KaKaoMap";
 import "./css/Main.css";
+import ApiTest from "../apis/ApiTest";
 
 function Main() {
   return (
@@ -14,6 +15,7 @@ function Main() {
           <Match />
         </div>
       </div>
+      <ApiTest></ApiTest>
     </div>
   );
 }
