@@ -1,7 +1,4 @@
-.radio-input {
-  margin: 10px;
-  margin-top: 15px;
-  margin-bottom: 8px;
+.demo-radio-tile-group {
   display: flex;
   flex-direction: row;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
@@ -11,48 +8,33 @@
   color: white;
 }
 
-.radio-input input[type="radio"] {
-  display: none;
-}
-
-.radio-input label {
+.itwinui-radio-tile {
+  margin: 10px;
+  margin-top: 15px;
+  margin-bottom: 8px;
   display: flex;
   align-items: center;
   padding: 10px;
   border: 1px solid #ccc;
   background-color: #000000;
   border-radius: 5px;
-  margin-right: 12px;
   cursor: pointer;
   position: relative;
   transition: all 0.3s ease-in-out;
 }
 
-.radio-input label:before {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 50%;
-  left: 0;
-  transform: translate(-50%, -50%);
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: #fff;
-  border: 2px solid #ccc;
-  transition: all 0.3s ease-in-out;
+.itwinui-radio-tile-input {
+  display: none;
 }
 
-.radio-input input[type="radio"]:checked + label:before {
+.itwinui-radio-tile-input:checked + .itwinui-radio-tile-label::before {
   background-color: royalblue;
-  top: 0;
 }
 
-.radio-input input[type="radio"]:checked + label {
+.itwinui-radio-tile-input:checked + .itwinui-radio-tile-label {
   background-color: #10b981;
   color: #fff;
   border-color: rgb(129, 235, 129);
-  animation: radio-translate 0.5s ease-in-out;
 }
 
 @keyframes radio-translate {
