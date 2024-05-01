@@ -17,6 +17,8 @@ import {
   Paper,
   TextField,
   ThemeProvider,
+  Typography,
+  colors,
   createTheme,
 } from "@mui/material";
 import { ReactComponent as GoatIcon } from "../assets/GOAT.svg";
@@ -112,7 +114,7 @@ function SignUp() {
         }}
       >
         <Grid container justifyContent="center" spacing={1}>
-          <Grid item xs={3} alignContent={"center"}>
+          <Grid item xs={3} alignContent={"center"} color="#f4f4f4">
             <GoatIcon width="400px" height="400px" />
             <h1>GOAT 회원가입하기</h1>
           </Grid>
@@ -127,7 +129,7 @@ function SignUp() {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
-                  bgcolor: "#eaebff",
+                  bgcolor: "#ffffff",
                   boxShadow: 3,
                   borderRadius: 1,
                 }}
