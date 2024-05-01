@@ -36,8 +36,7 @@ const Match = () => {
         <Sport selectedSport={selectedSport} onClick={handleSportClick} />
       </div>
       <div>
-        <h3>시간 선택</h3>
-        <Timelist onChange={handleTimeChange} />
+        <Timelist selectedSport={selectedTime} onChange={handleTimeChange} />
       </div>
       <Matching />
     </div>
