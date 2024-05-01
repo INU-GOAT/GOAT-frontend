@@ -56,7 +56,7 @@ function Menu() {
               <a
                 onClick={(event) => {
                   event.preventDefault();
-                  navigate(LogOut);
+                  navigate(<LogOut />);
                 }}
               >
                 로그아웃
