@@ -18,7 +18,7 @@
   
   .match-type-buttons {
     margin-bottom: 20px;
-    text-align: center; /* 중앙 정렬 추가 */
+    text-align: center;
   }
   
   .match-type-buttons button {
@@ -26,21 +26,21 @@
     width: 100px;
     height: 40px;
     margin-right: 10px;
-    margin-bottom: 10px; /* 버튼 아래 여백 추가 */
+    margin-bottom: 10px;
     border: none;
     background-color: #007bff;
     color: #fff;
     text-align: center;
-    line-height: 40px; /* 버튼 텍스트 가운데 정렬 */
+    line-height: 40px;
     cursor: pointer;
   }
   
   .match-type-buttons button:not(.selected):hover {
-    background-color: #0056b3; /* hover 시 색상 변경 */
+    background-color: #0056b3;
   }
   
   .match-type-buttons button.selected {
-    background-color: #0056b3; /* 선택된 버튼 색상 변경 */
+    background-color: #0056b3;
   }
   
   .match-type-buttons button:last-child {
