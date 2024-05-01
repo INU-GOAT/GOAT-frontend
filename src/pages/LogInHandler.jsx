@@ -1,43 +1,49 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { SyncLoader } from "react-spinners";
-import axios from "axios";
+
+import userAxios from "../apis/userAxios";
+import setUser from "../utils/setUser";
+import { isLoginStore } from "../utils/store";
 
 function LogInHandler() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const code = searchParams.get("code");
-
+  const { setIsLogin } = isLoginStore();
   console.log(code);
 
   useEffect(() => {
+    //await 바꾸기
     const getToken = async () => {
-      await axios
-        .post("http://15.165.113.9:8080/api/users/code", null, {
+      await userAxios
+        .post("/code", null, {
           headers: { code: code },
         })
         .then((res) => {
-          const accessToken = res.data.data.accessToken;
-          const refreshToken = res.data.data.refreshToken;
-          getUserId(accessToken);
+          console.log(res);
+
+          localStorage.setItem("accessToken", res.data.accessToken);
+          localStorage.setItem("refreshToken", res.data.refreshToken);
+          getUserId();
         })
         .catch((error) => {
           console.log(error);
           console.error("getToken 실패");
         });
     };
-    const getUserId = async (accessToken) => {
-      await axios
-        .get("http://15.165.113.9:8080/api/users", {
-          headers: { Auth: accessToken },
-        })
+    const getUserId = async () => {
+      await userAxios
+        .get()
         .then((res) => {
           console.log(res);
-          if (res.data.data === -1) {
+          if (res.data === -1) {
             alert("회원가입이 필요합니다.");
-            navigate("/SignUp", { state: { accessToken } });
+            navigate("/SignUp");
           } else {
-            //id 값 이용 코드 추가 작성하기
+            localStorage.setItem("isLogin", true);
+            setIsLogin(true);
+            setUser(res.data);
             navigate("/Main");
           }
         })
