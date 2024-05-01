@@ -9,12 +9,12 @@ export default function KakaoMap() {
       id="map"
       center={{
         // 지도의 중심좌표
-        lat: 33.450701,
-        lng: 126.570667,
+        lat: 37.37555724804313,
+        lng: 126.63280779604705,
       }}
 	  style={{
         // 지도의 크기
-        width: "100%",
+        width: "50%",
         height: "450px",
       }}
       level={3} // 지도의 확대 레벨
