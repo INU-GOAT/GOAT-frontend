@@ -1,7 +1,4 @@
 import axios from "axios";
-import refreshTokens from "./refreshTokens";
-import { useNavigate } from "react-router-dom";
-import LogOut from "../components/LogOut";
 
 const userAxios = axios.create({
   baseURL: "http://15.165.113.9:8080/api/users",
