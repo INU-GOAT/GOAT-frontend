@@ -1,14 +1,23 @@
-import React from 'react';
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import './Matchtype.css';
 
-const MatchType = ({ matchType, isSelected, onClick }) => {
+const MatchType = ({ matchType, isSelected, onClick, disabled }) => {
   const handleClick = () => {
-    onClick(matchType);
+    if (!disabled) {
+      onClick(matchType);
+    }
   };
 
   return (
-    <button className={isSelected ? 'selected' : ''} onClick={handleClick}>
+    <Button
+      variant="contained"
+      onClick={handleClick}
+      className={`match-type-button ${isSelected ? 'selected' : ''}`}
+      disabled={disabled}
+    >
       {matchType}
-    </button>
+    </Button>
   );
 };
 

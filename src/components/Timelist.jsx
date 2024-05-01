@@ -1,17 +1,11 @@
-import React, { useState, useEffect } from "react";
-import "./Timelist.css";
-import { Slider, Box, Typography } from "@mui/material";
+import React, { useState } from 'react';
+import { Slider, Box, Typography } from '@mui/material';
 
-function Timelist() {
+const Timelist = ({ onChange, disabled }) => {
   const now = new Date();
   const startTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
   const endTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
   const [sliderValue, setSliderValue] = useState(0);
-
-  useEffect(() => {
-    const currentTimeIndex = Math.floor((now - startTime) / (1000 * 60 * 30));
-    setSliderValue(currentTimeIndex);
-  }, []);
 
   const generateTimeSlots = () => {
     const timeSlots = [];
@@ -27,12 +21,14 @@ function Timelist() {
   const sliderMaxValue = timeSlots.length - 1;
 
   const handleChange = (_, newValue) => {
-    if (now.getTime() >= timeSlots[newValue].getTime()) return;
-    setSliderValue(newValue);
+    if (!disabled) {
+      setSliderValue(newValue);
+      onChange(timeSlots[newValue]);
+    }
   };
 
   return (
-    <div className="card-conteiner">
+    <div className="card-container">
       <div className="card-content">
         <div className="card-title">
           <span>시간 설정</span>
@@ -44,16 +40,17 @@ function Timelist() {
             max={sliderMaxValue}
             value={sliderValue}
             onChange={handleChange}
+            disabled={disabled}
           />
         </Box>
         <div className="values">
           <Typography variant="body2">
-            {timeSlots[sliderValue].toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+            {timeSlots[sliderValue].toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </Typography>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Timelist;
