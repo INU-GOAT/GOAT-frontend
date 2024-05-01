@@ -32,6 +32,7 @@
 .nav-items > li {
   display: inline-block;
   margin-left: 20px;
+  cursor: none;
 }
 .nav-items > li:first-child {
   margin-left: 0;

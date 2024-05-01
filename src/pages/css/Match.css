@@ -73,7 +73,17 @@
     background-color: #007bff;
     color: #fff;
     text-align: center;
-    line-height: 40px;
+    line-height: 50%;
+    cursor: pointer;
+}
+
+.match-type-buttons button:not(.selected):hover {
+  background-color: #fff;
+  color: #000;
+}
+
+.match-type-buttons button.selected {
+  background-color: #007bff;
 }
 
 .match-type-buttons button:last-child {
