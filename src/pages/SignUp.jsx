@@ -26,12 +26,13 @@ import {
   Stack,
   TextField,
   ThemeProvider,
+  ToggleButton,
+  ToggleButtonGroup,
   Typography,
   colors,
   createTheme,
 } from "@mui/material";
 import { ReactComponent as GoatIcon } from "../assets/GOAT.svg";
-import { IoMdFemale, IoMdMale } from "react-icons/io";
 import {
   GiBasketballBall,
   GiPingPongBat,
@@ -39,6 +40,8 @@ import {
   GiSoccerBall,
 } from "react-icons/gi";
 import { CgChevronLeft, CgChevronRight } from "react-icons/cg";
+import { FaApple, FaSeedling, FaTree } from "react-icons/fa";
+import { grey } from "@mui/material/colors";
 
 const ages = [
   {
@@ -70,10 +73,11 @@ function SignUp() {
   const [gender, setGender] = useState(null);
   const [nickname, setNickname] = useState(null);
   const [preferSport, setPreferSport] = useState(null);
-  // const [soccerTier, setSoccerTier] = useState(null);
-  // const [basketballTier, setBasketballTier] = useState(null);
-  // const [badmintonTier, setBadmintonTier] = useState(null);
-  // const [tableTennisTier, setTableTennisTier] = useState(null);
+  const [soccerTier, setSoccerTier] = useState(1);
+  const [basketballTier, setBasketballTier] = useState(1);
+  const [badmintonTier, setBadmintonTier] = useState(1);
+  const [tableTennisTier, setTableTennisTier] = useState(1);
+  const [tier, setTier] = useState(null);
   const [step, setStep] = useState(1);
 
   const { setIsLogin } = isLoginStore();
@@ -86,10 +90,15 @@ function SignUp() {
     setGender(data.get("gender"));
     setStep(2);
   };
-
+  const tierChange = (event, nextTier) => {
+    setTier(nextTier);
+  };
   const signUpHandler = async (e) => {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
+    if (preferSport === "soccer") setSoccerTier(tier);
+    else if (preferSport === "basketBall") setBasketballTier(tier);
+    else if (preferSport === "badminton") setBadmintonTier(tier);
+    else if (preferSport === "tableTennis") setTableTennisTier(tier);
 
     await userAxios
       .post(
@@ -99,10 +108,10 @@ function SignUp() {
           gender: gender,
           nickname: nickname,
           prefer_sport: preferSport,
-          soccer_tier: data.get("soccerTier"),
-          basketball_tier: data.get("basketballTier"),
-          badminton_tier: data.get("badmintonTier"),
-          tableTennis_tier: data.get("tableTennisTier"),
+          soccer_tier: soccerTier,
+          basketball_tier: basketballTier,
+          badminton_tier: badmintonTier,
+          tableTennis_tier: tableTennisTier,
         },
         {
           "Content-Type": "application/json",
@@ -163,10 +172,12 @@ function SignUp() {
               display: { xs: "none", lg: "flex" },
               flexDirection: "column",
               justifyContent: "center",
+              alignContent: "center",
+              flexWrap: "wrap",
             }}
           >
             <GoatIcon width="300px" height="300px" />
-            <h1>GOAT 회원가입하기</h1>
+            <h2>GOAT 회원가입하기</h2>
           </Grid>
 
           <Stack>
@@ -174,7 +185,7 @@ function SignUp() {
               <CssBaseline />
               <Box
                 width={"510px"}
-                alignItems={"center"}
+                alignItems={"stretch"}
                 sx={{
                   mt: 8,
                   padding: "40px 60px",
@@ -196,7 +207,7 @@ function SignUp() {
                     onSubmit={stepOneHandler}
                     sx={{ mt: 3 }}
                   >
-                    <h1>선수 정보 입력하기</h1>
+                    <h2>선수 정보 입력하기</h2>
                     <TextField
                       name="nickName"
                       required
@@ -225,8 +236,14 @@ function SignUp() {
                     </TextField>
 
                     <FormControl sx={{ mt: 2 }}>
-                      <FormLabel id="gender">성별</FormLabel>
-                      <RadioGroup row name="gender-group">
+                      <FormLabel name="gender-group" id="gender">
+                        성별
+                      </FormLabel>
+                      <RadioGroup
+                        row
+                        name="gender"
+                        aria-labelledby="gender-group"
+                      >
                         <FormControlLabel
                           value="male"
                           control={<Radio />}
@@ -258,7 +275,7 @@ function SignUp() {
                     onSubmit={signUpHandler}
                     sx={{ mt: 3 }}
                   >
-                    <h1>선호 스포츠 선택하기</h1>
+                    <h2>선호 스포츠와 레벨 선택하기</h2>
                     <RadioGroup
                       name="preferSport"
                       value={preferSport}
@@ -410,42 +427,70 @@ function SignUp() {
                         </CardActionArea>
                       </Card>
                     </RadioGroup>
-
-                    <TextField
-                      name="soccerTier"
-                      required
-                      fullWidth
-                      id="soccerTier"
-                      label="축구 실력"
-                      sx={{ mt: 2 }}
-                    />
-
-                    <TextField
-                      name="basketballTier"
-                      required
-                      fullWidth
-                      id="basketballTier"
-                      label="농구 실력"
-                      sx={{ mt: 2 }}
-                    />
-
-                    <TextField
-                      name="badmintonTier"
-                      required
-                      fullWidth
-                      id="badmintonTier"
-                      label="배드민턴 실력"
-                      sx={{ mt: 2 }}
-                    />
-
-                    <TextField
-                      name="tableTennisTier"
-                      required
-                      fullWidth
-                      id="tableTennisTier"
-                      label="탁구 실력"
-                      sx={{ mt: 2 }}
-                    />
+                    <Stack
+                      alignItems={"flex-start"}
+                      mt={4}
+                      flexDirection={"row"}
+                    >
+                      <ToggleButtonGroup
+                        orientation="vertical"
+                        value={tier}
+                        exclusive
+                        onChange={tierChange}
+                      >
+                        <ToggleButton
+                          value="1"
+                          aria-label="seedling"
+                          sx={{ padding: "19px" }}
+                        >
+                          <FaSeedling fill="lightgreen" fontSize="30px" />
+                        </ToggleButton>
+                        <ToggleButton
+                          value="2"
+                          aria-label="apple"
+                          sx={{ padding: "19px" }}
+                        >
+                          <FaApple fill="red" fontSize="30px" />
+                        </ToggleButton>
+                        <ToggleButton
+                          value="3"
+                          aria-label="tree"
+                          sx={{ padding: "19px" }}
+                        >
+                          <FaTree fill="green" fontSize="30px" />
+                        </ToggleButton>
+                      </ToggleButtonGroup>
+                      <Stack color="indigo">
+                        {tier === "1" && (
+                          <Stack mt={1} ml={2}>
+                            <h3>
+                              스포츠에 호기심을 갖고 있거나 입문한지 얼마 안된
+                              레벨입니다.
+                            </h3>
+                          </Stack>
+                        )}
+                        {tier === "2" && (
+                          <Stack mt={9.5} ml={2}>
+                            <h3>
+                              스포츠를 배우는 중이거나 취미로 즐기는 레벨입니다.
+                            </h3>
+                          </Stack>
+                        )}
+                        {tier === "3" && (
+                          <Stack mt={18} ml={2}>
+                            <h3>스포츠를 가르치거나 일상이 된 레벨입니다.</h3>
+                          </Stack>
+                        )}
+                      </Stack>
+                    </Stack>
+                    <Typography
+                      variant="subtitle2"
+                      mt={3}
+                      color={"yellowgreen"}
+                      textAlign={"right"}
+                    >
+                      선택하지 않은 스포츠의 레벨은 새싹레벨로 선택됩니다.
+                    </Typography>
                     <Stack
                       flexDirection={"row"}
                       justifyContent={"space-between"}
