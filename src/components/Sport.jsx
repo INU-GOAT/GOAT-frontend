@@ -6,7 +6,7 @@ const Sport = ({ selectedSport, onClick }) => (
     <RadioTile
       label='축구'
       icon={
-        <svg aria-hidden='true' viewBox='0 0 24 24'>
+        <svg aria-hidden='true' viewBox='0 0 6 6'>
             <path
               d='m12 0a7.98189 7.98189 0 0 0 -6.9688 11.906c.1079.192.221.381.3438.563l6.625 11.531 6.625-11.531c.102-.151.19-.311.281-.469l.063-.094a7.98217 7.98217 0 0 0 -6.969-11.906zm0 4a4 4 0 1 1 -4 4 4.00011 4.00011 0 0 1 4-4z'
               fill='#e74c3c'
@@ -19,7 +19,7 @@ const Sport = ({ selectedSport, onClick }) => (
     <RadioTile
       label='농구'
       icon={
-        <svg aria-hidden='true' viewBox='0 0 24 24'>
+        <svg aria-hidden='true' viewBox='0 0 6 6'>
           <path
             d='m12 0a7.98189 7.98189 0 0 0 -6.9688 11.906c.1079.192.221.381.3438.563l6.625 11.531 6.625-11.531c.102-.151.19-.311.281-.469l.063-.094a7.98217 7.98217 0 0 0 -6.969-11.906zm0 4a4 4 0 1 1 -4 4 4.00011 4.00011 0 0 1 4-4z'
             fill='#e74c3c'
@@ -32,7 +32,7 @@ const Sport = ({ selectedSport, onClick }) => (
     <RadioTile
       label='배드민턴'
       icon={
-        <svg aria-hidden='true' viewBox='0 0 24 24'>
+        <svg aria-hidden='true' viewBox='0 0 6 6'>
           <path
             d='m12 0a7.98189 7.98189 0 0 0 -6.9688 11.906c.1079.192.221.381.3438.563l6.625 11.531 6.625-11.531c.102-.151.19-.311.281-.469l.063-.094a7.98217 7.98217 0 0 0 -6.969-11.906zm0 4a4 4 0 1 1 -4 4 4.00011 4.00011 0 0 1 4-4z'
             fill='#e74c3c'
@@ -45,7 +45,7 @@ const Sport = ({ selectedSport, onClick }) => (
     <RadioTile
       label='탁구'
       icon={
-        <svg aria-hidden='true' viewBox='0 0 24 24'>
+        <svg aria-hidden='true' viewBox='0 0 6 6'>
           <path
             d='m12 0a7.98189 7.98189 0 0 0 -6.9688 11.906c.1079.192.221.381.3438.563l6.625 11.531 6.625-11.531c.102-.151.19-.311.281-.469l.063-.094a7.98217 7.98217 0 0 0 -6.969-11.906zm0 4a4 4 0 1 1 -4 4 4.00011 4.00011 0 0 1 4-4z'
             fill='#e74c3c'
