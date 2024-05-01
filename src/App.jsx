@@ -30,11 +30,8 @@ function App() {
               <Route path="/Main" element={<Main />} />
               <Route path="/Chat" element={<Chat />} />
               <Route path="/MyPage" element={<MyPage />} />
-<<<<<<< HEAD
-=======
               <Route path="/Schedule" element={<Schedule />} />
               <Route path="/Club" element={<Club />} />
->>>>>>> KJWON
             </Route>
 
             <Route path="*" element={<Navigate to="/Main" />} />
