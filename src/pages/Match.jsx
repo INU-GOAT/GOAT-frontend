@@ -30,8 +30,8 @@ const Match = () => {
   };
 
   return (
-    <div className="container">
-      <h2>매치 생성</h2>
+    <div className="container match-container">
+      <h2 className="match-title">매치 생성</h2>
       <div className="match-type-buttons">
         <MatchType matchType="솔로" isSelected={matchType === '솔로'} onClick={handleMatchTypeClick} disabled={matchingInProgress} />
         <MatchType matchType="팀" isSelected={matchType === '팀'} onClick={handleMatchTypeClick} disabled={matchingInProgress} />

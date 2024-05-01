@@ -1,6 +1,6 @@
 import React from 'react';
 import Match from './Match';
-import KakaoMap from "../components/KaKaoMap.jsx";
+import KaKaoMap from "../components/KaKaoMap.jsx";
 import "./css/Main.css";
 import ApiTest from "../apis/ApiTest";
 
@@ -8,7 +8,7 @@ function Main() {
   return (
     <div className="main">
       <div className="content">
-        <KakaoMap />
+        <KaKaoMap />
       </div>
       <div className="main-container">
         <div className="match-container">
