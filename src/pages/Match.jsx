@@ -5,6 +5,7 @@ import Sport from '../components/Sport';
 import Timelist from '../components/Timelist';
 import Matching from '../components/Matching';
 import './css/Match.css';
+import axios from 'axios';
 
 const Match = () => {
   const [matchType, setMatchType] = useState('');
@@ -25,7 +26,21 @@ const Match = () => {
   };
 
   const onStartMatching = () => {
+
     setMatchingInProgress(true);
+    axios.post('/api/matching', {
+      sport: selectedSport,
+      matching_start_time: selectedTime
+    })
+    .then((response) => {
+      console.log(response);
+
+    })
+    .then((error) => {
+      console.error(error);
+
+    });
+
     console.log('매칭 시작');
   };
 
