@@ -41,6 +41,12 @@ import {
 import { CgChevronLeft, CgChevronRight } from "react-icons/cg";
 import { FaApple, FaSeedling, FaTree } from "react-icons/fa";
 import { grey } from "@mui/material/colors";
+import {
+  BadmintonCard,
+  BasketBallCard,
+  SoccerCard,
+  TableTennisCard,
+} from "./../components/SportsCards";
 
 const ages = [
   {
@@ -71,6 +77,7 @@ function SignUp() {
   const [age, setAge] = useState(null);
   const [gender, setGender] = useState(null);
   const [nickname, setNickname] = useState(null);
+  const [sport, setSport] = useState(null);
   const [preferSport, setPreferSport] = useState(null);
   // const [soccerTier, setSoccerTier] = useState(1);
   // const [basketballTier, setBasketballTier] = useState(1);
@@ -314,74 +321,8 @@ function SignUp() {
                         alignContent: "space-around",
                       }}
                     >
-                      <Card
-                        raised={preferSport === "soccer"}
-                        sx={{
-                          maxWidth: "40%",
-                          outline: "1px solid",
-                          outlineColor:
-                            preferSport === "soccer"
-                              ? "primary.main"
-                              : "divider",
-                          backgroundColor:
-                            preferSport === "soccer"
-                              ? "background.default"
-                              : "",
-                        }}
-                      >
-                        <CardActionArea
-                          onClick={() => setPreferSport("soccer")}
-                        >
-                          <CardContent
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 1,
-                            }}
-                          >
-                            <GiSoccerBall
-                              fill={
-                                preferSport === "soccer" ? "skyblue" : "gray"
-                              }
-                              size={"100%"}
-                            ></GiSoccerBall>
-                          </CardContent>
-                        </CardActionArea>
-                      </Card>
-                      <Card
-                        raised={preferSport === "basketBall"}
-                        sx={{
-                          maxWidth: "40%",
-                          outline: "1px solid",
-                          outlineColor:
-                            preferSport === "basketBall"
-                              ? "primary.main"
-                              : "divider",
-                          backgroundColor:
-                            preferSport === "basketBall"
-                              ? "background.default"
-                              : "",
-                        }}
-                      >
-                        <CardActionArea
-                          onClick={() => setPreferSport("basketBall")}
-                        >
-                          <CardContent
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 1,
-                            }}
-                          >
-                            <GiBasketballBall
-                              fill={
-                                preferSport === "basketBall" ? "orange" : "gray"
-                              }
-                              size={"100%"}
-                            ></GiBasketballBall>
-                          </CardContent>
-                        </CardActionArea>
-                      </Card>
+                      <SoccerCard sportState={{ sport, setSport }} />
+                      <BasketBallCard sportState={{ sport, setSport }} />
                     </RadioGroup>
                     <RadioGroup
                       name="preferSport"
@@ -393,77 +334,8 @@ function SignUp() {
                         alignContent: "space-around",
                       }}
                     >
-                      <Card
-                        raised={preferSport === "badminton"}
-                        sx={{
-                          maxWidth: "40%",
-                          outline: "1px solid",
-                          outlineColor:
-                            preferSport === "badminton"
-                              ? "primary.main"
-                              : "divider",
-                          backgroundColor:
-                            preferSport === "badminton"
-                              ? "background.default"
-                              : "",
-                        }}
-                      >
-                        <CardActionArea
-                          onClick={() => setPreferSport("badminton")}
-                        >
-                          <CardContent
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 1,
-                            }}
-                          >
-                            <GiShuttlecock
-                              fill={
-                                preferSport === "badminton"
-                                  ? "lightgreen"
-                                  : "gray"
-                              }
-                              size={"100%"}
-                            ></GiShuttlecock>
-                          </CardContent>
-                        </CardActionArea>
-                      </Card>
-                      <Card
-                        raised={preferSport === "tableTennis"}
-                        sx={{
-                          maxWidth: "40%",
-                          flexGrow: 1,
-                          outline: "1px solid",
-                          outlineColor:
-                            preferSport === "tableTennis"
-                              ? "primary.main"
-                              : "divider",
-                          backgroundColor:
-                            preferSport === "tableTennis"
-                              ? "background.default"
-                              : "",
-                        }}
-                      >
-                        <CardActionArea
-                          onClick={() => setPreferSport("tableTennis")}
-                        >
-                          <CardContent
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 1,
-                            }}
-                          >
-                            <GiPingPongBat
-                              fill={
-                                preferSport === "tableTennis" ? "red" : "gray"
-                              }
-                              size={"100%"}
-                            ></GiPingPongBat>
-                          </CardContent>
-                        </CardActionArea>
-                      </Card>
+                      <BadmintonCard sportState={{ sport, setSport }} />
+                      <TableTennisCard sportState={{ sport, setSport }} />
                     </RadioGroup>
                     <Stack
                       alignItems={"flex-start"}

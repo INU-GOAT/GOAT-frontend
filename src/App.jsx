@@ -15,6 +15,7 @@ import UserResponse from "./apis/UserResponse";
 
 function App() {
   const { isLogin, setIsLogin } = isLoginStore();
+
   return (
     <BrowserRouter>
       <UserResponse />
@@ -28,7 +29,6 @@ function App() {
               <Route path="/Schedule" element={<Schedule />} />
               <Route path="/Club" element={<Club />} />
             </Route>
-
             <Route path="*" element={<Navigate to="/Main" />} />
           </>
         ) : (
