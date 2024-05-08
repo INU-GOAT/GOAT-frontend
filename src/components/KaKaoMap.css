@@ -1,4 +1,28 @@
-.map-container {
-    padding: 100px;
-  }
-  
+.map{
+  width: 60%;
+  height: 450px;
+}
+.place-list {
+  margin-top: 20px;
+}
+
+.place-list h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.place-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.place-list li {
+  font-size: 16px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.place-list li:hover {
+  color: #007bff; /* 마우스 호버 시 색상 변경 */
+}
