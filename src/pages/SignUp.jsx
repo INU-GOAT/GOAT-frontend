@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-//import "./css/SignUp.css";
 import userAxios from "../apis/userAxios";
 import getUser from "../apis/getUser";
 import setUser from "../utils/setUser";
@@ -156,31 +155,40 @@ function SignUp() {
       <Box
         sx={{
           position: "absolute",
-          height: "100vh",
-          width: "100vw",
-          backgroundColor: "rgba(0, 0, 0, 0.6)",
-          zIndex: "1",
-        }}
-      ></Box>
-      <Box
-        sx={{
-          backgroundImage: "url(https://source.unsplash.com/random?sports)",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          height: "100vh",
-          width: "100vw",
-          display: "flex",
-          alignItems: "center",
+          height: "100%",
+          width: "100%",
         }}
       >
+        <Box
+          sx={{
+            position: "fixed",
+            height: "100%",
+            width: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.6)",
+            zIndex: "2",
+          }}
+        ></Box>
+        <Box
+          sx={{
+            position: "fixed",
+            backgroundImage: "url(https://source.unsplash.com/random?sports)",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            height: "100%",
+            width: "100%",
+
+            alignItems: "center",
+            zIndex: "1",
+          }}
+        ></Box>
         <Grid
           container
           direction={"row"}
           alignItems={"center"}
           justifyContent="center"
           spacing={1}
-          sx={{ zIndex: "2" }}
+          sx={{ zIndex: "3", position: "relative", mt: "0", height: "100%" }}
         >
           <Grid
             item
@@ -207,6 +215,7 @@ function SignUp() {
                 alignItems={"stretch"}
                 sx={{
                   mt: 8,
+                  mb: 8,
                   padding: "40px 60px",
                   display: "flex",
                   flexDirection: "column",
@@ -489,25 +498,25 @@ function SignUp() {
                           <FaTree fill="green" fontSize="30px" />
                         </ToggleButton>
                       </ToggleButtonGroup>
-                      <Stack color="indigo">
+                      <Stack color="green">
                         {tier === "1" && (
-                          <Stack mt={1} ml={2}>
-                            <h3>
+                          <Stack mt={1.5} ml={2}>
+                            <h4>
                               스포츠에 호기심을 갖고 있거나 입문한지 얼마 안된
                               레벨입니다.
-                            </h3>
+                            </h4>
                           </Stack>
                         )}
                         {tier === "2" && (
-                          <Stack mt={9.5} ml={2}>
-                            <h3>
+                          <Stack mt={10} ml={2}>
+                            <h4>
                               스포츠를 배우는 중이거나 취미로 즐기는 레벨입니다.
-                            </h3>
+                            </h4>
                           </Stack>
                         )}
                         {tier === "3" && (
-                          <Stack mt={18} ml={2}>
-                            <h3>스포츠를 가르치거나 일상이 된 레벨입니다.</h3>
+                          <Stack mt={18.5} ml={2}>
+                            <h4>스포츠를 가르치거나 일상이 된 레벨입니다.</h4>
                           </Stack>
                         )}
                       </Stack>
