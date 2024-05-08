@@ -26,3 +26,6 @@
 .place-list li:hover {
   color: #007bff; /* 마우스 호버 시 색상 변경 */
 }
+.map-container {
+    padding: 100px;
+  }

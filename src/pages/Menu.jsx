@@ -6,51 +6,32 @@ import "./css/Menu.css";
 function Menu() {
   const navigate = useNavigate();
 
+  const handleNavigation = (path) => (event) => {
+    event.preventDefault();
+    navigate(path);
+  };
+
   return (
     <div id="wrap">
       <header>
         <nav className="header-nav">
           <ul className="nav-items">
             <li>
-              <a
+              <button
                 className="main-items"
-                onClick={(event) => {
-                  event.preventDefault();
-                  navigate("./Main");
-                }}
+                onClick={handleNavigation("./Main")}
               >
                 GOAT
-              </a>
+              </button>
             </li>
             <li>
-              <a
-                onClick={(event) => {
-                  event.preventDefault();
-                  navigate("./Schedule");
-                }}
-              >
-                전적
-              </a>
+              <button onClick={handleNavigation("./Schedule")}>전적</button>
             </li>
             <li>
-              <a
-                onClick={(event) => {
-                  event.preventDefault();
-                  navigate("./Club");
-                }}
-              >
-                클럽
-              </a>
+              <button onClick={handleNavigation("./Club")}>클럽</button>
             </li>
             <li>
-              <a
-                onClick={(event) => {
-                  event.preventDefault();
-                  navigate("./MyPage");
-                }}
-              >
-                마이페이지
-              </a>
+              <button onClick={handleNavigation("./MyPage")}>마이페이지</button>
             </li>
             <li>
               <LogOut />

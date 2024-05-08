@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import SignOut from "../components/SignOut";
 import LogOut from "../components/LogOut";
 
@@ -16,14 +16,25 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import {
+  Card,
+  CardActionArea,
+  CardContent,
   FormControl,
   FormLabel,
   MenuItem,
   Radio,
   RadioGroup,
+  Stack,
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
+import {
+  GiBasketballBall,
+  GiPingPongBat,
+  GiShuttlecock,
+  GiSoccerBall,
+} from "react-icons/gi";
+import { FaApple, FaSeedling, FaTree } from "react-icons/fa";
 
 const defaultTheme = createTheme();
 const ages = [
@@ -40,8 +51,8 @@ const ages = [
     label: "30대",
   },
   {
-    value: "40",
-    label: "40대",
+    value: "30",
+    label: "30대",
   },
   {
     value: "50",
@@ -49,6 +60,11 @@ const ages = [
   },
 ];
 function MyPage() {
+  const [preferSport, setPreferSport] = useState(null);
+  const [tier, setTier] = useState(null);
+  const tierChange = (event, nextTier) => {
+    setTier(nextTier);
+  };
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container
@@ -60,6 +76,7 @@ function MyPage() {
       >
         <CssBaseline />
         <Box
+          width={"510px"}
           sx={{
             marginTop: 1,
             display: "flex",
@@ -126,134 +143,265 @@ function MyPage() {
                 </FormControl>
               </Grid>
               <Grid item xs={12} mb={2}>
-                <FormLabel id="emo-row-radio-buttons-group-label">
-                  선호 스포츠
-                </FormLabel>
-                <p />
-                <ToggleButtonGroup
-                  color="primary"
-                  exclusive
-                  aria-label="Platform"
-                  value={"ios"}
-                >
-                  <ToggleButton value="web">축구</ToggleButton>
-                  <ToggleButton value="android">농구</ToggleButton>
-                  <ToggleButton value="ios">배드민턴</ToggleButton>
-                  <ToggleButton value="asd">탁구</ToggleButton>
-                </ToggleButtonGroup>
+                <Stack alignItems={"flex-start"} mt={4} flexDirection={"row"}>
+                  <RadioGroup
+                    name="preferSport"
+                    value={preferSport}
+                    sx={{
+                      flexDirection: "column",
+                      mt: 2,
+                      alignContent: "flex-start",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Card
+                      raised={preferSport === "soccer"}
+                      sx={{
+                        maxWidth: "40%",
+                        outline: "1px solid",
+                        outlineColor:
+                          preferSport === "soccer" ? "primary.main" : "divider",
+                        backgroundColor:
+                          preferSport === "soccer" ? "background.default" : "",
+                      }}
+                    >
+                      <CardActionArea onClick={() => setPreferSport("soccer")}>
+                        <CardContent
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1,
+                          }}
+                        >
+                          <GiSoccerBall
+                            fill={preferSport === "soccer" ? "skyblue" : "gray"}
+                            size={"100%"}
+                          ></GiSoccerBall>
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
+                    <Card
+                      raised={preferSport === "basketBall"}
+                      sx={{
+                        maxWidth: "40%",
+                        outline: "1px solid",
+                        outlineColor:
+                          preferSport === "basketBall"
+                            ? "primary.main"
+                            : "divider",
+                        backgroundColor:
+                          preferSport === "basketBall"
+                            ? "background.default"
+                            : "",
+                      }}
+                    >
+                      <CardActionArea
+                        onClick={() => setPreferSport("basketBall")}
+                      >
+                        <CardContent
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1,
+                          }}
+                        >
+                          <GiBasketballBall
+                            fill={
+                              preferSport === "basketBall" ? "orange" : "gray"
+                            }
+                            size={"100%"}
+                          ></GiBasketballBall>
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
+                    <Card
+                      raised={preferSport === "badminton"}
+                      sx={{
+                        maxWidth: "40%",
+                        outline: "1px solid",
+                        outlineColor:
+                          preferSport === "badminton"
+                            ? "primary.main"
+                            : "divider",
+                        backgroundColor:
+                          preferSport === "badminton"
+                            ? "background.default"
+                            : "",
+                      }}
+                    >
+                      <CardActionArea
+                        onClick={() => setPreferSport("badminton")}
+                      >
+                        <CardContent
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1,
+                          }}
+                        >
+                          <GiShuttlecock
+                            fill={
+                              preferSport === "badminton"
+                                ? "lightgreen"
+                                : "gray"
+                            }
+                            size={"100%"}
+                          ></GiShuttlecock>
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
+                    <Card
+                      raised={preferSport === "tableTennis"}
+                      sx={{
+                        maxWidth: "40%",
+                        flexGrow: 1,
+                        outline: "1px solid",
+                        outlineColor:
+                          preferSport === "tableTennis"
+                            ? "primary.main"
+                            : "divider",
+                        backgroundColor:
+                          preferSport === "tableTennis"
+                            ? "background.default"
+                            : "",
+                      }}
+                    >
+                      <CardActionArea
+                        onClick={() => setPreferSport("tableTennis")}
+                      >
+                        <CardContent
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1,
+                          }}
+                        >
+                          <GiPingPongBat
+                            fill={
+                              preferSport === "tableTennis" ? "red" : "gray"
+                            }
+                            size={"100%"}
+                          ></GiPingPongBat>
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
+                  </RadioGroup>
+                  <Stack>
+                    <ToggleButtonGroup
+                      value={tier}
+                      exclusive
+                      onChange={tierChange}
+                      sx={{ mt: 4 }}
+                    >
+                      <ToggleButton
+                        value="1"
+                        aria-label="seedling"
+                        sx={{ padding: "19px" }}
+                      >
+                        <FaSeedling fill="lightgreen" fontSize="30px" />
+                      </ToggleButton>
+                      <ToggleButton
+                        value="2"
+                        aria-label="apple"
+                        sx={{ padding: "19px" }}
+                      >
+                        <FaApple fill="red" fontSize="30px" />
+                      </ToggleButton>
+                      <ToggleButton
+                        value="3"
+                        aria-label="tree"
+                        sx={{ padding: "19px" }}
+                      >
+                        <FaTree fill="green" fontSize="30px" />
+                      </ToggleButton>
+                    </ToggleButtonGroup>
+                    <ToggleButtonGroup
+                      value={tier}
+                      exclusive
+                      onChange={tierChange}
+                      sx={{ mt: 3 }}
+                    >
+                      <ToggleButton
+                        value="1"
+                        aria-label="seedling"
+                        sx={{ padding: "19px" }}
+                      >
+                        <FaSeedling fill="lightgreen" fontSize="30px" />
+                      </ToggleButton>
+                      <ToggleButton
+                        value="2"
+                        aria-label="apple"
+                        sx={{ padding: "19px" }}
+                      >
+                        <FaApple fill="red" fontSize="30px" />
+                      </ToggleButton>
+                      <ToggleButton
+                        value="3"
+                        aria-label="tree"
+                        sx={{ padding: "19px" }}
+                      >
+                        <FaTree fill="green" fontSize="30px" />
+                      </ToggleButton>
+                    </ToggleButtonGroup>
+                    <ToggleButtonGroup
+                      value={tier}
+                      exclusive
+                      onChange={tierChange}
+                      sx={{ mt: 3 }}
+                    >
+                      <ToggleButton
+                        value="1"
+                        aria-label="seedling"
+                        sx={{ padding: "19px" }}
+                      >
+                        <FaSeedling fill="lightgreen" fontSize="30px" />
+                      </ToggleButton>
+                      <ToggleButton
+                        value="2"
+                        aria-label="apple"
+                        sx={{ padding: "19px" }}
+                      >
+                        <FaApple fill="red" fontSize="30px" />
+                      </ToggleButton>
+                      <ToggleButton
+                        value="3"
+                        aria-label="tree"
+                        sx={{ padding: "19px" }}
+                      >
+                        <FaTree fill="green" fontSize="30px" />
+                      </ToggleButton>
+                    </ToggleButtonGroup>
+                    <ToggleButtonGroup
+                      value={tier}
+                      exclusive
+                      onChange={tierChange}
+                      sx={{ mt: 3 }}
+                    >
+                      <ToggleButton
+                        value="1"
+                        aria-label="seedling"
+                        sx={{ padding: "19px" }}
+                      >
+                        <FaSeedling fill="lightgreen" fontSize="30px" />
+                      </ToggleButton>
+                      <ToggleButton
+                        value="2"
+                        aria-label="apple"
+                        sx={{ padding: "19px" }}
+                      >
+                        <FaApple fill="red" fontSize="30px" />
+                      </ToggleButton>
+                      <ToggleButton
+                        value="3"
+                        aria-label="tree"
+                        sx={{ padding: "19px" }}
+                      >
+                        <FaTree fill="green" fontSize="30px" />
+                      </ToggleButton>
+                    </ToggleButtonGroup>
+                  </Stack>
+                </Stack>
               </Grid>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl>
-                <FormLabel id="demo-row-radio-buttons-group-label">
-                  축구 실력
-                </FormLabel>
-                <RadioGroup
-                  row
-                  aria-labelledby="demo-row-radio-buttons-group-label"
-                  name="row-radio-buttons-group"
-                >
-                  <FormControlLabel
-                    value="female"
-                    control={<Radio />}
-                    label="초보"
-                  />
-                  <FormControlLabel
-                    value="male"
-                    control={<Radio />}
-                    label="중수"
-                  />
-                  <FormControlLabel
-                    value="male"
-                    control={<Radio />}
-                    label="고수"
-                  />
-                </RadioGroup>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl>
-                <FormLabel id="demo-row-radio-buttons-group-label">
-                  농구 실력
-                </FormLabel>
-                <RadioGroup
-                  row
-                  aria-labelledby="demo-row-radio-buttons-group-label"
-                  name="row-radio-buttons-group"
-                >
-                  <FormControlLabel
-                    value="female"
-                    control={<Radio />}
-                    label="초보"
-                  />
-                  <FormControlLabel
-                    value="male"
-                    control={<Radio />}
-                    label="중수"
-                  />
-                  <FormControlLabel
-                    value="male"
-                    control={<Radio />}
-                    label="고수"
-                  />
-                </RadioGroup>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl>
-                <FormLabel id="demo-row-radio-buttons-group-label">
-                  배드민턴 실력
-                </FormLabel>
-                <RadioGroup
-                  row
-                  aria-labelledby="demo-row-radio-buttons-group-label"
-                  name="row-radio-buttons-group"
-                >
-                  <FormControlLabel
-                    value="female"
-                    control={<Radio />}
-                    label="초보"
-                  />
-                  <FormControlLabel
-                    value="male"
-                    control={<Radio />}
-                    label="중수"
-                  />
-                  <FormControlLabel
-                    value="male"
-                    control={<Radio />}
-                    label="고수"
-                  />
-                </RadioGroup>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl>
-                <FormLabel id="demo-row-radio-buttons-group-label">
-                  탁구 실력
-                </FormLabel>
-                <RadioGroup
-                  row
-                  aria-labelledby="demo-row-radio-buttons-group-label"
-                  name="row-radio-buttons-group"
-                >
-                  <FormControlLabel
-                    value="female"
-                    control={<Radio />}
-                    label="초보"
-                  />
-                  <FormControlLabel
-                    value="male"
-                    control={<Radio />}
-                    label="중수"
-                  />
-                  <FormControlLabel
-                    value="male"
-                    control={<Radio />}
-                    label="고수"
-                  />
-                </RadioGroup>
-              </FormControl>
             </Grid>
 
             <Button

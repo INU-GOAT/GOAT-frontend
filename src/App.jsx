@@ -15,11 +15,7 @@ import UserResponse from "./apis/UserResponse";
 
 function App() {
   const { isLogin, setIsLogin } = isLoginStore();
-  useEffect(() => {
-    if (localStorage.getItem("isLogin") === "true") {
-      setIsLogin(true);
-    }
-  }, [setIsLogin]);
+
   return (
     <BrowserRouter>
       <UserResponse />

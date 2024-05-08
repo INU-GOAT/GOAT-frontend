@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-//import "./css/SignUp.css";
 import userAxios from "../apis/userAxios";
 import getUser from "../apis/getUser";
 import setUser from "../utils/setUser";
@@ -26,12 +25,13 @@ import {
   Stack,
   TextField,
   ThemeProvider,
+  ToggleButton,
+  ToggleButtonGroup,
   Typography,
   colors,
   createTheme,
 } from "@mui/material";
 import { ReactComponent as GoatIcon } from "../assets/GOAT.svg";
-import { IoMdFemale, IoMdMale } from "react-icons/io";
 import {
   GiBasketballBall,
   GiPingPongBat,
@@ -39,6 +39,14 @@ import {
   GiSoccerBall,
 } from "react-icons/gi";
 import { CgChevronLeft, CgChevronRight } from "react-icons/cg";
+import { FaApple, FaSeedling, FaTree } from "react-icons/fa";
+import { grey } from "@mui/material/colors";
+import {
+  BadmintonCard,
+  BasketBallCard,
+  SoccerCard,
+  TableTennisCard,
+} from "./../components/SportsCards";
 
 const ages = [
   {
@@ -69,11 +77,13 @@ function SignUp() {
   const [age, setAge] = useState(null);
   const [gender, setGender] = useState(null);
   const [nickname, setNickname] = useState(null);
+  const [sport, setSport] = useState(null);
   const [preferSport, setPreferSport] = useState(null);
-  // const [soccerTier, setSoccerTier] = useState(null);
-  // const [basketballTier, setBasketballTier] = useState(null);
-  // const [badmintonTier, setBadmintonTier] = useState(null);
-  // const [tableTennisTier, setTableTennisTier] = useState(null);
+  // const [soccerTier, setSoccerTier] = useState(1);
+  // const [basketballTier, setBasketballTier] = useState(1);
+  // const [badmintonTier, setBadmintonTier] = useState(1);
+  // const [tableTennisTier, setTableTennisTier] = useState(1);
+  const [tier, setTier] = useState(null);
   const [step, setStep] = useState(1);
 
   const { setIsLogin } = isLoginStore();
@@ -86,11 +96,35 @@ function SignUp() {
     setGender(data.get("gender"));
     setStep(2);
   };
-
+  const tierChange = (event, nextTier) => {
+    setTier(nextTier);
+  };
   const signUpHandler = async (e) => {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
+    let soccerTier = 1,
+      basketballTier = 1,
+      badmintonTier = 1,
+      tableTennisTier = 1;
+    if (preferSport === "soccer") {
+      soccerTier = +tier;
+    } else if (preferSport === "basketBall") {
+      basketballTier = +tier;
+    } else if (preferSport === "badminton") {
+      badmintonTier = +tier;
+    } else if (preferSport === "tableTennis") {
+      tableTennisTier = +tier;
+    }
 
+    console.log({
+      age: age,
+      gender: gender,
+      nickname: nickname,
+      prefer_sport: preferSport,
+      soccer_tier: soccerTier,
+      basketball_tier: basketballTier,
+      badminton_tier: badmintonTier,
+      tableTennis_tier: tableTennisTier,
+    });
     await userAxios
       .post(
         "",
@@ -99,10 +133,10 @@ function SignUp() {
           gender: gender,
           nickname: nickname,
           prefer_sport: preferSport,
-          soccer_tier: data.get("soccerTier"),
-          basketball_tier: data.get("basketballTier"),
-          badminton_tier: data.get("badmintonTier"),
-          tableTennis_tier: data.get("tableTennisTier"),
+          soccer_tier: soccerTier,
+          basketball_tier: basketballTier,
+          badminton_tier: badmintonTier,
+          tableTennis_tier: tableTennisTier,
         },
         {
           "Content-Type": "application/json",
@@ -128,31 +162,40 @@ function SignUp() {
       <Box
         sx={{
           position: "absolute",
-          height: "100vh",
-          width: "100vw",
-          backgroundColor: "rgba(0, 0, 0, 0.6)",
-          zIndex: "1",
-        }}
-      ></Box>
-      <Box
-        sx={{
-          backgroundImage: "url(https://source.unsplash.com/random?sports)",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          height: "100vh",
-          width: "100vw",
-          display: "flex",
-          alignItems: "center",
+          height: "100%",
+          width: "100%",
         }}
       >
+        <Box
+          sx={{
+            position: "fixed",
+            height: "100%",
+            width: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.6)",
+            zIndex: "2",
+          }}
+        ></Box>
+        <Box
+          sx={{
+            position: "fixed",
+            backgroundImage: "url(https://source.unsplash.com/random?sports)",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            height: "100%",
+            width: "100%",
+
+            alignItems: "center",
+            zIndex: "1",
+          }}
+        ></Box>
         <Grid
           container
           direction={"row"}
           alignItems={"center"}
           justifyContent="center"
           spacing={1}
-          sx={{ zIndex: "2" }}
+          sx={{ zIndex: "3", position: "relative", mt: "0", height: "100%" }}
         >
           <Grid
             item
@@ -163,10 +206,12 @@ function SignUp() {
               display: { xs: "none", lg: "flex" },
               flexDirection: "column",
               justifyContent: "center",
+              alignContent: "center",
+              flexWrap: "wrap",
             }}
           >
             <GoatIcon width="300px" height="300px" />
-            <h1>GOAT 회원가입하기</h1>
+            <h2>GOAT 회원가입하기</h2>
           </Grid>
 
           <Stack>
@@ -174,9 +219,10 @@ function SignUp() {
               <CssBaseline />
               <Box
                 width={"510px"}
-                alignItems={"center"}
+                alignItems={"stretch"}
                 sx={{
                   mt: 8,
+                  mb: 8,
                   padding: "40px 60px",
                   display: "flex",
                   flexDirection: "column",
@@ -196,7 +242,7 @@ function SignUp() {
                     onSubmit={stepOneHandler}
                     sx={{ mt: 3 }}
                   >
-                    <h1>선수 정보 입력하기</h1>
+                    <h2>선수 정보 입력하기</h2>
                     <TextField
                       name="nickName"
                       required
@@ -225,8 +271,14 @@ function SignUp() {
                     </TextField>
 
                     <FormControl sx={{ mt: 2 }}>
-                      <FormLabel id="gender">성별</FormLabel>
-                      <RadioGroup row name="gender-group">
+                      <FormLabel name="gender-group" id="gender">
+                        성별
+                      </FormLabel>
+                      <RadioGroup
+                        row
+                        name="gender"
+                        aria-labelledby="gender-group"
+                      >
                         <FormControlLabel
                           value="male"
                           control={<Radio />}
@@ -258,7 +310,7 @@ function SignUp() {
                     onSubmit={signUpHandler}
                     sx={{ mt: 3 }}
                   >
-                    <h1>선호 스포츠 선택하기</h1>
+                    <h2>선호 스포츠와 레벨 선택하기</h2>
                     <RadioGroup
                       name="preferSport"
                       value={preferSport}
@@ -269,68 +321,8 @@ function SignUp() {
                         alignContent: "space-around",
                       }}
                     >
-                      <Card
-                        raised={preferSport === "soccer"}
-                        sx={{
-                          maxWidth: "40%",
-                          outline: "1px solid",
-                          outlineColor:
-                            gender === "soccer" ? "primary.main" : "divider",
-                          backgroundColor:
-                            gender === "soccer" ? "background.default" : "",
-                        }}
-                      >
-                        <CardActionArea
-                          onClick={() => setPreferSport("soccer")}
-                        >
-                          <CardContent
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 1,
-                            }}
-                          >
-                            <GiSoccerBall
-                              fill={
-                                preferSport === "soccer" ? "skyblue" : "gray"
-                              }
-                              size={"100%"}
-                            ></GiSoccerBall>
-                          </CardContent>
-                        </CardActionArea>
-                      </Card>
-                      <Card
-                        raised={preferSport === "basketBall"}
-                        sx={{
-                          maxWidth: "40%",
-                          outline: "1px solid",
-                          outlineColor:
-                            gender === "basketBall"
-                              ? "primary.main"
-                              : "divider",
-                          backgroundColor:
-                            gender === "basketBall" ? "background.default" : "",
-                        }}
-                      >
-                        <CardActionArea
-                          onClick={() => setPreferSport("basketBall")}
-                        >
-                          <CardContent
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 1,
-                            }}
-                          >
-                            <GiBasketballBall
-                              fill={
-                                preferSport === "basketBall" ? "orange" : "gray"
-                              }
-                              size={"100%"}
-                            ></GiBasketballBall>
-                          </CardContent>
-                        </CardActionArea>
-                      </Card>
+                      <SoccerCard sportState={{ sport, setSport }} />
+                      <BasketBallCard sportState={{ sport, setSport }} />
                     </RadioGroup>
                     <RadioGroup
                       name="preferSport"
@@ -342,110 +334,73 @@ function SignUp() {
                         alignContent: "space-around",
                       }}
                     >
-                      <Card
-                        raised={preferSport === "badminton"}
-                        sx={{
-                          maxWidth: "40%",
-                          outline: "1px solid",
-                          outlineColor:
-                            gender === "badminton" ? "primary.main" : "divider",
-                          backgroundColor:
-                            gender === "badminton" ? "background.default" : "",
-                        }}
-                      >
-                        <CardActionArea
-                          onClick={() => setPreferSport("badminton")}
-                        >
-                          <CardContent
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 1,
-                            }}
-                          >
-                            <GiShuttlecock
-                              fill={
-                                preferSport === "badminton"
-                                  ? "lightgreen"
-                                  : "gray"
-                              }
-                              size={"100%"}
-                            ></GiShuttlecock>
-                          </CardContent>
-                        </CardActionArea>
-                      </Card>
-                      <Card
-                        raised={preferSport === "tableTennis"}
-                        sx={{
-                          maxWidth: "40%",
-                          flexGrow: 1,
-                          outline: "1px solid",
-                          outlineColor:
-                            gender === "tableTennis"
-                              ? "primary.main"
-                              : "divider",
-                          backgroundColor:
-                            gender === "tableTennis"
-                              ? "background.default"
-                              : "",
-                        }}
-                      >
-                        <CardActionArea
-                          onClick={() => setPreferSport("tableTennis")}
-                        >
-                          <CardContent
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 1,
-                            }}
-                          >
-                            <GiPingPongBat
-                              fill={
-                                preferSport === "tableTennis" ? "red" : "gray"
-                              }
-                              size={"100%"}
-                            ></GiPingPongBat>
-                          </CardContent>
-                        </CardActionArea>
-                      </Card>
+                      <BadmintonCard sportState={{ sport, setSport }} />
+                      <TableTennisCard sportState={{ sport, setSport }} />
                     </RadioGroup>
-
-                    <TextField
-                      name="soccerTier"
-                      required
-                      fullWidth
-                      id="soccerTier"
-                      label="축구 실력"
-                      sx={{ mt: 2 }}
-                    />
-
-                    <TextField
-                      name="basketballTier"
-                      required
-                      fullWidth
-                      id="basketballTier"
-                      label="농구 실력"
-                      sx={{ mt: 2 }}
-                    />
-
-                    <TextField
-                      name="badmintonTier"
-                      required
-                      fullWidth
-                      id="badmintonTier"
-                      label="배드민턴 실력"
-                      sx={{ mt: 2 }}
-                    />
-
-                    <TextField
-                      name="tableTennisTier"
-                      required
-                      fullWidth
-                      id="tableTennisTier"
-                      label="탁구 실력"
-                      sx={{ mt: 2 }}
-                    />
+                    <Stack
+                      alignItems={"flex-start"}
+                      mt={4}
+                      flexDirection={"row"}
+                    >
+                      <ToggleButtonGroup
+                        orientation="vertical"
+                        value={tier}
+                        exclusive
+                        onChange={tierChange}
+                      >
+                        <ToggleButton
+                          value="1"
+                          aria-label="seedling"
+                          sx={{ padding: "19px" }}
+                        >
+                          <FaSeedling fill="lightgreen" fontSize="30px" />
+                        </ToggleButton>
+                        <ToggleButton
+                          value="2"
+                          aria-label="apple"
+                          sx={{ padding: "19px" }}
+                        >
+                          <FaApple fill="red" fontSize="30px" />
+                        </ToggleButton>
+                        <ToggleButton
+                          value="3"
+                          aria-label="tree"
+                          sx={{ padding: "19px" }}
+                        >
+                          <FaTree fill="green" fontSize="30px" />
+                        </ToggleButton>
+                      </ToggleButtonGroup>
+                      <Stack color="green">
+                        {tier === "1" && (
+                          <Stack mt={1.5} ml={2}>
+                            <h4>
+                              스포츠에 호기심을 갖고 있거나 입문한지 얼마 안된
+                              레벨입니다.
+                            </h4>
+                          </Stack>
+                        )}
+                        {tier === "2" && (
+                          <Stack mt={10} ml={2}>
+                            <h4>
+                              스포츠를 배우는 중이거나 취미로 즐기는 레벨입니다.
+                            </h4>
+                          </Stack>
+                        )}
+                        {tier === "3" && (
+                          <Stack mt={18.5} ml={2}>
+                            <h4>스포츠를 가르치거나 일상이 된 레벨입니다.</h4>
+                          </Stack>
+                        )}
+                      </Stack>
+                    </Stack>
+                    <Typography
+                      variant="subtitle2"
+                      mt={3}
+                      color={"yellowgreen"}
+                      textAlign={"right"}
+                    >
+                      선택하지 않은 스포츠의 레벨은 새싹레벨로 선택됩니다.
+                    </Typography>
                     <Stack
                       flexDirection={"row"}
                       justifyContent={"space-between"}
