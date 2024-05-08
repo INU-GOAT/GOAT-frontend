@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 export const isLoginStore = create((set) => ({
-  isLogin: false,
+  isLogin: localStorage.getItem("isLogin") === "true" ? true : false,
   setIsLogin: (newValue) => set({ isLogin: newValue }),
 }));
 
