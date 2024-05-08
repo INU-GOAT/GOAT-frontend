@@ -7,12 +7,12 @@
 
 .match-container {
   max-width: 800px;
-  margin: 20px auto; /* 좌우 마진을 auto로 설정하여 가운데 정렬 */
+  margin: 20px auto;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  display: flex; /* Flexbox를 사용 */
-  flex-direction: column; /* 자식 요소들을 세로로 정렬 */
-  align-items: center; /* 자식 요소들을 중앙으로 정렬 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .match-title {
@@ -21,9 +21,9 @@
 }
 
 .match-type-buttons {
-  width: 100%; /* 버튼 그룹의 너비를 최대로 설정 */
+  width: 100%;
     display: flex;
-    justify-content: center; /* 버튼을 가운데 정렬 */
+    justify-content: center;
 }
 
 .match-type-buttons button {
@@ -38,24 +38,23 @@
   text-align: center;
   line-height: 40px;
   cursor: pointer;
-  transition: background-color 0.3s; /* 부드러운 배경 색 변경 효과 추가 */
+  transition: background-color 0.3s;
 }
 
 .match-type-buttons button:not(.selected):hover, 
-.match-type-buttons button:not(.selected):focus { /* 포커스 상태 추가 */
+.match-type-buttons button:not(.selected):focus {
   background-color: #0056b3;
 }
 
 .match-type-buttons button.selected {
-  background-color: #004080; /* 선택된 버튼의 배경색 변경 */
-  font-weight: bold; /* 텍스트 두껍게 */
+  background-color: #004080;
+  font-weight: bold;
 }
 
 .match-type-buttons button:last-child {
   margin-right: 0;
 }
 
-/* 반응형 디자인 */
 @media (max-width: 600px) {
   .match-container {
       padding: 10px;
@@ -67,7 +66,7 @@
   }
 
   .match-type-buttons button {
-      width: 80px; /* 버튼 크기 조정 */
+      width: 80px;
       height: 35px;
       line-height: 35px;
   }
