@@ -4,14 +4,18 @@ import TeamInvite from '../components/Teaminvite';
 import Sport from '../components/Sport';
 import Timelist from '../components/Timelist';
 import Matching from '../components/Matching';
-import './css/Match.css';
+import KaKaoMap from '../components/KaKaoMap';
 import axios from 'axios';
+import './css/Match.css';
+
 
 const Match = () => {
   const [matchType, setMatchType] = useState('');
   const [selectedSport, setSelectedSport] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
   const [matchingInProgress, setMatchingInProgress] = useState(false);
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
 
   const handleMatchTypeClick = (type) => {
     setMatchType(type);
@@ -25,12 +29,18 @@ const Match = () => {
     setSelectedTime(time);
   };
 
+  const handleLocationChange = (lat, lng) => {
+    setLatitude(lat);
+    setLongitude(lng);
+  };
+
   const onStartMatching = () => {
 
     setMatchingInProgress(true);
     axios.post('/api/matching', {
       sport: selectedSport,
-      matching_start_time: selectedTime
+      latitude: latitude,
+      longitude: longitude,
     })
     .then((response) => {
       console.log(response);
@@ -59,6 +69,7 @@ const Match = () => {
       <div>
         <Timelist onChange={handleTimeChange} disabled={matchingInProgress} />
       </div>
+      <KaKaoMap onLocationChange={handleLocationChange} />
       <Matching 
         onStartMatching={onStartMatching}
         matchType={matchType}
