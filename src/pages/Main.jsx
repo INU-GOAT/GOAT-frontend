@@ -11,7 +11,7 @@ function Main() {
         <KaKaoMap />
       </div>
       <div className="main-container">
-        <div className="match-container">
+        <div className="m-match-container">
           <Match />
         </div>
       </div>

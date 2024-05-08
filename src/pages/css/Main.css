@@ -1,5 +1,12 @@
-.match-container {
+.main::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.m-match-container {
   float: right;
-  width: 30%;
-  margin-left: 20px;
+  margin-left: 10px;
+  border: none;
+  box-shadow: none;
+  overflow: hidden;
 }
