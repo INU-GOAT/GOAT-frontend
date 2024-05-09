@@ -30,10 +30,10 @@ const Timelist = ({ onChange, disabled }) => {
   return (
     <div className="card-container">
       <div className="card-content">
-        <div className="card-title">
-          <span>시간 설정</span>
+        <div>
+          <h3 className="match-title">시간 설정</h3>
         </div>
-        <Box sx={{ width: 230 }}>
+        <Box sx={{ width: 370 }}>
           <Slider
             step={1}
             min={0}
@@ -44,9 +44,9 @@ const Timelist = ({ onChange, disabled }) => {
           />
         </Box>
         <div className="values">
-          <Typography variant="body2">
+          <h3 className="match-title">
             {timeSlots[sliderValue].toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-          </Typography>
+          </h3>
         </div>
       </div>
     </div>

@@ -63,13 +63,14 @@ const Match = () => {
       </div>
       {matchType === '팀' && <TeamInvite disabled={matchingInProgress} />}
       <div>
-        <h3>종목 선택</h3>
+        <br></br>
+        <h3 className="match-title">종목 선택</h3>
         <Sport selectedSport={selectedSport} onClick={handleSportClick} disabled={matchingInProgress} />
       </div>
+      <br></br>
       <div>
         <Timelist onChange={handleTimeChange} disabled={matchingInProgress} />
       </div>
-      <KaKaoMap onLocationChange={handleLocationChange} />
       <Matching 
         onStartMatching={onStartMatching}
         matchType={matchType}
