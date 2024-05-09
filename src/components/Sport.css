@@ -1,52 +1,18 @@
-.demo-radio-tile-group {
+.sports-card-group {
   display: flex;
-  flex-direction: row;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  color: white;
+  flex-wrap: wrap;
+  justify-content: center; /* 카드들을 수평 중앙에 정렬 */
+  align-items: center; /* 카드들을 수직 중앙에 정렬 */
+  padding: 20px 0; /* 상하 패딩 추가 */
 }
 
-.itwinui-radio-tile {
-  margin: 10px;
-  margin-top: 15px;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  border: 1px solid #ccc;
-  background-color: #000000;
-  border-radius: 5px;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.3s ease-in-out;
+.card {
+  flex: 0 1 48%; /* 각 카드가 화면의 약 절반 크기를 차지하도록 설정 */
+  margin: 10px; /* 카드 간 여백 조정 */
+  box-sizing: border-box; /* 패딩과 테두리가 너비에 포함되도록 설정 */
 }
 
-.itwinui-radio-tile-input {
-  display: none;
-}
-
-.itwinui-radio-tile-input:checked + .itwinui-radio-tile-label::before {
-  background-color: royalblue;
-}
-
-.itwinui-radio-tile-input:checked + .itwinui-radio-tile-label {
-  background-color: #10b981;
-  color: #fff;
-  border-color: rgb(129, 235, 129);
-}
-
-@keyframes radio-translate {
-  0% {
-    transform: translateX(0);
-  }
-
-  50% {
-    transform: translateY(-10px);
-  }
-
-  100% {
-    transform: translateX(0);
-  }
+.card.selected {
+  border-color: #007bff;
+  background-color: #e0f7fa;
 }
