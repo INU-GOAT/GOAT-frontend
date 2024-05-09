@@ -15,7 +15,6 @@ function Main() {
           <Match />
         </div>
       </div>
-      <ApiTest></ApiTest>
     </div>
   );
 }

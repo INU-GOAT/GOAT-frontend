@@ -19,7 +19,11 @@ const Matching = ({ onStartMatching, matchType, selectedSport, selectedTime, mat
         </Box>
       ) : (
         <div>
-          <button onClick={handleStartMatching} disabled={matchingInProgress}>
+          <button 
+            onClick={handleStartMatching} 
+            disabled={matchingInProgress}
+            className="matching-button"
+          >
             매칭 시작
           </button>
         </div>

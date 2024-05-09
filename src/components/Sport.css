@@ -1,18 +1,26 @@
-.sports-card-group {
+.sport-selection-group {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center; /* 카드들을 수평 중앙에 정렬 */
-  align-items: center; /* 카드들을 수직 중앙에 정렬 */
-  padding: 20px 0; /* 상하 패딩 추가 */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
 }
 
-.card {
-  flex: 0 1 48%; /* 각 카드가 화면의 약 절반 크기를 차지하도록 설정 */
-  margin: 10px; /* 카드 간 여백 조정 */
-  box-sizing: border-box; /* 패딩과 테두리가 너비에 포함되도록 설정 */
+.sport-selection-group .MuiRadioGroup-root {
+  padding: 2px 4px;
+  min-width: 50px;
+  font-size: 0.75rem;
+  height: 24px;
 }
 
-.card.selected {
-  border-color: #007bff;
-  background-color: #e0f7fa;
+.sport-selection-group .MuiFormControlLabel-root {
+  margin: 0;
+}
+
+.sport-selection-group .MuiRadio-root {
+  display: none; /* 라디오 버튼을 숨김 */
+}
+
+.sport-selection-group .MuiButtonBase-root {
+  padding: 10px; /* 버튼 패딩 조정 */
 }
