@@ -35,11 +35,14 @@ import { ReactComponent as GoatIcon } from "../assets/GOAT.svg";
 import {
   GiBasketballBall,
   GiPingPongBat,
+  GiPlantSeed,
   GiShuttlecock,
   GiSoccerBall,
 } from "react-icons/gi";
 import { CgChevronLeft, CgChevronRight } from "react-icons/cg";
-import { FaApple, FaSeedling, FaTree } from "react-icons/fa";
+import { FaApple, FaLeaf, FaSeedling, FaTree } from "react-icons/fa";
+import { LuFlower, LuFlower2 } from "react-icons/lu";
+import { PiFlowerFill, PiTreeFill } from "react-icons/pi";
 import { grey } from "@mui/material/colors";
 import {
   BadmintonCard,
@@ -47,6 +50,8 @@ import {
   SoccerCard,
   TableTennisCard,
 } from "./../components/SportsCards";
+import { IoMdFlower } from "react-icons/io";
+import TierButton from "../components/TierButton";
 
 const ages = [
   {
@@ -79,11 +84,11 @@ function SignUp() {
   const [nickname, setNickname] = useState(null);
   const [sport, setSport] = useState(null);
   const [preferSport, setPreferSport] = useState(null);
-  // const [soccerTier, setSoccerTier] = useState(1);
-  // const [basketballTier, setBasketballTier] = useState(1);
-  // const [badmintonTier, setBadmintonTier] = useState(1);
-  // const [tableTennisTier, setTableTennisTier] = useState(1);
-  const [tier, setTier] = useState(null);
+  const [soccerTier, setSoccerTier] = useState(null);
+  const [basketballTier, setBasketballTier] = useState(null);
+  const [badmintonTier, setBadmintonTier] = useState(null);
+  const [tableTennisTier, setTableTennisTier] = useState(null);
+  const [preferTier, setPreferTier] = useState(null);
   const [step, setStep] = useState(1);
 
   const { setIsLogin } = isLoginStore();
@@ -96,23 +101,25 @@ function SignUp() {
     setGender(data.get("gender"));
     setStep(2);
   };
-  const tierChange = (event, nextTier) => {
-    setTier(nextTier);
+  const stepTwoHandler = () => {
+    setPreferSport(sport);
+    setStep(3);
+  };
+  const preferTierChange = (event, nextTier) => {
+    setPreferTier(nextTier);
+    console.log(preferTier);
   };
   const signUpHandler = async (e) => {
     e.preventDefault();
-    let soccerTier = 1,
-      basketballTier = 1,
-      badmintonTier = 1,
-      tableTennisTier = 1;
+
     if (preferSport === "soccer") {
-      soccerTier = +tier;
+      setSoccerTier(preferTier);
     } else if (preferSport === "basketBall") {
-      basketballTier = +tier;
+      setBasketballTier(preferTier);
     } else if (preferSport === "badminton") {
-      badmintonTier = +tier;
+      setBadmintonTier(preferTier);
     } else if (preferSport === "tableTennis") {
-      tableTennisTier = +tier;
+      setTableTennisTier(preferTier);
     }
 
     console.log({
@@ -233,7 +240,7 @@ function SignUp() {
                 }}
               >
                 <Stack component={"header"} color="#747474">
-                  <h4>단계 {step} / 2</h4>
+                  <h4>단계 {step} / 3</h4>
                 </Stack>
                 {step === 1 && (
                   <Box
@@ -307,7 +314,7 @@ function SignUp() {
                   <Box
                     component={"form"}
                     noValidate
-                    onSubmit={signUpHandler}
+                    onSubmit={stepTwoHandler}
                     sx={{ mt: 3 }}
                   >
                     <h2>선호 스포츠와 레벨 선택하기</h2>
@@ -342,36 +349,14 @@ function SignUp() {
                       mt={4}
                       flexDirection={"row"}
                     >
-                      <ToggleButtonGroup
-                        orientation="vertical"
-                        value={tier}
-                        exclusive
-                        onChange={tierChange}
-                      >
-                        <ToggleButton
-                          value="1"
-                          aria-label="seedling"
-                          sx={{ padding: "19px" }}
-                        >
-                          <FaSeedling fill="lightgreen" fontSize="30px" />
-                        </ToggleButton>
-                        <ToggleButton
-                          value="2"
-                          aria-label="apple"
-                          sx={{ padding: "19px" }}
-                        >
-                          <FaApple fill="red" fontSize="30px" />
-                        </ToggleButton>
-                        <ToggleButton
-                          value="3"
-                          aria-label="tree"
-                          sx={{ padding: "19px" }}
-                        >
-                          <FaTree fill="green" fontSize="30px" />
-                        </ToggleButton>
-                      </ToggleButtonGroup>
+                      <TierButton
+                        orientation={"vertical"}
+                        setTier={setPreferTier}
+                        tier={preferTier}
+                      ></TierButton>
+
                       <Stack color="green">
-                        {tier === "1" && (
+                        {preferTier === "1" && (
                           <Stack mt={1.5} ml={2}>
                             <h4>
                               스포츠에 호기심을 갖고 있거나 입문한지 얼마 안된
@@ -379,28 +364,21 @@ function SignUp() {
                             </h4>
                           </Stack>
                         )}
-                        {tier === "2" && (
+                        {preferTier === "2" && (
                           <Stack mt={10} ml={2}>
                             <h4>
                               스포츠를 배우는 중이거나 취미로 즐기는 레벨입니다.
                             </h4>
                           </Stack>
                         )}
-                        {tier === "3" && (
+                        {preferTier === "3" && (
                           <Stack mt={18.5} ml={2}>
                             <h4>스포츠를 가르치거나 일상이 된 레벨입니다.</h4>
                           </Stack>
                         )}
                       </Stack>
                     </Stack>
-                    <Typography
-                      variant="subtitle2"
-                      mt={3}
-                      color={"yellowgreen"}
-                      textAlign={"right"}
-                    >
-                      선택하지 않은 스포츠의 레벨은 새싹레벨로 선택됩니다.
-                    </Typography>
+
                     <Stack
                       flexDirection={"row"}
                       justifyContent={"space-between"}
@@ -419,7 +397,158 @@ function SignUp() {
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}
                       >
-                        가입하기
+                        다음으로
+                      </Button>
+                    </Stack>
+                  </Box>
+                )}
+                {step === 3 && (
+                  <Box
+                    component={"form"}
+                    noValidate
+                    onSubmit={signUpHandler}
+                    sx={{ mt: 3 }}
+                  >
+                    <h2>나머지 스포츠 레벨 선택하기</h2>
+
+                    <Stack flexDirection={"column"}>
+                      {preferSport !== "soccer" && (
+                        <Stack flexDirection={"row"} sx={{ mt: 2 }}>
+                          <Card
+                            sx={{
+                              maxWidth: "30%",
+                            }}
+                          >
+                            <CardContent
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 1,
+                              }}
+                            >
+                              <GiSoccerBall
+                                fill={"skyblue"}
+                                size={"100%"}
+                              ></GiSoccerBall>
+                            </CardContent>
+                          </Card>
+                          <Stack sx={{ mt: 3.5, ml: 5 }}>
+                            <TierButton
+                              orientation={"horizontal"}
+                              setTier={setSoccerTier}
+                              tier={soccerTier}
+                            />
+                          </Stack>
+                        </Stack>
+                      )}
+                      {preferSport !== "basketBall" && (
+                        <Stack flexDirection={"row"} sx={{ mt: 2 }}>
+                          <Card
+                            sx={{
+                              maxWidth: "30%",
+                            }}
+                          >
+                            <CardContent
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 1,
+                              }}
+                            >
+                              <GiBasketballBall
+                                fill={"orange"}
+                                size={"100%"}
+                              ></GiBasketballBall>
+                            </CardContent>
+                          </Card>
+                          <Stack sx={{ mt: 3.5, ml: 5 }}>
+                            <TierButton
+                              orientation={"horizontal"}
+                              setTier={setBasketballTier}
+                              tier={basketballTier}
+                            />
+                          </Stack>
+                        </Stack>
+                      )}
+                      {preferSport !== "badminton" && (
+                        <Stack flexDirection={"row"} sx={{ mt: 2 }}>
+                          <Card
+                            sx={{
+                              maxWidth: "30%",
+                            }}
+                          >
+                            <CardContent
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 1,
+                              }}
+                            >
+                              <GiShuttlecock
+                                fill={"lightgreen"}
+                                size={"100%"}
+                              ></GiShuttlecock>
+                            </CardContent>
+                          </Card>
+                          <Stack sx={{ mt: 3.5, ml: 5 }}>
+                            <TierButton
+                              orientation={"horizontal"}
+                              setTier={setBadmintonTier}
+                              tier={badmintonTier}
+                            />
+                          </Stack>
+                        </Stack>
+                      )}
+                      {preferSport !== "tableTennis" && (
+                        <Stack flexDirection={"row"} sx={{ mt: 2 }}>
+                          <Card
+                            sx={{
+                              maxWidth: "30%",
+                            }}
+                          >
+                            <CardContent
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 1,
+                              }}
+                            >
+                              <GiPingPongBat
+                                fill={"red"}
+                                size={"100%"}
+                              ></GiPingPongBat>
+                            </CardContent>
+                          </Card>
+                          <Stack sx={{ mt: 3.5, ml: 5 }}>
+                            <TierButton
+                              orientation={"horizontal"}
+                              setTier={setTableTennisTier}
+                              tier={tableTennisTier}
+                            />
+                          </Stack>
+                        </Stack>
+                      )}
+                    </Stack>
+
+                    <Stack
+                      flexDirection={"row"}
+                      justifyContent={"space-between"}
+                    >
+                      <Button
+                        startIcon={<CgChevronLeft />}
+                        variant="text"
+                        onClick={() => setStep(2)}
+                        sx={{ mt: 3, mb: 2 }}
+                      >
+                        뒤로가기
+                      </Button>
+                      <Button
+                        endIcon={<CgChevronRight />}
+                        type="submit"
+                        variant="contained"
+                        sx={{ mt: 3, mb: 2 }}
+                      >
+                        다음으로
                       </Button>
                     </Stack>
                   </Box>

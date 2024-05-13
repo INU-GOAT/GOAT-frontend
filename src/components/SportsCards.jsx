@@ -1,5 +1,4 @@
 import { Card, CardActionArea, CardContent } from "@mui/material";
-import { func } from "prop-types";
 import React from "react";
 import {
   GiBasketballBall,
