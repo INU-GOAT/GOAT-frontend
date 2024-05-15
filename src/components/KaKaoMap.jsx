@@ -4,53 +4,60 @@ import useKakaoLoader from "./useKakaoLoader";
 import './KaKaoMap.css';
 import { List, ListItem, ListItemText } from '@mui/material';
 
+
 const center = {
   lat: 37.375557,
   lng: 126.63280,
 };
 
-export default function KaKaoMap({ onLocationChange }) {
+export default function KaKaoMap() {
   useKakaoLoader();
   const [position, setPosition] = useState({
     lat: undefined,
     lng: undefined,
   });
+  
+  
   const [searchKeyword, setSearchKeyword] = useState('');
   const [searchResult, setSearchResult] = useState([]);
   const mapRef = useRef(null);
   const [selectedPlace, setSelectedPlace] = useState(null);
 
+  
   useEffect(() => {
     const handleKeyPress = (event) => {
-      if (event.key === 'Enter' && searchKeyword.trim() === '') {
-        event.preventDefault();
-        alert('검색어를 입력하세요.');
-        return;
-      }
-    
-      const ps = new window.kakao.maps.services.Places();
-      ps.keywordSearch(searchKeyword, (data, status) => {
-        if (status === window.kakao.maps.services.Status.OK) {
-          setSearchResult(data);
-          fitMapToMarkers();
-        } else {
-          alert('검색 결과가 없습니다.');
-          setSearchResult([]);
+      if (event.key === 'Enter') {
+        if (searchKeyword.trim() === '') {
+          event.preventDefault();
+          return;
         }
-      });
+        
+        const ps = new window.kakao.maps.services.Places();
+        ps.keywordSearch(searchKeyword, (data, status) => {
+          if (status === window.kakao.maps.services.Status.OK) {
+            setSearchResult(data);
+            fitMapToMarkers();
+          } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
+            setSearchResult([]);
+          }
+        });
+      }
     };
-    
-
+  
     document.addEventListener('keypress', handleKeyPress);
-
+  
     return () => {
       document.removeEventListener('keypress', handleKeyPress);
     };
-  }, [searchKeyword]);
+  },     // eslint-disable-next-line react-hooks/exhaustive-deps
+  [searchKeyword]);
 
   useEffect(() => {
+    
     fitMapToMarkers();
-  }, [searchResult]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchResult]
+);
 
   const handleMarkerClick = (place) => {
     setSelectedPlace(place);
@@ -58,18 +65,15 @@ export default function KaKaoMap({ onLocationChange }) {
       lat: place.y,
       lng: place.x,
     });
-    onLocationChange(place.y, place.x);
   };
 
   const getCurrentPosition = () => {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        const { latitude, longitude } = pos.coords;
         setPosition({
-          lat: latitude,
-          lng: longitude,
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
         });
-        onLocationChange(latitude, longitude);
       },
       () => alert("위치 정보를 가져오는데 실패했습니다."),
       {
@@ -96,8 +100,9 @@ export default function KaKaoMap({ onLocationChange }) {
       lat: place.y,
       lng: place.x,
     });
-    onLocationChange(place.y, place.x);
   };
+
+  
 
   return (
     <div className="map-container">
@@ -114,7 +119,6 @@ export default function KaKaoMap({ onLocationChange }) {
               lat: latlng.getLat(),
               lng: latlng.getLng(),
             });
-            onLocationChange(latlng.getLat(), latlng.getLng());
           }}
         >
           {searchResult.map((place, index) => (
@@ -144,18 +148,19 @@ export default function KaKaoMap({ onLocationChange }) {
           onChange={(e) => setSearchKeyword(e.target.value)} 
           placeholder="장소를 검색하세요" 
         />
+        </div>
+        <div className="search_results">
+          <h2>검색 결과</h2>
+          <List className="search_list">
+            {searchResult.map((place, index) => (
+              <ListItem key={index} button onClick={() => handleListItemClick(place)}>
+                <ListItemText primary={place.place_name} />
+              </ListItem>
+            ))}
+          </List>
+        </div>
       </div>
-      </div>
-      {/*<div className="search_results">
-        <h2>검색 결과</h2>
-        <List className="search_list">
-          {searchResult.map((place, index) => (
-            <ListItem key={index} button onClick={() => handleListItemClick(place)}>
-              <ListItemText primary={place.place_name} />
-            </ListItem>
-          ))}
-        </List>
-        </div>*/}
+      
     </div>
   );
 }

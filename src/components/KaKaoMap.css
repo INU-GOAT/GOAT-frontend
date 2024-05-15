@@ -7,22 +7,17 @@
 }
 
 .map {
-  margin-top: 40px;
-  width: 800px;
-  height: 700px;
-}
-
-.search_results {
-  flex: 1;
-  padding: 0 20px;
+  width: 100%;
+  height: 600px;
+  margin-top: 0;
 }
 
 .search_list {
   padding: 0;
-  background-color: #f8f9fa; 
-  border-radius: 8px; 
-  padding: 10px; 
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  background-color: #f8f9fa; /* Set background color */
+  border-radius: 8px; /* Add border-radius for rounded corners */
+  padding: 10px; /* Add some padding for spacing */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
 }
 
 .search_list .MuiListItem-root {
@@ -33,12 +28,11 @@
 }
 
 .search_list .MuiListItem-root:hover {
-  color: #007bff; 
+  color: #007bff; /* Change color on hover */
 }
 
 
 .current_place {
-  margin-top: 20px;
   display: inline-flex;
   color: white;
   font-weight: bold;
@@ -46,6 +40,7 @@
   border-radius: 4px;
   border: none;
   cursor: pointer;
+  margin-top: 20px;
   height: 2.25rem;
   padding: 0.5rem 1rem; 
   background-color: #228be6; 
