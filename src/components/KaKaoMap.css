@@ -12,10 +12,6 @@
   margin-top: 0;
 }
 
-.search_results {
-  flex: 1;
-  padding: 0 20px; /* Adjust padding as needed */
-}
 .search_list {
   padding: 0;
   background-color: #f8f9fa; /* Set background color */
