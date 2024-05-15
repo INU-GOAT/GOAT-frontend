@@ -1,10 +1,10 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { SyncLoader } from "react-spinners";
 
 import userAxios from "../apis/userAxios";
 import setUser from "../utils/setUser";
 import { isLoginStore } from "../utils/store";
+import { CircularProgress, Stack } from "@mui/material";
 
 function LogInHandler() {
   const navigate = useNavigate();
@@ -57,10 +57,10 @@ function LogInHandler() {
   }, []);
 
   return (
-    <div backgroundcolor="#9376E0">
-      <p>로그인 중입니다.</p>
-      <SyncLoader color="#EAEBFF" />
-    </div>
+    <Stack sx={{ alignItems: "center", mt: 5 }}>
+      <h1>로그인 중입니다.</h1>
+      <CircularProgress />
+    </Stack>
   );
 }
 
