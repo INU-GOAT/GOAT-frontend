@@ -4,6 +4,7 @@ import Teaminvite from '../components/Teaminvite';
 import Sport from '../components/Sport';
 import Timelist from '../components/Timelist';
 import Matching from '../components/Matching';
+import TeamMemberActions from '../components/TeamMemberActions';
 import { getMatching, startMatching, cancelMatching } from '../apis/matching';
 import './css/Match.css';
 
@@ -116,6 +117,7 @@ const Match = ({ latitude, longitude }) => {
         selectedTime={selectedTime}
         matchingInProgress={matchingInProgress}
       />
+      <TeamMemberActions disabled={matchingInProgress} />
     </div>
   );
 };

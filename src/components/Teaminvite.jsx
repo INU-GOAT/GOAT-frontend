@@ -1,12 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import getUser from '../apis/getUser';
-import { inviteToGroup } from '../apis/group';
+import { inviteToGroup, expelGroupMember, getGroupMembers } from '../apis/group';
 import './Teaminvite.css';
 
 const Teaminvite = ({ disabled }) => {
   const [invitedUsers, setInvitedUsers] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [error, setError] = useState('');
+  const [groupMembers, setGroupMembers] = useState([]);
+
+  useEffect(() => {
+    const fetchGroupMembers = async () => {
+      const members = await getGroupMembers();
+      if (members) {
+        setGroupMembers(members);
+      }
+    };
+
+    fetchGroupMembers();
+  }, []);
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -18,6 +30,7 @@ const Teaminvite = ({ disabled }) => {
       return;
     }
 
+    // 유저 닉네임 확인
     const users = await getUser();
     const user = users.find(u => u.username === inputValue.trim());
     if (!user) {
@@ -25,6 +38,7 @@ const Teaminvite = ({ disabled }) => {
       return;
     }
 
+    // 그룹에 초대
     const result = await inviteToGroup(inputValue.trim());
     if (!result) {
       setError('그룹 초대 실패.');
@@ -36,10 +50,11 @@ const Teaminvite = ({ disabled }) => {
     setError('');
   };
 
-  const handleRemoveUser = (index) => {
-    const updatedUsers = [...invitedUsers];
-    updatedUsers.splice(index, 1);
-    setInvitedUsers(updatedUsers);
+  const handleRemoveUser = async (memberId) => {
+    const result = await expelGroupMember(memberId);
+    if (result) {
+      setGroupMembers(groupMembers.filter(member => member.id !== memberId));
+    }
   };
 
   const handleKeyPress = (e) => {
@@ -64,10 +79,10 @@ const Teaminvite = ({ disabled }) => {
       </div>
       {error && <div className="team-invite-error">{error}</div>}
       <ul className="team-invite-list">
-        {invitedUsers.map((user, index) => (
-          <li key={index} className="team-invite-list-item">
-            {user}
-            <button onClick={() => handleRemoveUser(index)} disabled={disabled}>삭제</button>
+        {groupMembers.map((member) => (
+          <li key={member.id} className="team-invite-list-item">
+            {member.username}
+            <button onClick={() => handleRemoveUser(member.id)} disabled={disabled}>추방</button>
           </li>
         ))}
       </ul>
