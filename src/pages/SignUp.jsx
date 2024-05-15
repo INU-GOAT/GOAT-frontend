@@ -92,7 +92,7 @@ function SignUp() {
     setPreferSport(sport);
     if (sport === "soccer") {
       setSoccerTier(preferTier);
-    } else if (sport === "basketBall") {
+    } else if (sport === "basketball") {
       setBasketballTier(preferTier);
     } else if (sport === "badminton") {
       setBadmintonTier(preferTier);
@@ -424,7 +424,7 @@ function SignUp() {
                           </Stack>
                         </Stack>
                       )}
-                      {preferSport !== "basketBall" && (
+                      {preferSport !== "basketball" && (
                         <Stack flexDirection={"row"} sx={{ mt: 2 }}>
                           <Card
                             sx={{
