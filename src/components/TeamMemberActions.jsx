@@ -9,8 +9,10 @@ const TeamMemberActions = ({ disabled }) => {
   useEffect(() => {
     const fetchGroupMembers = async () => {
       const members = await getGroupMembers();
-      if (members) {
+      if (members && Array.isArray(members)) {
         setGroupMembers(members);
+      } else {
+        setGroupMembers([]);
       }
     };
 
@@ -20,8 +22,10 @@ const TeamMemberActions = ({ disabled }) => {
   useEffect(() => {
     const fetchInvites = async () => {
       const invites = await getInvites();
-      if (invites) {
+      if (invites && Array.isArray(invites)) {
         setInvites(invites);
+      } else {
+        setInvites([]);
       }
     };
 

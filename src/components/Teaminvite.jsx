@@ -12,8 +12,10 @@ const Teaminvite = ({ disabled }) => {
   useEffect(() => {
     const fetchGroupMembers = async () => {
       const members = await getGroupMembers();
-      if (members) {
+      if (members && Array.isArray(members)) {
         setGroupMembers(members);
+      } else {
+        setGroupMembers([]);
       }
     };
 
@@ -31,6 +33,11 @@ const Teaminvite = ({ disabled }) => {
     }
 
     const users = await getUser();
+    if (!Array.isArray(users)) {
+      setError('유저 목록을 가져오는 데 실패했습니다.');
+      return;
+    }
+
     const user = users.find(u => u.username === inputValue.trim());
     if (!user) {
       setError('유저 닉네임이 존재하지 않습니다.');

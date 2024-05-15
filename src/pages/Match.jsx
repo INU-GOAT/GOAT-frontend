@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import MatchType from '../components/Matchtype';
 import Teaminvite from '../components/Teaminvite';
 import Sport from '../components/Sport';
 import Timelist from '../components/Timelist';
 import Matching from '../components/Matching';
 import TeamMemberActions from '../components/TeamMemberActions';
-import { getMatching, startMatching, cancelMatching } from '../apis/matching';
+import { startMatching, cancelMatching } from '../apis/matching';
 import './css/Match.css';
 
 const Match = ({ latitude, longitude }) => {
@@ -17,22 +17,6 @@ const Match = ({ latitude, longitude }) => {
   const [matchingStartTime, setMatchingStartTime] = useState('');
   const [matchStartTimes, setMatchStartTimes] = useState([]);
   const [preferCourt, setPreferCourt] = useState('');
-
-  useEffect(() => {
-    const fetchMatching = async () => {
-      const data = await getMatching();
-      if (data) {
-        const { sport, latitude, longitude, matchingStartTime, matchStartTimes, preferCourt } = data;
-        setSelectedSport(sport);
-        setMatchingStartTime(matchingStartTime);
-        setMatchStartTimes(matchStartTimes);
-        setPreferCourt(preferCourt);
-        setMatchingInProgress(true);
-      }
-    };
-
-    fetchMatching();
-  }, []);
 
   const handleMatchTypeClick = (type) => {
     setMatchType(type);
