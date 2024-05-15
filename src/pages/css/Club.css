@@ -35,12 +35,13 @@
   }
 
   input[type="submit"] {
-    padding: 12px 20px; 
+    padding: 12px 20px;
     background-color: #007bff;
     color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin: 0 auto; /* 가운데 정렬 */
   }
   
   input[type="submit"]:hover {

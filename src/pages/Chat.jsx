@@ -12,7 +12,7 @@ import {
   Typography,
   createTheme,
 } from "@mui/material";
-import KaKaoMap from "../components/KaKaoMap";
+import KaKaoMapchat from "../components/KaKaoMap_chat";
 import { Map } from "react-kakao-maps-sdk";
 
 import { CgChevronRight } from "react-icons/cg";
@@ -26,7 +26,7 @@ function Chat() {
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex", minHeight: "95dvh" }}>
         <Box sx={{ flex: 3, boxShadow: 3, borderRadius: 1, margin: 3 }}>
-          <KaKaoMap></KaKaoMap>
+          <KaKaoMapchat></KaKaoMapchat>
         </Box>
 
         <Box
