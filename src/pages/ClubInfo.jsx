@@ -1,7 +1,9 @@
 import React from 'react';
-import './ClubInfo.css'; 
+import { useNavigate } from "react-router-dom";
+import './css/ClubInfo.css'; 
 
 function ClubInfo({ clubname, intro, selectedSport }) {
+
   return (
     <div className="club-info">
       <h2>클럽 정보</h2>

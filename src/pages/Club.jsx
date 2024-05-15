@@ -1,3 +1,5 @@
+// Club.jsx
+
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
@@ -16,7 +18,7 @@ function Club() {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(`submit! ${clubname} ${intro} ${selectedSport}`);
-        navigate("/ClubInfo"); 
+        navigate("/ClubInfo"); // ClubInfo 페이지로 이동
     };
 
     return (
