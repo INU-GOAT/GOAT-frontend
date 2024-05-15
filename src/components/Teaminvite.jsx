@@ -30,7 +30,6 @@ const Teaminvite = ({ disabled }) => {
       return;
     }
 
-    // 유저 닉네임 확인
     const users = await getUser();
     const user = users.find(u => u.username === inputValue.trim());
     if (!user) {
@@ -38,7 +37,6 @@ const Teaminvite = ({ disabled }) => {
       return;
     }
 
-    // 그룹에 초대
     const result = await inviteToGroup(inputValue.trim());
     if (!result) {
       setError('그룹 초대 실패.');
