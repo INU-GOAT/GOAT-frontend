@@ -4,26 +4,23 @@ import useKakaoLoader from "./useKakaoLoader";
 import './KaKaoMap.css';
 import { List, ListItem, ListItemText } from '@mui/material';
 
-
 const center = {
   lat: 37.375557,
   lng: 126.63280,
 };
 
-export default function KaKaoMap() {
+export default function KaKaoMap({ onLocationChange }) {
   useKakaoLoader();
   const [position, setPosition] = useState({
     lat: undefined,
     lng: undefined,
   });
   
-  
   const [searchKeyword, setSearchKeyword] = useState('');
   const [searchResult, setSearchResult] = useState([]);
   const mapRef = useRef(null);
   const [selectedPlace, setSelectedPlace] = useState(null);
 
-  
   useEffect(() => {
     const handleKeyPress = (event) => {
       if (event.key === 'Enter') {
@@ -53,11 +50,9 @@ export default function KaKaoMap() {
   [searchKeyword]);
 
   useEffect(() => {
-    
     fitMapToMarkers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchResult]
-);
+  },     // eslint-disable-next-line react-hooks/exhaustive-deps
+  [searchResult]);
 
   const handleMarkerClick = (place) => {
     setSelectedPlace(place);
@@ -100,9 +95,9 @@ export default function KaKaoMap() {
       lat: place.y,
       lng: place.x,
     });
-  };
 
-  
+    onLocationChange(place.y, place.x);
+  };
 
   return (
     <div className="map-container">
@@ -142,25 +137,24 @@ export default function KaKaoMap() {
           현재 위치
         </button>
         <div className="keyword">
-        <input 
-          type="text" 
-          value={searchKeyword} 
-          onChange={(e) => setSearchKeyword(e.target.value)} 
-          placeholder="장소를 검색하세요" 
-        />
+          <input 
+            type="text" 
+            value={searchKeyword} 
+            onChange={(e) => setSearchKeyword(e.target.value)} 
+            placeholder="장소를 검색하세요" 
+          />
         </div>
         <div className="search_results">
           <h2>검색 결과</h2>
           <List className="search_list">
             {searchResult.map((place, index) => (
-              <ListItem key={index} button onClick={() => handleListItemClick(place)}>
-                <ListItemText primary={place.place_name} />
-              </ListItem>
+            <ListItem key={index} button onClick={() => handleListItemClick(place)}>
+              <ListItemText primary={place.place_name} />
+            </ListItem>
             ))}
           </List>
         </div>
       </div>
-      
     </div>
   );
 }
