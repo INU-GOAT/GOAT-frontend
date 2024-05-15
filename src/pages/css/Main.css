@@ -1,31 +1,26 @@
 .main {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: space-between;
+  align-items: stretch;
 }
 
 .content, .main-container {
-  width: 100%;
-  max-width: 800px;
+  flex: 1;
   padding: 10px;
 }
 
 .m-match-container {
-  margin-top: 10px;
+  margin-left: 10px;
   border: none;
   box-shadow: none;
   overflow: hidden;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 768px) {
   .main {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: stretch;
+    flex-direction: column;
   }
-
   .m-match-container {
-    margin-top: 0;
-    margin-left: 10px;
+    margin-left: 0;
   }
 }
