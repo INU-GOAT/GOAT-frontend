@@ -1,8 +1,9 @@
 import * as React from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 
-const Matching = ({ onStartMatching, matchType, selectedSport, selectedTime, matchingInProgress }) => {
+const Matching = ({ onStartMatching, onCancelMatching, matchType, selectedSport, selectedTime, matchingInProgress }) => {
   const handleStartMatching = () => {
     if (!matchType || !selectedSport || !selectedTime) {
       alert('매치 실패: 매치 유형, 종목, 시간을 선택하세요.');
@@ -16,13 +17,24 @@ const Matching = ({ onStartMatching, matchType, selectedSport, selectedTime, mat
       {matchingInProgress ? (
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <CircularProgress />
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={onCancelMatching}
+            sx={{ ml: 2 }}
+          >
+            매칭 취소
+          </Button>
         </Box>
       ) : (
-        <div>
-          <button onClick={handleStartMatching} disabled={matchingInProgress}>
-            매칭 시작
-          </button>
-        </div>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleStartMatching}
+          sx={{ mt: 2 }}
+        >
+          매칭 시작
+        </Button>
       )}
     </div>
   );

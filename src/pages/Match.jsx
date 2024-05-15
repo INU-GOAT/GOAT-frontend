@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
 import MatchType from '../components/Matchtype';
-import TeamInvite from '../components/Teaminvite';
+import Teaminvite from '../components/Teaminvite';
 import Sport from '../components/Sport';
 import Timelist from '../components/Timelist';
 import Matching from '../components/Matching';
+import TeamMemberActions from '../components/TeamMemberActions';
+import { startMatching, cancelMatching } from '../apis/matching';
 import './css/Match.css';
 
-const Match = () => {
+const Match = ({ latitude, longitude }) => {
   const [matchType, setMatchType] = useState('');
   const [selectedSport, setSelectedSport] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
   const [matchingInProgress, setMatchingInProgress] = useState(false);
+  const [preferSport, setPreferSport] = useState('');
+  const [matchingStartTime, setMatchingStartTime] = useState('');
+  const [matchStartTimes, setMatchStartTimes] = useState([]);
+  const [preferCourt, setPreferCourt] = useState('');
 
   const handleMatchTypeClick = (type) => {
     setMatchType(type);
@@ -24,9 +30,44 @@ const Match = () => {
     setSelectedTime(time);
   };
 
-  const onStartMatching = () => {
+  const handleCourtChange = (court) => {
+    setPreferCourt(court);
+  };
+
+  const onStartMatching = async () => {
+    if (!latitude || !longitude) {
+      alert("위치를 설정하세요.");
+      return;
+    }
+
+    const requestBody = {
+      sport: selectedSport,
+      latitude: latitude,
+      longitude: longitude,
+      matchingStartTime: new Date().toISOString(),
+      matchStartTimes: [selectedTime],
+      preferCourt: preferCourt,
+      userCount: 1,
+      groupId: 1
+    };
+
     setMatchingInProgress(true);
+
+    const response = await startMatching(requestBody);
+    if (!response) {
+      setMatchingInProgress(false);
+    }
+
     console.log('매칭 시작');
+  };
+
+  const onCancelMatching = async () => {
+    const response = await cancelMatching();
+    if (response) {
+      setMatchingInProgress(false);
+    }
+
+    console.log('매칭 취소');
   };
 
   return (
@@ -36,16 +77,30 @@ const Match = () => {
         <MatchType matchType="솔로" isSelected={matchType === '솔로'} onClick={handleMatchTypeClick} disabled={matchingInProgress} />
         <MatchType matchType="팀" isSelected={matchType === '팀'} onClick={handleMatchTypeClick} disabled={matchingInProgress} />
       </div>
-      {matchType === '팀' && <TeamInvite disabled={matchingInProgress} />}
+      {matchType === '팀' && (
+        <>
+          <Teaminvite disabled={matchingInProgress} />
+          <TeamMemberActions disabled={matchingInProgress} />
+        </>
+      )}
       <div>
-        <h3>종목 선택</h3>
-        <Sport selectedSport={selectedSport} onClick={handleSportClick} disabled={matchingInProgress} />
+        <br />
+        <h3 className="match-title">종목 선택</h3>
+        <Sport
+          sport={selectedSport}
+          setSport={setSelectedSport}
+          preferSport={preferSport}
+          setPreferSport={setPreferSport}
+          disabled={matchingInProgress}
+        />
       </div>
+      <br />
       <div>
         <Timelist onChange={handleTimeChange} disabled={matchingInProgress} />
       </div>
       <Matching 
         onStartMatching={onStartMatching}
+        onCancelMatching={onCancelMatching}
         matchType={matchType}
         selectedSport={selectedSport}
         selectedTime={selectedTime}

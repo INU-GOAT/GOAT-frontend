@@ -1,48 +1,74 @@
 /* Reset CSS */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.match-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.match-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.match-type-buttons {
+  width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.match-type-buttons button {
+  display: inline-block;
+  width: 100px;
+  height: 40px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.match-type-buttons button:not(.selected):hover, 
+.match-type-buttons button:not(.selected):focus {
+  background-color: #0056b3;
+}
+
+.match-type-buttons button.selected {
+  background-color: #004080;
+  font-weight: bold;
+}
+
+.match-type-buttons button:last-child {
+  margin-right: 0;
+}
+
+@media (max-width: 600px) {
+  .match-container {
+      padding: 10px;
+      margin: 10px;
   }
 
-  .match-container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-  }
-  
   .match-title {
-    font-size: 24px;
-    margin-bottom: 20px;
+      font-size: 20px;
   }
-  
-  .match-type-buttons {
-    margin-bottom: 20px;
-    text-align: center; /* 중앙 정렬 추가 */
-  }
-  
+
   .match-type-buttons button {
-    display: inline-block;
-    width: 100px;
-    height: 40px;
-    margin-right: 10px;
-    margin-bottom: 10px; /* 버튼 아래 여백 추가 */
-    border: none;
-    background-color: #007bff;
-    color: #fff;
-    text-align: center;
-    line-height: 40px; /* 버튼 텍스트 가운데 정렬 */
-    cursor: pointer;
+      width: 80px;
+      height: 35px;
+      line-height: 35px;
   }
-  
-  .match-type-buttons button:not(.selected):hover {
-    background-color: #0056b3; /* hover 시 색상 변경 */
-  }
-  
-  .match-type-buttons button.selected {
-    background-color: #0056b3; /* 선택된 버튼 색상 변경 */
-  }
-  
-  .match-type-buttons button:last-child {
-    margin-right: 0;
-  }
+}
