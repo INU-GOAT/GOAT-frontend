@@ -1,11 +1,12 @@
 .main {
-  display: flex; /* Flexbox를 활용하여 내부 아이템을 나열 */
-  justify-content: space-between; /* 아이템 간 공간을 균등하게 배분 */
-  align-items: stretch; /* 모든 아이템의 높이를 같게 조정 */
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
 }
+
 .content, .main-container {
-  flex: 1; /* 각 컨테이너에 유연한 공간 할당 */
-  padding: 10px; /* 여백 추가 */
+  flex: 1;
+  padding: 10px;
 }
 
 .m-match-container {
@@ -13,4 +14,13 @@
   border: none;
   box-shadow: none;
   overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .main {
+    flex-direction: column;
+  }
+  .m-match-container {
+    margin-left: 0;
+  }
 }

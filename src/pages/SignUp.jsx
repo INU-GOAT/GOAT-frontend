@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import userAxios from "../apis/userAxios";
 import getUser from "../apis/getUser";
@@ -10,7 +9,6 @@ import {
   Box,
   Button,
   Card,
-  CardActionArea,
   CardContent,
   Container,
   CssBaseline,
@@ -19,38 +17,27 @@ import {
   FormLabel,
   Grid,
   MenuItem,
-  Paper,
   Radio,
   RadioGroup,
   Stack,
   TextField,
   ThemeProvider,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography,
-  colors,
   createTheme,
 } from "@mui/material";
 import { ReactComponent as GoatIcon } from "../assets/GOAT.svg";
 import {
   GiBasketballBall,
   GiPingPongBat,
-  GiPlantSeed,
   GiShuttlecock,
   GiSoccerBall,
 } from "react-icons/gi";
 import { CgChevronLeft, CgChevronRight } from "react-icons/cg";
-import { FaApple, FaLeaf, FaSeedling, FaTree } from "react-icons/fa";
-import { LuFlower, LuFlower2 } from "react-icons/lu";
-import { PiFlowerFill, PiTreeFill } from "react-icons/pi";
-import { grey } from "@mui/material/colors";
 import {
   BadmintonCard,
   BasketBallCard,
   SoccerCard,
   TableTennisCard,
 } from "./../components/SportsCards";
-import { IoMdFlower } from "react-icons/io";
 import TierButton from "../components/TierButton";
 
 const ages = [
@@ -103,24 +90,20 @@ function SignUp() {
   };
   const stepTwoHandler = () => {
     setPreferSport(sport);
+    if (sport === "soccer") {
+      setSoccerTier(preferTier);
+    } else if (sport === "basketball") {
+      setBasketballTier(preferTier);
+    } else if (sport === "badminton") {
+      setBadmintonTier(preferTier);
+    } else if (sport === "tableTennis") {
+      setTableTennisTier(preferTier);
+    }
     setStep(3);
-  };
-  const preferTierChange = (event, nextTier) => {
-    setPreferTier(nextTier);
-    console.log(preferTier);
+    console.log(soccerTier, preferSport, sport, preferTier);
   };
   const signUpHandler = async (e) => {
     e.preventDefault();
-
-    if (preferSport === "soccer") {
-      setSoccerTier(preferTier);
-    } else if (preferSport === "basketBall") {
-      setBasketballTier(preferTier);
-    } else if (preferSport === "badminton") {
-      setBadmintonTier(preferTier);
-    } else if (preferSport === "tableTennis") {
-      setTableTennisTier(preferTier);
-    }
 
     console.log({
       age: age,
@@ -441,7 +424,7 @@ function SignUp() {
                           </Stack>
                         </Stack>
                       )}
-                      {preferSport !== "basketBall" && (
+                      {preferSport !== "basketball" && (
                         <Stack flexDirection={"row"} sx={{ mt: 2 }}>
                           <Card
                             sx={{

@@ -4,7 +4,6 @@ const groupAxios = axios.create({
   baseURL: "http://15.165.113.9:8080/api/group",
 });
 
-// 요청 인터셉터
 groupAxios.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("accessToken");

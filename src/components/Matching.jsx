@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -15,21 +15,26 @@ const Matching = ({ onStartMatching, onCancelMatching, matchType, selectedSport,
   return (
     <div>
       {matchingInProgress ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <CircularProgress />
-          <Button variant="contained" onClick={onCancelMatching} sx={{ mt: 2 }}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={onCancelMatching}
+            sx={{ ml: 2 }}
+          >
             매칭 취소
           </Button>
         </Box>
       ) : (
-        <div>
-          <Button
-            variant="contained"
-            onClick={handleStartMatching}
-          >
-            매칭 시작
-          </Button>
-        </div>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleStartMatching}
+          sx={{ mt: 2 }}
+        >
+          매칭 시작
+        </Button>
       )}
     </div>
   );
