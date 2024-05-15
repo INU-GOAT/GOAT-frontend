@@ -19,7 +19,7 @@ const Sport = ({ sport, setSport, preferSport, setPreferSport, disabled }) => {
           mt: 2,
           justifyContent: "space-around",
           alignContent: "space-around",
-          flexWrap: "wrap", // 한 줄로 다 표시되지 않을 때, 다음 줄로 넘어가도록 설정
+          flexWrap: "wrap",
         }}
       >
         <SoccerCard
@@ -44,7 +44,7 @@ const Sport = ({ sport, setSport, preferSport, setPreferSport, disabled }) => {
           mt: 2,
           justifyContent: "space-around",
           alignContent: "space-around",
-          flexWrap: "wrap", // 한 줄로 다 표시되지 않을 때, 다음 줄로 넘어가도록 설정
+          flexWrap: "wrap",
         }}
       >
         <BadmintonCard
