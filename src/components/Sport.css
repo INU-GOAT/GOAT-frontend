@@ -6,32 +6,19 @@
   margin-top: 20px;
 }
 
+.sport-radio-container {
+  display: flex;
+  justify-content: center; /* 두 라디오 그룹을 중앙으로 정렬 */
+  width: 100%;
+}
+
 .sport-radio-group {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: center; /* 각 라디오 그룹의 내부 요소들을 중앙 정렬 */
   align-content: space-around;
+  flex-wrap: wrap;
 }
 
-.sport-radio-group > div {
-  margin-bottom: 20px; /* 카드들 간의 아래쪽 간격 추가 */
-}
-
-.sport-selection-group .MuiRadioGroup-root {
-  padding: 2px 4px;
-  min-width: 50px;
-  font-size: 0.75rem;
-  height: 24px;
-}
-
-.sport-selection-group .MuiFormControlLabel-root {
-  margin: 0;
-}
-
-.sport-selection-group .MuiRadio-root {
-  display: none;
-}
-
-.sport-selection-group .MuiButtonBase-root {
-  padding: 10px;
+.card-wrapper {
+  margin: 10px; /* 카드들 간의 간격 추가 */
 }
