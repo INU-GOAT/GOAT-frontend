@@ -41,17 +41,17 @@ export function SoccerCard(props) {
 export function BasketBallCard(props) {
   return (
     <Card
-      raised={props.sportState.sport === "basketball"}
+      raised={props.sportState.sport === "basketBall"}
       sx={{
         maxWidth: "40%",
         outline: "1px solid",
         outlineColor:
-          props.sportState.sport === "basketball" ? "primary.main" : "divider",
+          props.sportState.sport === "basketBall" ? "primary.main" : "divider",
         backgroundColor:
-          props.sportState.sport === "basketball" ? "background.default" : "",
+          props.sportState.sport === "basketBall" ? "background.default" : "",
       }}
     >
-      <CardActionArea onClick={() => props.sportState.setSport("basketball")}>
+      <CardActionArea onClick={() => props.sportState.setSport("basketBall")}>
         <CardContent
           sx={{
             display: "flex",
@@ -60,7 +60,7 @@ export function BasketBallCard(props) {
           }}
         >
           <GiBasketballBall
-            fill={props.sportState.sport === "basketball" ? "orange" : "gray"}
+            fill={props.sportState.sport === "basketBall" ? "orange" : "gray"}
             size={"100%"}
           ></GiBasketballBall>
         </CardContent>

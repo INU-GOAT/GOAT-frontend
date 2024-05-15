@@ -6,10 +6,12 @@ import "./css/Main.css";
 function Main() {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
+  const [preferCourt, setPreferCourt] = useState('');
 
-  const handleLocationChange = (lat, lng) => {
+  const handleLocationChange = (lat, lng, courtName) => {
     setLatitude(lat);
     setLongitude(lng);
+    setPreferCourt(courtName);
   };
 
   return (
@@ -19,7 +21,7 @@ function Main() {
       </div>
       <div className="main-container">
         <div className="m-match-container">
-          <Match latitude={latitude} longitude={longitude} />
+          <Match latitude={latitude} longitude={longitude} preferCourt={preferCourt} />
         </div>
       </div>
     </div>

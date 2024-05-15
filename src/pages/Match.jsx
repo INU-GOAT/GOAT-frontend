@@ -8,7 +8,7 @@ import TeamMemberActions from '../components/TeamMemberActions';
 import { startMatching, cancelMatching } from '../apis/matching';
 import './css/Match.css';
 
-const Match = ({ latitude, longitude }) => {
+const Match = ({ latitude, longitude, preferCourt }) => {
   const [matchType, setMatchType] = useState('');
   const [selectedSport, setSelectedSport] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
@@ -16,7 +16,7 @@ const Match = ({ latitude, longitude }) => {
   const [preferSport, setPreferSport] = useState('');
   const [matchingStartTime, setMatchingStartTime] = useState('');
   const [matchStartTimes, setMatchStartTimes] = useState([]);
-  const [preferCourt, setPreferCourt] = useState('');
+  const [preferCourtName, setPreferCourtName] = useState(preferCourt || '');
 
   const handleMatchTypeClick = (type) => {
     setMatchType(type);
@@ -31,7 +31,18 @@ const Match = ({ latitude, longitude }) => {
   };
 
   const handleCourtChange = (court) => {
-    setPreferCourt(court);
+    setPreferCourtName(court);
+  };
+
+  const sportMap = {
+    soccer: "축구",
+    basketball: "농구",
+    badminton: "배드민턴",
+    tabletennis: "탁구"
+  };
+
+  const roundToTwoDecimals = (value) => {
+    return Math.round(value * 100) / 100;
   };
 
   const onStartMatching = async () => {
@@ -41,15 +52,17 @@ const Match = ({ latitude, longitude }) => {
     }
 
     const requestBody = {
-      sport: selectedSport,
-      latitude: latitude,
-      longitude: longitude,
+      sport: sportMap[selectedSport],
+      latitude: roundToTwoDecimals(latitude),
+      longitude: roundToTwoDecimals(longitude),
       matchingStartTime: new Date().toISOString(),
       matchStartTimes: [selectedTime],
-      preferCourt: preferCourt,
+      preferCourt: preferCourtName,
       userCount: 1,
       groupId: 1
     };
+
+    console.log('Request Body:', requestBody);
 
     setMatchingInProgress(true);
 
