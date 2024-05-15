@@ -4,6 +4,7 @@ const groupAxios = axios.create({
   baseURL: "http://15.165.113.9:8080/api/group",
 });
 
+// 요청 인터셉터
 groupAxios.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("accessToken");
@@ -63,6 +64,16 @@ export const leaveGroup = async () => {
     return response.data;
   } catch (error) {
     console.error('그룹 탈퇴 실패:', error);
+    return null;
+  }
+};
+
+export const getInvites = async () => {
+  try {
+    const response = await groupAxios.get('/invites');
+    return response.data;
+  } catch (error) {
+    console.error('그룹 초대 조회 실패:', error);
     return null;
   }
 };

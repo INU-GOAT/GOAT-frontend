@@ -93,7 +93,12 @@ const Match = ({ latitude, longitude }) => {
         <MatchType matchType="솔로" isSelected={matchType === '솔로'} onClick={handleMatchTypeClick} disabled={matchingInProgress} />
         <MatchType matchType="팀" isSelected={matchType === '팀'} onClick={handleMatchTypeClick} disabled={matchingInProgress} />
       </div>
-      {matchType === '팀' && <Teaminvite disabled={matchingInProgress} />}
+      {matchType === '팀' && (
+        <>
+          <Teaminvite disabled={matchingInProgress} />
+          <TeamMemberActions disabled={matchingInProgress} />
+        </>
+      )}
       <div>
         <br />
         <h3 className="match-title">종목 선택</h3>
@@ -117,7 +122,6 @@ const Match = ({ latitude, longitude }) => {
         selectedTime={selectedTime}
         matchingInProgress={matchingInProgress}
       />
-      <TeamMemberActions disabled={matchingInProgress} />
     </div>
   );
 };
