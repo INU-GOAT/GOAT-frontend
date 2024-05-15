@@ -1,10 +1,14 @@
-.main::after {
-  content: "";
-  display: table;
-  clear: both;
+.main {
+  display: flex; /* Flexbox를 활용하여 내부 아이템을 나열 */
+  justify-content: space-between; /* 아이템 간 공간을 균등하게 배분 */
+  align-items: stretch; /* 모든 아이템의 높이를 같게 조정 */
 }
+.content, .main-container {
+  flex: 1; /* 각 컨테이너에 유연한 공간 할당 */
+  padding: 10px; /* 여백 추가 */
+}
+
 .m-match-container {
-  float: right;
   margin-left: 10px;
   border: none;
   box-shadow: none;

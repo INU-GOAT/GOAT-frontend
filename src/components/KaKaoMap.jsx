@@ -22,7 +22,6 @@ export default function KaKaoMap() {
   const [searchResult, setSearchResult] = useState([]);
   const mapRef = useRef(null);
   const [selectedPlace, setSelectedPlace] = useState(null);
-  const [clickedMarker, setClickedMarker] = useState(null);
 
   
   useEffect(() => {
