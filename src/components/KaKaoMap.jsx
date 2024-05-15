@@ -46,11 +46,13 @@ export default function KaKaoMap({ onLocationChange }) {
     return () => {
       document.removeEventListener('keypress', handleKeyPress);
     };
-  }, [searchKeyword]); // eslint-disable-next-line react-hooks/exhaustive-deps
+  },     // eslint-disable-next-line react-hooks/exhaustive-deps
+  [searchKeyword]);
 
   useEffect(() => {
     fitMapToMarkers();
-  }, [searchResult]); // eslint-disable-next-line react-hooks/exhaustive-deps
+  },     // eslint-disable-next-line react-hooks/exhaustive-deps
+  [searchResult]);
 
   const handleMarkerClick = (place) => {
     setSelectedPlace(place);
