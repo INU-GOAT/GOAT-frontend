@@ -1,0 +1,43 @@
+.team-member-actions-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+  }
+  
+  .group-invite-list, .group-member-list {
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 20px;
+  }
+  
+  .group-invite-list-item, .group-member-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .group-invite-list-item button, .group-leave-button {
+    padding: 5px 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .group-invite-list-item button:hover:not(:disabled), .group-leave-button:hover:not(:disabled) {
+    background-color: #45a049;
+  }
+  
+  .group-leave-button {
+    margin-top: 20px;
+  }

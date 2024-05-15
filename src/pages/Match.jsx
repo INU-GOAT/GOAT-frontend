@@ -1,21 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MatchType from '../components/Matchtype';
-import TeamInvite from '../components/Teaminvite';
+import Teaminvite from '../components/Teaminvite';
 import Sport from '../components/Sport';
 import Timelist from '../components/Timelist';
 import Matching from '../components/Matching';
-import KaKaoMap from '../components/KaKaoMap';
-import axios from 'axios';
+import TeamMemberActions from '../components/TeamMemberActions';
+import { getMatching, startMatching, cancelMatching } from '../apis/matching';
 import './css/Match.css';
 
-
-const Match = () => {
+const Match = ({ latitude, longitude }) => {
   const [matchType, setMatchType] = useState('');
   const [selectedSport, setSelectedSport] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
   const [matchingInProgress, setMatchingInProgress] = useState(false);
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
+  const [preferSport, setPreferSport] = useState('');
+  const [matchingStartTime, setMatchingStartTime] = useState('');
+  const [matchStartTimes, setMatchStartTimes] = useState([]);
+  const [preferCourt, setPreferCourt] = useState('');
+
+  useEffect(() => {
+    const fetchMatching = async () => {
+      const data = await getMatching();
+      if (data) {
+        const { sport, latitude, longitude, matchingStartTime, matchStartTimes, preferCourt } = data;
+        setSelectedSport(sport);
+        setMatchingStartTime(matchingStartTime);
+        setMatchStartTimes(matchStartTimes);
+        setPreferCourt(preferCourt);
+        setMatchingInProgress(true);
+      }
+    };
+
+    fetchMatching();
+  }, []);
 
   const handleMatchTypeClick = (type) => {
     setMatchType(type);
@@ -29,29 +46,44 @@ const Match = () => {
     setSelectedTime(time);
   };
 
-  const handleLocationChange = (lat, lng) => {
-    setLatitude(lat);
-    setLongitude(lng);
+  const handleCourtChange = (court) => {
+    setPreferCourt(court);
   };
 
-  const onStartMatching = () => {
+  const onStartMatching = async () => {
+    if (!latitude || !longitude) {
+      alert("위치를 설정하세요.");
+      return;
+    }
 
-    setMatchingInProgress(true);
-    axios.post('/api/matching', {
+    const requestBody = {
       sport: selectedSport,
       latitude: latitude,
       longitude: longitude,
-    })
-    .then((response) => {
-      console.log(response);
+      matchingStartTime: new Date().toISOString(),
+      matchStartTimes: [selectedTime],
+      preferCourt: preferCourt,
+      userCount: 1,
+      groupId: 1
+    };
 
-    })
-    .then((error) => {
-      console.error(error);
+    setMatchingInProgress(true);
 
-    });
+    const response = await startMatching(requestBody);
+    if (!response) {
+      setMatchingInProgress(false);
+    }
 
     console.log('매칭 시작');
+  };
+
+  const onCancelMatching = async () => {
+    const response = await cancelMatching();
+    if (response) {
+      setMatchingInProgress(false);
+    }
+
+    console.log('매칭 취소');
   };
 
   return (
@@ -61,18 +93,30 @@ const Match = () => {
         <MatchType matchType="솔로" isSelected={matchType === '솔로'} onClick={handleMatchTypeClick} disabled={matchingInProgress} />
         <MatchType matchType="팀" isSelected={matchType === '팀'} onClick={handleMatchTypeClick} disabled={matchingInProgress} />
       </div>
-      {matchType === '팀' && <TeamInvite disabled={matchingInProgress} />}
+      {matchType === '팀' && (
+        <>
+          <Teaminvite disabled={matchingInProgress} />
+          <TeamMemberActions disabled={matchingInProgress} />
+        </>
+      )}
       <div>
-        <br></br>
+        <br />
         <h3 className="match-title">종목 선택</h3>
-        <Sport selectedSport={selectedSport} onClick={handleSportClick} disabled={matchingInProgress} />
+        <Sport
+          sport={selectedSport}
+          setSport={setSelectedSport}
+          preferSport={preferSport}
+          setPreferSport={setPreferSport}
+          disabled={matchingInProgress}
+        />
       </div>
-      <br></br>
+      <br />
       <div>
         <Timelist onChange={handleTimeChange} disabled={matchingInProgress} />
       </div>
       <Matching 
         onStartMatching={onStartMatching}
+        onCancelMatching={onCancelMatching}
         matchType={matchType}
         selectedSport={selectedSport}
         selectedTime={selectedTime}
