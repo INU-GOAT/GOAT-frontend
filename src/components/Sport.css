@@ -6,6 +6,17 @@
   margin-top: 20px;
 }
 
+.sport-radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-content: space-around;
+}
+
+.sport-radio-group > div {
+  margin-bottom: 20px; /* 카드들 간의 아래쪽 간격 추가 */
+}
+
 .sport-selection-group .MuiRadioGroup-root {
   padding: 2px 4px;
   min-width: 50px;
@@ -18,9 +29,9 @@
 }
 
 .sport-selection-group .MuiRadio-root {
-  display: none; /* 라디오 버튼을 숨김 */
+  display: none;
 }
 
 .sport-selection-group .MuiButtonBase-root {
-  padding: 10px; /* 버튼 패딩 조정 */
+  padding: 10px;
 }

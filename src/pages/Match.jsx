@@ -64,8 +64,6 @@ const Match = ({ latitude, longitude, preferCourt }) => {
       preferCourt: preferCourtName
     };
 
-    console.log('Request Body:', requestBody);
-
     setMatchingInProgress(true);
 
     const response = await startMatching(requestBody);
