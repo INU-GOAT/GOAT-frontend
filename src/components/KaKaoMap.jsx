@@ -150,17 +150,18 @@ export default function KaKaoMap() {
           placeholder="장소를 검색하세요" 
         />
         </div>
-      </div>
-      <div className="search_results">
-        <h2>검색 결과</h2>
-        <List className="search_list">
-          {searchResult.map((place, index) => (
-            <ListItem key={index} button onClick={() => handleListItemClick(place)}>
-              <ListItemText primary={place.place_name} />
-            </ListItem>
-          ))}
-        </List>
+        <div className="search_results">
+          <h2>검색 결과</h2>
+          <List className="search_list">
+            {searchResult.map((place, index) => (
+              <ListItem key={index} button onClick={() => handleListItemClick(place)}>
+                <ListItemText primary={place.place_name} />
+              </ListItem>
+            ))}
+          </List>
         </div>
+      </div>
+      
     </div>
   );
 }
