@@ -42,7 +42,7 @@ export const cancelMatching = async () => {
     const result = await matchingAxios.delete('/');
     return result.data;
   } catch (error) {
-    console.error('매칭 중단 실패: ', error);
+    console.error('매칭 취소 실패: ', error);
     return null;
   }
 };

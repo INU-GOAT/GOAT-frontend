@@ -1,15 +1,22 @@
+import React from 'react';
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
 import "./css/Club.css";
+import Sport from '../components/Sport';
 
 function Club() {
     const [clubname, setClubname] = useState('');
     const [intro, setIntro] = useState('');
-    const [sport, setSport] = useState('');
+    const [selectedSport, setSelectedSport] = useState('');
+    const [preferSport, setPreferSport] = useState('');
+    const [matchingInProgress, setMatchingInProgress] = useState(false);
+
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(`submit! ${clubname} ${intro} ${sport}`);
+        console.log(`submit! ${clubname} ${intro} ${selectedSport}`);
+        navigate("/ClubInfo"); 
     };
 
     return (
@@ -28,47 +35,17 @@ function Club() {
                     placeholder="소개문"
                     onChange={(e) => setIntro(e.target.value)}
                 />
-                <label>
-                    <input
-                        type="radio"
-                        name="sport"
-                        value="soccer"
-                        checked={sport === "soccer"}
-                        onChange={(e) => setSport(e.target.value)}
-                    />
-                    축구
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        name="sport"
-                        value="pingpong"
-                        checked={sport === "pingpong"}
-                        onChange={(e) => setSport(e.target.value)}
-                    />
-                    탁구
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        name="sport"
-                        value="basketball"
-                        checked={sport === "basketball"}
-                        onChange={(e) => setSport(e.target.value)}
-                    />
-                    농구
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        name="sport"
-                        value="badminton"
-                        checked={sport === "badminton"}
-                        onChange={(e) => setSport(e.target.value)}
-                    />
-                    배드민턴
-                </label>
-                <input type="submit" />
+                <Sport
+                    sport={selectedSport}
+                    setSport={setSelectedSport}
+                    preferSport={preferSport}
+                    setPreferSport={setPreferSport}
+                    disabled={matchingInProgress}
+                />
+                <input 
+                    type="submit"
+                    className="submit"
+                />
             </form>
         </div>
     );
