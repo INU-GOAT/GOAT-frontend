@@ -1,6 +1,6 @@
 .Club {
     max-width: 600px;
-    margin: 50px auto;
+    margin: 30px auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 10px;
@@ -30,6 +30,10 @@
     vertical-align: middle; 
   }
   
+  .submit{
+    margin-top: 20px;
+  }
+
   input[type="submit"] {
     padding: 12px 20px; 
     background-color: #007bff;
