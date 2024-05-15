@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import { Slider, Box, Typography } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Slider, Box } from '@mui/material';
 
 const Timelist = ({ onChange, disabled }) => {
   const now = new Date();
   const startTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
   const endTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
-  const [sliderValue, setSliderValue] = useState(0);
 
   const generateTimeSlots = () => {
     const timeSlots = [];
@@ -19,6 +18,22 @@ const Timelist = ({ onChange, disabled }) => {
 
   const timeSlots = generateTimeSlots();
   const sliderMaxValue = timeSlots.length - 1;
+
+  const findInitialSliderValue = () => {
+    const closestTimeSlot = timeSlots.reduce((closest, current) => {
+      return Math.abs(current - now) < Math.abs(closest - now) ? current : closest;
+    }, timeSlots[0]);
+
+    return timeSlots.indexOf(closestTimeSlot);
+  };
+
+  const initialSliderValue = findInitialSliderValue();
+
+  const [sliderValue, setSliderValue] = useState(initialSliderValue);
+
+  useEffect(() => {
+    onChange(timeSlots[initialSliderValue]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleChange = (_, newValue) => {
     if (!disabled) {

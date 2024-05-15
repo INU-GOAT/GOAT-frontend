@@ -2,6 +2,7 @@ import React from 'react';
 import { RadioGroup } from "@mui/material";
 import { SoccerCard, BasketBallCard, BadmintonCard, TableTennisCard } from './../components/SportsCards';
 
+
 const Sport = ({ sport, setSport, preferSport, setPreferSport, disabled }) => {
   const handleCardClick = (value) => {
     setPreferSport(value);
@@ -22,9 +23,9 @@ const Sport = ({ sport, setSport, preferSport, setPreferSport, disabled }) => {
         }}
       >
         <SoccerCard sportState={{ sport, setSport: () => handleCardClick('soccer') }} disabled={disabled} />
-        <BasketBallCard sportState={{ sport, setSport: () => handleCardClick('basketball') }} disabled={disabled} />
+        <BasketBallCard sportState={{ sport, setSport: () => handleCardClick('basketBall') }} disabled={disabled} />
         <BadmintonCard sportState={{ sport, setSport: () => handleCardClick('badminton') }} disabled={disabled} />
-        <TableTennisCard sportState={{ sport, setSport: () => handleCardClick('tabletennis') }} disabled={disabled} />
+        <TableTennisCard sportState={{ sport, setSport: () => handleCardClick('tableTennis') }} disabled={disabled} />
       </RadioGroup>
     </div>
   );
