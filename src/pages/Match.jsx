@@ -45,6 +45,10 @@ const Match = ({ latitude, longitude, preferCourt }) => {
     return Math.round(value * 100) / 100;
   };
 
+  const formatDateToISOString = (date) => {
+    return new Date(date).toISOString();
+  };
+
   const onStartMatching = async () => {
     if (!latitude || !longitude) {
       alert("위치를 설정하세요.");
@@ -56,10 +60,8 @@ const Match = ({ latitude, longitude, preferCourt }) => {
       latitude: roundToTwoDecimals(latitude),
       longitude: roundToTwoDecimals(longitude),
       matchingStartTime: new Date().toISOString(),
-      matchStartTimes: [selectedTime],
-      preferCourt: preferCourtName,
-      userCount: 1,
-      groupId: 1
+      matchStartTimes: [formatDateToISOString(selectedTime)],
+      preferCourt: preferCourtName
     };
 
     console.log('Request Body:', requestBody);
