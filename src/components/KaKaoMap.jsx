@@ -4,6 +4,7 @@ import useKakaoLoader from "./useKakaoLoader";
 import './KaKaoMap.css';
 import { List, ListItem, ListItemText } from '@mui/material';
 
+
 const center = {
   lat: 37.375557,
   lng: 126.63280,
@@ -15,43 +16,49 @@ export default function KaKaoMap() {
     lat: undefined,
     lng: undefined,
   });
+  
+  
   const [searchKeyword, setSearchKeyword] = useState('');
   const [searchResult, setSearchResult] = useState([]);
   const mapRef = useRef(null);
   const [selectedPlace, setSelectedPlace] = useState(null);
+  const [clickedMarker, setClickedMarker] = useState(null);
 
+  
   useEffect(() => {
     const handleKeyPress = (event) => {
       if (event.key === 'Enter') {
         if (searchKeyword.trim() === '') {
-          alert('검색어를 입력하세요.');
+          event.preventDefault();
           return;
         }
-
-        event.preventDefault();
+        
         const ps = new window.kakao.maps.services.Places();
         ps.keywordSearch(searchKeyword, (data, status) => {
           if (status === window.kakao.maps.services.Status.OK) {
             setSearchResult(data);
             fitMapToMarkers();
-          } else {
-            alert('검색 결과가 없습니다.');
+          } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
             setSearchResult([]);
           }
         });
       }
     };
-
+  
     document.addEventListener('keypress', handleKeyPress);
-
+  
     return () => {
       document.removeEventListener('keypress', handleKeyPress);
     };
-  }, [searchKeyword]);
+  },     // eslint-disable-next-line react-hooks/exhaustive-deps
+  [searchKeyword]);
 
   useEffect(() => {
+    
     fitMapToMarkers();
-  }, [searchResult]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchResult]
+);
 
   const handleMarkerClick = (place) => {
     setSelectedPlace(place);
@@ -96,9 +103,11 @@ export default function KaKaoMap() {
     });
   };
 
+  
+
   return (
-    <>
-      <div className="map-container">
+    <div className="map-container">
+      <div className="map-wrapper">
         <Map
           className="map"
           id="map"
@@ -128,30 +137,30 @@ export default function KaKaoMap() {
             />
           )}
         </Map>
-      </div>
-      <div>
+        <button 
+          className="current_place"
+          onClick={getCurrentPosition}>
+          현재 위치
+        </button>
+        <div className="keyword">
         <input 
           type="text" 
           value={searchKeyword} 
           onChange={(e) => setSearchKeyword(e.target.value)} 
           placeholder="장소를 검색하세요" 
         />
+        </div>
       </div>
-      <div className="place-list">
+      <div className="search_results">
         <h2>검색 결과</h2>
-        <List>
+        <List className="search_list">
           {searchResult.map((place, index) => (
             <ListItem key={index} button onClick={() => handleListItemClick(place)}>
               <ListItemText primary={place.place_name} />
             </ListItem>
           ))}
         </List>
-      </div>
-      <div id="clickLatlng">
-        {position.lat &&
-          `클릭한 위치의 위도는 ${position.lat} 이고, 경도는 ${position.lng} 입니다`}
-      </div>
-      <button onClick={getCurrentPosition}>현재 위치</button>
-    </>
+        </div>
+    </div>
   );
 }
