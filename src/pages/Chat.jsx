@@ -13,15 +13,51 @@ import {
   createTheme,
 } from "@mui/material";
 import KaKaoMapchat from "../components/KaKaoMap_chat";
-import { Map } from "react-kakao-maps-sdk";
-
-import { CgChevronRight } from "react-icons/cg";
 import { IoMdSend } from "react-icons/io";
 import { MdWhereToVote } from "react-icons/md";
+import SockJS from "sockjs-client";
+import { useEffect, useState } from "react";
+import { Stomp } from "@stomp/stompjs";
 
 const defaultTheme = createTheme();
 
 function Chat() {
+  const [stompClient, setStompClient] = useState(null);
+  const [chatList, setChatList] = useState([]);
+  const myNickname = localStorage.getItem("nickname");
+
+  useEffect(() => {
+    const socket = new SockJS("http://15.165.113.9:8080/chat");
+    const client = Stomp.over(socket);
+    client.connect({}, () => {
+      client.subscribe("/room/1", (chat) => {
+        if (chat) {
+          console.log(chat);
+          setChatList((prevchatList) => [
+            ...prevchatList,
+            JSON.parse(chat.body),
+          ]);
+        }
+      });
+    });
+    setStompClient(client);
+    return () => {
+      if (stompClient) {
+        stompClient.disconnect();
+      }
+    };
+  }, [stompClient]);
+
+  const sendChat = () => {
+    if (stompClient) {
+      const message = {
+        userNickname: myNickname,
+        comment: "hi",
+      };
+      stompClient.send("/send/message/1", JSON.stringify(message));
+    }
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex", minHeight: "95dvh" }}>
@@ -197,7 +233,7 @@ function Chat() {
             />
             <Button
               endIcon={<IoMdSend />}
-              type="submit"
+              onClick={sendChat()}
               variant="contained"
               sx={{ ml: 1, width: "18%", backgroundColor: "#9376E0" }}
             >
