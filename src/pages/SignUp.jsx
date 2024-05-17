@@ -39,6 +39,7 @@ import {
   TableTennisCard,
 } from "./../components/SportsCards";
 import TierButton from "../components/TierButton";
+import isNickname from "../apis/isNickname";
 
 const ages = [
   {
@@ -81,12 +82,27 @@ function SignUp() {
   const { setIsLogin } = isLoginStore();
   const navigate = useNavigate();
 
+  const [isCorrectNickname, setIsCorrectNickname] = useState(true);
+  const [nicknameHelper, setNicknameHelper] = useState("");
+
   const stepOneHandler = (e) => {
+    e.preventDefault();
     const data = new FormData(e.currentTarget);
     setAge(data.get("age"));
     setNickname(data.get("nickName"));
     setGender(data.get("gender"));
-    setStep(2);
+    if (!nickname) {
+      setIsCorrectNickname(false);
+      setNicknameHelper("닉네임을 입력해주세요");
+    } else {
+      setIsCorrectNickname(isNickname(nickname));
+      console.log(isCorrectNickname);
+      isCorrectNickname === false
+        ? setNicknameHelper("중복된 닉네임입니다.")
+        : setNicknameHelper("");
+    }
+
+    // setStep(2);
   };
   const stepTwoHandler = () => {
     setPreferSport(sport);
@@ -240,6 +256,8 @@ function SignUp() {
                       id="nickName"
                       label="닉네임"
                       autoFocus
+                      error={!isCorrectNickname}
+                      helperText={nicknameHelper}
                       sx={{ mt: 4 }}
                     />
 
@@ -251,6 +269,7 @@ function SignUp() {
                       id="age"
                       label="나이대"
                       defaultValue=""
+                      error={true}
                       sx={{ mt: 2 }}
                     >
                       {ages.map((option) => (
