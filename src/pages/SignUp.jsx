@@ -84,25 +84,36 @@ function SignUp() {
 
   const [isCorrectNickname, setIsCorrectNickname] = useState(true);
   const [nicknameHelper, setNicknameHelper] = useState("");
+  const [isAge, setIsAge] = useState(true);
+  const [ageHelper, setAgeHelper] = useState("");
 
-  const stepOneHandler = (e) => {
+  const stepOneHandler = async (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     setAge(data.get("age"));
     setNickname(data.get("nickName"));
     setGender(data.get("gender"));
-    if (!nickname) {
+
+    if (data.get("nickName") === "") {
       setIsCorrectNickname(false);
       setNicknameHelper("닉네임을 입력해주세요");
     } else {
-      setIsCorrectNickname(isNickname(nickname));
+      const isNick = await isNickname(data.get("nickName"));
+      console.log(isNick);
+      setIsCorrectNickname(!isNick);
       console.log(isCorrectNickname);
-      isCorrectNickname === false
-        ? setNicknameHelper("중복된 닉네임입니다.")
-        : setNicknameHelper("");
+      if (isNick === true) {
+        setNicknameHelper("중복된 닉네임입니다.");
+      } else {
+        setNicknameHelper("");
+        if (data.get("age") === "") {
+          setIsAge(false);
+          setAgeHelper("나이대를 입력해주세요");
+        } else {
+          setStep(2);
+        }
+      }
     }
-
-    // setStep(2);
   };
   const stepTwoHandler = () => {
     setPreferSport(sport);
@@ -269,7 +280,8 @@ function SignUp() {
                       id="age"
                       label="나이대"
                       defaultValue=""
-                      error={true}
+                      error={!isAge}
+                      helperText={ageHelper}
                       sx={{ mt: 2 }}
                     >
                       {ages.map((option) => (
@@ -287,6 +299,7 @@ function SignUp() {
                         row
                         name="gender"
                         aria-labelledby="gender-group"
+                        defaultValue={"male"}
                       >
                         <FormControlLabel
                           value="male"

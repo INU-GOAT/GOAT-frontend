@@ -8,7 +8,7 @@ const isNickname = async (nickname) => {
       {}
     );
     console.log(result);
-    return result;
+    return result.data;
   } catch (error) {
     console.error(error);
     console.error("닉네임 중복 체크 실패");
