@@ -17,7 +17,6 @@ import { MdWhereToVote } from "react-icons/md";
 import SockJS from "sockjs-client";
 import { useEffect, useRef, useState } from "react";
 import { Client, Stomp } from "@stomp/stompjs";
-import getChat from "../apis/getChat";
 import { FaSeedling } from "react-icons/fa";
 import ChatAvatar from "./../components/ChatAvatar";
 import ChatBubble from "../components/ChatBubble";
