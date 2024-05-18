@@ -16,21 +16,32 @@ import KaKaoMapchat from "../components/KaKaoMap_chat";
 import { IoMdSend } from "react-icons/io";
 import { MdWhereToVote } from "react-icons/md";
 import SockJS from "sockjs-client";
-import { useEffect, useState } from "react";
-import { Stomp } from "@stomp/stompjs";
+import { useEffect, useRef, useState } from "react";
+import { Client, Stomp } from "@stomp/stompjs";
 
 const defaultTheme = createTheme();
 
 function Chat() {
-  const [stompClient, setStompClient] = useState(null);
+  const client = useRef();
+
   const [chatList, setChatList] = useState([]);
   const myNickname = localStorage.getItem("nickname");
 
   useEffect(() => {
-    const socket = new SockJS("http://15.165.113.9:8080/chat");
-    const client = Stomp.over(socket);
-    client.connect({}, () => {
-      client.subscribe("/room/1", (chat) => {
+    client.current = new Client({
+      brokerURL: "ws://15.165.113.9:8080/chat",
+      debug: (str) => {
+        console.log(str);
+      },
+      reconnectDelay: 5000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
+    });
+
+    client.current.activate();
+    client.current.onConnect = () => {
+      console.log("success");
+      client.current.subscribe("/room/1", (chat) => {
         if (chat) {
           console.log(chat);
           setChatList((prevchatList) => [
@@ -39,22 +50,23 @@ function Chat() {
           ]);
         }
       });
-    });
-    setStompClient(client);
-    return () => {
-      if (stompClient) {
-        stompClient.disconnect();
-      }
     };
-  }, [stompClient]);
+    return () => {
+      client.current.deactivate();
+      console.log("채팅이 종료되었습니다.");
+    };
+  }, []);
 
   const sendChat = () => {
-    if (stompClient) {
+    if (client.current) {
       const message = {
         userNickname: myNickname,
         comment: "hi",
       };
-      stompClient.send("/send/message/1", JSON.stringify(message));
+      client.current.publish({
+        destination: "/send/message/1",
+        body: JSON.stringify(message),
+      });
     }
   };
 
