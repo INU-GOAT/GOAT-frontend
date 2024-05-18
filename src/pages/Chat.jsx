@@ -27,26 +27,25 @@ const defaultTheme = createTheme();
 function Chat() {
   const client = useRef();
   const scrollRef = useRef();
-  const roomId = 1;
+  const roomId = 2;
   const [chatList, setChatList] = useState([]);
   const [inputChat, setInputChat] = useState("");
   const myNickname = localStorage.getItem("nickname");
-
+  const getChat = async () => {
+    try {
+      const result = await axios.get(
+        `http://15.165.113.9:8080/api/chats/${roomId}`
+      );
+      console.log(result.data);
+      console.log(result.data.data);
+      setChatList(result.data.data);
+      console.log(chatList);
+    } catch (error) {
+      console.error(error);
+      console.error("채팅내역 불러오기 실패");
+    }
+  };
   useEffect(() => {
-    const getChat = async () => {
-      try {
-        const result = await axios.get(
-          `http://15.165.113.9:8080/api/chats/${roomId}`
-        );
-        console.log(result.data);
-        console.log(result.data.data);
-        setChatList(result.data.data);
-        console.log(chatList);
-      } catch (error) {
-        console.error(error);
-        console.error("채팅내역 불러오기 실패");
-      }
-    };
     getChat();
 
     client.current = new Client({
@@ -133,7 +132,7 @@ function Chat() {
           <Box ref={scrollRef} sx={{ overflowY: "auto", height: "87%" }}>
             {chatList.map((chat) => (
               <ChatBubble
-                isMyChat={false}
+                isMyChat={chat.userNickname === myNickname}
                 nickname={chat.userNickname}
                 tier={400}
                 team={1}
