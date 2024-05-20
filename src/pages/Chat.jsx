@@ -21,23 +21,64 @@ import { FaSeedling } from "react-icons/fa";
 import ChatAvatar from "./../components/ChatAvatar";
 import ChatBubble from "../components/ChatBubble";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
 function Chat() {
+  const state = useLocation();
+  console.log(state.state);
+
+  const [team1, setTeam1] = useState([]);
+  const [team2, setTeam2] = useState([]);
+  const [title, setTitle] = useState("");
+  const [preferCourts, setPreferCourts] = useState([]);
+
+  useEffect(() => {
+    const setTeam = () => {
+      const team1 = Object.entries(state.state.team1);
+      console.log(team1);
+      const team2 = Object.entries(state.state.team2);
+      setTeam1(team1);
+      setTeam2(team2);
+    };
+    const setCourts = () => {
+      setPreferCourts(state.state.preferCourts);
+    };
+    const getTitle = () => {
+      const date = new Date(state.state.startTime);
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      const sport = state.state.sportName;
+      setTitle(
+        `${month}월 ${day}일 ${hours}시 ${minutes}분 ${sport} 경기 대화방`
+      );
+    };
+    setTeam();
+    setCourts();
+    getTitle();
+  }, [
+    state.state.preferCourts,
+    state.state.sportName,
+    state.state.startTime,
+    state.state.team1,
+    state.state.team2,
+  ]);
+
   const client = useRef();
   const scrollRef = useRef();
-  const roomId = 2;
+  const gameId = state.state.gameId;
   const [chatList, setChatList] = useState([]);
   const [inputChat, setInputChat] = useState("");
   const myNickname = localStorage.getItem("nickname");
   const getChat = async () => {
     try {
       const result = await axios.get(
-        `http://15.165.113.9:8080/api/chats/${roomId}`
+        `http://15.165.113.9:8080/api/chats/${gameId}`
       );
       console.log(result.data);
-      console.log(result.data.data);
       setChatList(result.data.data);
       console.log(chatList);
     } catch (error) {
@@ -61,7 +102,7 @@ function Chat() {
     client.current.activate();
     client.current.onConnect = () => {
       console.log("success");
-      client.current.subscribe(`/room/${roomId}`, (chat) => {
+      client.current.subscribe(`/room/${gameId}`, (chat) => {
         if (chat) {
           console.log(JSON.parse(chat.body));
 
@@ -92,10 +133,23 @@ function Chat() {
       };
 
       client.current.publish({
-        destination: `/send/message/${roomId}`,
+        destination: `/send/message/${gameId}`,
         body: JSON.stringify(message),
       });
       setInputChat("");
+    }
+  };
+  const sendVote = () => {
+    if (client.current) {
+      const message = {
+        userNickname: myNickname,
+        comment: inputChat,
+      };
+
+      client.current.publish({
+        destination: `/send/vote/${gameId}`,
+        body: JSON.stringify(message),
+      });
     }
   };
 
@@ -109,7 +163,9 @@ function Chat() {
         <Box
           sx={{
             flex: 2,
-            alignItems: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
             boxShadow: 3,
             borderRadius: 1,
             margin: 3,
@@ -127,22 +183,25 @@ function Chat() {
               color: "white",
             }}
           >
-            <h3>5월 10일 11시 30분 배드민턴 경기 대화방</h3>
+            <h3>{title}</h3>
           </Box>
-          <Box ref={scrollRef} sx={{ overflowY: "auto", height: "87%" }}>
+          <Box
+            ref={scrollRef}
+            sx={{ overflowY: "auto", flex: 1, width: "100%" }}
+          >
             {chatList.map((chat) => (
               <ChatBubble
                 isMyChat={chat.userNickname === myNickname}
                 nickname={chat.userNickname}
-                tier={400}
-                team={1}
-                number={0}
+                tier={state.state.user[chat.userNickname].tier}
+                team={state.state.user[chat.userNickname].team}
+                number={state.state.user[chat.userNickname].number}
                 chat={chat.comment}
               />
             ))}
           </Box>
 
-          <Stack direction="row" sx={{ margin: 1, mt: 2 }}>
+          <Stack direction="row" sx={{ padding: 1, width: "100%" }}>
             <TextField
               fullWidth
               placeholder="선수들과 대화를 나누세요!"
@@ -155,7 +214,7 @@ function Chat() {
               endIcon={<IoMdSend />}
               onClick={sendChat}
               variant="contained"
-              sx={{ ml: 1, width: "18%", backgroundColor: "#9376E0" }}
+              sx={{ ml: 1, backgroundColor: "#9376E0", whiteSpace: "nowrap" }}
             >
               전송
             </Button>
@@ -179,6 +238,7 @@ function Chat() {
               boxShadow: 3,
               borderRadius: 1,
               margin: 3,
+              overflowY: "auto",
             }}
           >
             <Box
@@ -196,33 +256,32 @@ function Chat() {
             </Box>
             <Box
               sx={{
+                flex: 1,
                 display: "flex",
+                flexDirection: "column",
+                overflowY: "auto",
                 width: "100%",
-                margin: 1,
-                ml: 2,
-                padding: 1,
-                alignItems: "center",
               }}
             >
-              <Avatar sx={{ bgcolor: "	#DC143C" }}>1</Avatar>
-              <Typography component="h3" variant="h6" sx={{ ml: 1 }}>
-                선수 1
-              </Typography>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                width: "100%",
-                margin: 1,
-                ml: 2,
-                padding: 1,
-                alignItems: "center",
-              }}
-            >
-              <Avatar sx={{ bgcolor: "	#DC143C" }}>2</Avatar>
-              <Typography component="h3" variant="h6" sx={{ ml: 1 }}>
-                선수 2
-              </Typography>
+              {team1.map((user) => (
+                <Box
+                  sx={{
+                    display: "flex",
+                    width: "100%",
+                    padding: 2,
+                    alignItems: "center",
+                  }}
+                >
+                  <ChatAvatar
+                    tier={user[1].tier}
+                    team={user[1].team}
+                    number={user[1].number}
+                  />
+                  <Typography component="h3" variant="h6" sx={{ ml: 1 }}>
+                    {user[0]}
+                  </Typography>
+                </Box>
+              ))}
             </Box>
           </Box>
           <Box
@@ -236,6 +295,7 @@ function Chat() {
               boxShadow: 3,
               borderRadius: 1,
               margin: 3,
+              overflowY: "auto",
             }}
           >
             <Box
@@ -253,33 +313,32 @@ function Chat() {
             </Box>
             <Box
               sx={{
+                flex: 1,
                 display: "flex",
+                flexDirection: "column",
+                overflowY: "auto",
                 width: "100%",
-                margin: 1,
-                ml: 2,
-                padding: 1,
-                alignItems: "center",
               }}
             >
-              <Avatar sx={{ bgcolor: "	#4169E1" }}>3</Avatar>
-              <Typography component="h3" variant="h6" sx={{ ml: 1 }}>
-                선수 3
-              </Typography>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                width: "100%",
-                margin: 1,
-                ml: 2,
-                padding: 1,
-                alignItems: "center",
-              }}
-            >
-              <Avatar sx={{ bgcolor: "	#4169E1" }}>4</Avatar>
-              <Typography component="h3" variant="h6" sx={{ ml: 1 }}>
-                선수 4
-              </Typography>
+              {team2.map((user) => (
+                <Box
+                  sx={{
+                    display: "flex",
+                    width: "100%",
+                    padding: 2,
+                    alignItems: "center",
+                  }}
+                >
+                  <ChatAvatar
+                    tier={user[1].tier}
+                    team={user[1].team}
+                    number={user[1].number}
+                  />
+                  <Typography component="h3" variant="h6" sx={{ ml: 1 }}>
+                    {user[0]}
+                  </Typography>
+                </Box>
+              ))}
             </Box>
           </Box>
           <Box sx={{ flex: 1, margin: 3 }}>
