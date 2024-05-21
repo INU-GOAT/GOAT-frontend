@@ -38,7 +38,7 @@ const Teaminvite = ({ disabled }) => {
       return;
     }
 
-    const user = users.find(u => u.username === inputValue.trim());
+    const user = users.find(u => u.nickname === inputValue.trim());
     if (!user) {
       setError('유저 닉네임이 존재하지 않습니다.');
       return;
@@ -86,7 +86,7 @@ const Teaminvite = ({ disabled }) => {
       <ul className="team-invite-list">
         {groupMembers.map((member) => (
           <li key={member.id} className="team-invite-list-item">
-            {member.username}
+            {member.nickname}
             <button onClick={() => handleRemoveUser(member.id)} disabled={disabled}>추방</button>
           </li>
         ))}

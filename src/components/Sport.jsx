@@ -32,7 +32,7 @@ const Sport = ({ sport, setSport, preferSport, setPreferSport, disabled }) => {
           sportState={{ sport, setSport }}
           label="농구"
           disabled={disabled}
-          value="basketball"
+          value="basketBall"
         />
       </RadioGroup>
       <RadioGroup
@@ -57,7 +57,7 @@ const Sport = ({ sport, setSport, preferSport, setPreferSport, disabled }) => {
           sportState={{ sport, setSport }}
           label="탁구"
           disabled={disabled}
-          value="tabletennis"
+          value="tableTennis"
         />
       </RadioGroup>
     </div>
