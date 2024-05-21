@@ -1,21 +1,16 @@
 import React, { useState } from "react";
 import SignOut from "../components/SignOut";
-import LogOut from "../components/LogOut";
-
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-
 import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
+
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import {
+  Badge,
   Card,
   CardActionArea,
   CardContent,
@@ -25,8 +20,6 @@ import {
   Radio,
   RadioGroup,
   Stack,
-  ToggleButton,
-  ToggleButtonGroup,
 } from "@mui/material";
 import {
   GiBasketballBall,
@@ -34,7 +27,9 @@ import {
   GiShuttlecock,
   GiSoccerBall,
 } from "react-icons/gi";
-import { FaApple, FaSeedling, FaTree } from "react-icons/fa";
+import { FaLeaf, FaSeedling } from "react-icons/fa";
+
+import { PiFlowerFill } from "react-icons/pi";
 
 const defaultTheme = createTheme();
 const ages = [
@@ -60,365 +55,232 @@ const ages = [
   },
 ];
 function MyPage() {
+  const myNickname = localStorage.getItem("nickname");
+  const myAge = localStorage.getItem("age");
+  const myGender = localStorage.getItem("gender");
+  const myPreferSport = localStorage.getItem("prefer_sport");
   const [preferSport, setPreferSport] = useState(null);
-  const [tier, setTier] = useState(null);
-  const tierChange = (event, nextTier) => {
-    setTier(nextTier);
+  const soccerTier = localStorage.getItem("soccer_tier");
+  const basketballTier = localStorage.getItem("basketball_tier");
+  const badmintonTier = localStorage.getItem("badminton_tier");
+  const tableTennisTier = localStorage.getItem("tableTennis_tier");
+  const [sport, setSport] = useState(myPreferSport);
+
+  const tier = (tier) => {
+    if (tier === "1") {
+      return <FaSeedling fill="#9ACD32" fontSize="30px" />;
+    } else if (tier === "2") {
+      return <FaLeaf fill="	#3CB371" fontSize="30px" />;
+    } else {
+      return <PiFlowerFill fill="#FFB6C1" fontSize="30px" />;
+    }
   };
+
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container
-        component="main"
-        maxWidth="xs"
-        container
-        justifyContent="center"
-        spacing={1}
+      <CssBaseline />
+      <Box
+        sx={{
+          maxWidth: "sm",
+          marginX: "auto",
+          marginTop: 3,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          padding: 4,
+          boxShadow: 3,
+          borderRadius: 1,
+        }}
       >
-        <CssBaseline />
-        <Box
-          width={"510px"}
-          sx={{
-            marginTop: 1,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            padding: 4,
-            boxShadow: 3,
-            borderRadius: 1,
-          }}
-        >
-          <Typography component="h1" variant="h5">
-            회원 정보 수정
-          </Typography>
-          <Box component="form" noValidate sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  autoComplete="given-name"
-                  name="닉네임"
-                  fullWidth
-                  id="firstName"
-                  label="닉네임"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  name="age"
-                  select
-                  fullWidth
-                  id="age"
-                  label="나이대"
-                  defaultValue=""
-                  sx={{ mt: 1 }}
+        <Typography component="h1" variant="h5">
+          회원 정보
+        </Typography>
+        <Box component="form" noValidate sx={{ mt: 3 }}>
+          <Stack>
+            <Stack>
+              <TextField
+                autoComplete="given-name"
+                name="닉네임"
+                fullWidth
+                id="firstName"
+                label="닉네임"
+                defaultValue={myNickname}
+              />
+            </Stack>
+            <Stack sx={{ mt: 3 }}>
+              <TextField
+                name="age"
+                select
+                fullWidth
+                id="age"
+                label="나이대"
+                defaultValue={myAge}
+              >
+                {ages.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Stack>
+            <Stack sx={{ mt: 3 }}>
+              <FormControl>
+                <FormLabel name="gender-group" id="gender">
+                  성별
+                </FormLabel>
+                <RadioGroup
+                  row
+                  name="gender"
+                  aria-labelledby="gender-group"
+                  defaultValue={myGender}
                 >
-                  {ages.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid>
-              <Grid item xs={12}>
-                <FormControl>
-                  <FormLabel id="demo-row-radio-buttons-group-label">
-                    성별
-                  </FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
-                  >
-                    <FormControlLabel
-                      value="female"
-                      control={<Radio />}
-                      label="남성"
-                    />
-                    <FormControlLabel
-                      value="male"
-                      control={<Radio />}
-                      label="여성"
-                    />
-                  </RadioGroup>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} mb={2}>
-                <Stack alignItems={"flex-start"} mt={4} flexDirection={"row"}>
-                  <RadioGroup
-                    name="preferSport"
-                    value={preferSport}
+                  <FormControlLabel
+                    value="male"
+                    control={<Radio />}
+                    label="남성"
+                  />
+                  <FormControlLabel
+                    value="female"
+                    control={<Radio />}
+                    label="여성"
+                  />
+                </RadioGroup>
+              </FormControl>
+            </Stack>
+          </Stack>
+          <Stack
+            display="flex"
+            flexDirection={"row"}
+            justifyContent={"space-between"}
+          >
+            <Badge badgeContent={tier(soccerTier)} sx={{ width: "20%" }}>
+              <Card
+                raised={sport === "soccer"}
+                sx={{
+                  maxWidth: "100%",
+                  outline: "1px solid",
+                  outlineColor: sport === "soccer" ? "primary.main" : "divider",
+                  backgroundColor:
+                    sport === "soccer" ? "background.default" : "",
+                }}
+              >
+                <CardActionArea onClick={() => setSport("soccer")}>
+                  <CardContent
                     sx={{
-                      flexDirection: "column",
-                      mt: 2,
-                      alignContent: "flex-start",
-                      justifyContent: "space-between",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
                     }}
                   >
-                    <Card
-                      raised={preferSport === "soccer"}
-                      sx={{
-                        maxWidth: "40%",
-                        outline: "1px solid",
-                        outlineColor:
-                          preferSport === "soccer" ? "primary.main" : "divider",
-                        backgroundColor:
-                          preferSport === "soccer" ? "background.default" : "",
-                      }}
-                    >
-                      <CardActionArea onClick={() => setPreferSport("soccer")}>
-                        <CardContent
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 1,
-                          }}
-                        >
-                          <GiSoccerBall
-                            fill={preferSport === "soccer" ? "skyblue" : "gray"}
-                            size={"100%"}
-                          ></GiSoccerBall>
-                        </CardContent>
-                      </CardActionArea>
-                    </Card>
-                    <Card
-                      raised={preferSport === "basketBall"}
-                      sx={{
-                        maxWidth: "40%",
-                        outline: "1px solid",
-                        outlineColor:
-                          preferSport === "basketBall"
-                            ? "primary.main"
-                            : "divider",
-                        backgroundColor:
-                          preferSport === "basketBall"
-                            ? "background.default"
-                            : "",
-                      }}
-                    >
-                      <CardActionArea
-                        onClick={() => setPreferSport("basketBall")}
-                      >
-                        <CardContent
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 1,
-                          }}
-                        >
-                          <GiBasketballBall
-                            fill={
-                              preferSport === "basketBall" ? "orange" : "gray"
-                            }
-                            size={"100%"}
-                          ></GiBasketballBall>
-                        </CardContent>
-                      </CardActionArea>
-                    </Card>
-                    <Card
-                      raised={preferSport === "badminton"}
-                      sx={{
-                        maxWidth: "40%",
-                        outline: "1px solid",
-                        outlineColor:
-                          preferSport === "badminton"
-                            ? "primary.main"
-                            : "divider",
-                        backgroundColor:
-                          preferSport === "badminton"
-                            ? "background.default"
-                            : "",
-                      }}
-                    >
-                      <CardActionArea
-                        onClick={() => setPreferSport("badminton")}
-                      >
-                        <CardContent
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 1,
-                          }}
-                        >
-                          <GiShuttlecock
-                            fill={
-                              preferSport === "badminton"
-                                ? "lightgreen"
-                                : "gray"
-                            }
-                            size={"100%"}
-                          ></GiShuttlecock>
-                        </CardContent>
-                      </CardActionArea>
-                    </Card>
-                    <Card
-                      raised={preferSport === "tableTennis"}
-                      sx={{
-                        maxWidth: "40%",
-                        flexGrow: 1,
-                        outline: "1px solid",
-                        outlineColor:
-                          preferSport === "tableTennis"
-                            ? "primary.main"
-                            : "divider",
-                        backgroundColor:
-                          preferSport === "tableTennis"
-                            ? "background.default"
-                            : "",
-                      }}
-                    >
-                      <CardActionArea
-                        onClick={() => setPreferSport("tableTennis")}
-                      >
-                        <CardContent
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 1,
-                          }}
-                        >
-                          <GiPingPongBat
-                            fill={
-                              preferSport === "tableTennis" ? "red" : "gray"
-                            }
-                            size={"100%"}
-                          ></GiPingPongBat>
-                        </CardContent>
-                      </CardActionArea>
-                    </Card>
-                  </RadioGroup>
-                  <Stack>
-                    <ToggleButtonGroup
-                      value={tier}
-                      exclusive
-                      onChange={tierChange}
-                      sx={{ mt: 4 }}
-                    >
-                      <ToggleButton
-                        value="1"
-                        aria-label="seedling"
-                        sx={{ padding: "19px" }}
-                      >
-                        <FaSeedling fill="lightgreen" fontSize="30px" />
-                      </ToggleButton>
-                      <ToggleButton
-                        value="2"
-                        aria-label="apple"
-                        sx={{ padding: "19px" }}
-                      >
-                        <FaApple fill="red" fontSize="30px" />
-                      </ToggleButton>
-                      <ToggleButton
-                        value="3"
-                        aria-label="tree"
-                        sx={{ padding: "19px" }}
-                      >
-                        <FaTree fill="green" fontSize="30px" />
-                      </ToggleButton>
-                    </ToggleButtonGroup>
-                    <ToggleButtonGroup
-                      value={tier}
-                      exclusive
-                      onChange={tierChange}
-                      sx={{ mt: 3 }}
-                    >
-                      <ToggleButton
-                        value="1"
-                        aria-label="seedling"
-                        sx={{ padding: "19px" }}
-                      >
-                        <FaSeedling fill="lightgreen" fontSize="30px" />
-                      </ToggleButton>
-                      <ToggleButton
-                        value="2"
-                        aria-label="apple"
-                        sx={{ padding: "19px" }}
-                      >
-                        <FaApple fill="red" fontSize="30px" />
-                      </ToggleButton>
-                      <ToggleButton
-                        value="3"
-                        aria-label="tree"
-                        sx={{ padding: "19px" }}
-                      >
-                        <FaTree fill="green" fontSize="30px" />
-                      </ToggleButton>
-                    </ToggleButtonGroup>
-                    <ToggleButtonGroup
-                      value={tier}
-                      exclusive
-                      onChange={tierChange}
-                      sx={{ mt: 3 }}
-                    >
-                      <ToggleButton
-                        value="1"
-                        aria-label="seedling"
-                        sx={{ padding: "19px" }}
-                      >
-                        <FaSeedling fill="lightgreen" fontSize="30px" />
-                      </ToggleButton>
-                      <ToggleButton
-                        value="2"
-                        aria-label="apple"
-                        sx={{ padding: "19px" }}
-                      >
-                        <FaApple fill="red" fontSize="30px" />
-                      </ToggleButton>
-                      <ToggleButton
-                        value="3"
-                        aria-label="tree"
-                        sx={{ padding: "19px" }}
-                      >
-                        <FaTree fill="green" fontSize="30px" />
-                      </ToggleButton>
-                    </ToggleButtonGroup>
-                    <ToggleButtonGroup
-                      value={tier}
-                      exclusive
-                      onChange={tierChange}
-                      sx={{ mt: 3 }}
-                    >
-                      <ToggleButton
-                        value="1"
-                        aria-label="seedling"
-                        sx={{ padding: "19px" }}
-                      >
-                        <FaSeedling fill="lightgreen" fontSize="30px" />
-                      </ToggleButton>
-                      <ToggleButton
-                        value="2"
-                        aria-label="apple"
-                        sx={{ padding: "19px" }}
-                      >
-                        <FaApple fill="red" fontSize="30px" />
-                      </ToggleButton>
-                      <ToggleButton
-                        value="3"
-                        aria-label="tree"
-                        sx={{ padding: "19px" }}
-                      >
-                        <FaTree fill="green" fontSize="30px" />
-                      </ToggleButton>
-                    </ToggleButtonGroup>
-                  </Stack>
-                </Stack>
-              </Grid>
-            </Grid>
+                    <GiSoccerBall
+                      fill={sport === "soccer" ? "skyblue" : "gray"}
+                      size={"100%"}
+                    ></GiSoccerBall>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Badge>
+            <Badge badgeContent={tier(basketballTier)} sx={{ width: "20%" }}>
+              <Card
+                raised={sport === "basketBall"}
+                sx={{
+                  maxWidth: "100%",
+                  outline: "1px solid",
+                  outlineColor:
+                    sport === "basketBall" ? "primary.main" : "divider",
+                  backgroundColor:
+                    sport === "basketBall" ? "background.default" : "",
+                }}
+              >
+                <CardActionArea onClick={() => setSport("basketBall")}>
+                  <CardContent
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                    }}
+                  >
+                    <GiBasketballBall
+                      fill={sport === "basketBall" ? "orange" : "gray"}
+                      size={"100%"}
+                    ></GiBasketballBall>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Badge>
+            <Badge badgeContent={tier(badmintonTier)} sx={{ width: "20%" }}>
+              <Card
+                raised={sport === "badminton"}
+                sx={{
+                  maxWidth: "100%",
+                  outline: "1px solid",
+                  outlineColor:
+                    sport === "badminton" ? "primary.main" : "divider",
+                  backgroundColor:
+                    sport === "badminton" ? "background.default" : "",
+                }}
+              >
+                <CardActionArea onClick={() => setSport("badminton")}>
+                  <CardContent
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                    }}
+                  >
+                    <GiShuttlecock
+                      fill={sport === "badminton" ? "lightgreen" : "gray"}
+                      size={"100%"}
+                    ></GiShuttlecock>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Badge>
+            <Badge badgeContent={tier(tableTennisTier)} sx={{ width: "20%" }}>
+              <Card
+                raised={sport === "tableTennis"}
+                sx={{
+                  maxWidth: "100%",
+                  flexGrow: 1,
+                  outline: "1px solid",
+                  outlineColor:
+                    sport === "tableTennis" ? "primary.main" : "divider",
+                  backgroundColor:
+                    sport === "tableTennis" ? "background.default" : "",
+                }}
+              >
+                <CardActionArea onClick={() => setSport("tableTennis")}>
+                  <CardContent
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                    }}
+                  >
+                    <GiPingPongBat
+                      fill={sport === "tableTennis" ? "red" : "gray"}
+                      size={"100%"}
+                    ></GiPingPongBat>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Badge>
+          </Stack>
 
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              회원 정보 수정하기
-            </Button>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 5, mb: 2 }}
+          >
+            회원 정보 수정하기
+          </Button>
 
-            <Grid container justifyContent="flex-end">
-              <SignOut></SignOut>
-            </Grid>
-          </Box>
+          <Grid container justifyContent="flex-end">
+            <SignOut></SignOut>
+          </Grid>
         </Box>
-      </Container>
+      </Box>
     </ThemeProvider>
   );
 }
