@@ -27,6 +27,7 @@ function ChatHandler() {
     } catch (error) {
       console.error(error);
       console.error("진행 중인 게임 불러오기 실패");
+      alert("진행중인 게임이 존재하지 않습니다.");
     }
   };
   const goChat = (props) => {

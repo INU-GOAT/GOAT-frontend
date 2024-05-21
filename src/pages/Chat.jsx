@@ -3,8 +3,16 @@ import {
   Badge,
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  FormControlLabel,
   Grid,
   Paper,
+  Radio,
+  RadioGroup,
   Stack,
   TextField,
   ThemeProvider,
@@ -27,7 +35,6 @@ const defaultTheme = createTheme();
 
 function Chat() {
   const state = useLocation();
-  console.log(state.state);
 
   const [team1, setTeam1] = useState([]);
   const [team2, setTeam2] = useState([]);
@@ -35,6 +42,7 @@ function Chat() {
   const [preferCourts, setPreferCourts] = useState([]);
 
   useEffect(() => {
+    console.log(state.state);
     const setTeam = () => {
       const team1 = Object.entries(state.state.team1);
       console.log(team1);
@@ -60,6 +68,7 @@ function Chat() {
     setCourts();
     getTitle();
   }, [
+    state.state,
     state.state.preferCourts,
     state.state.sportName,
     state.state.startTime,
@@ -67,12 +76,27 @@ function Chat() {
     state.state.team2,
   ]);
 
+  const [open, setOpen] = useState(false);
+  const [selectedCourt, setSelectedCourt] = useState("");
+  const [isVoted, setIsVoted] = useState(localStorage.getItem("isVoted"));
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleOptionChange = (event) => {
+    setSelectedCourt(event.target.value);
+  };
+
   const client = useRef();
   const scrollRef = useRef();
   const gameId = state.state.gameId;
   const [chatList, setChatList] = useState([]);
   const [inputChat, setInputChat] = useState("");
   const myNickname = localStorage.getItem("nickname");
+
   const getChat = async () => {
     try {
       const result = await axios.get(
@@ -86,6 +110,7 @@ function Chat() {
       console.error("채팅내역 불러오기 실패");
     }
   };
+
   useEffect(() => {
     getChat();
 
@@ -143,14 +168,17 @@ function Chat() {
     if (client.current) {
       const message = {
         userNickname: myNickname,
-        comment: inputChat,
+        comment: selectedCourt,
       };
 
       client.current.publish({
-        destination: `/send/vote/${gameId}`,
+        destination: `/vote/${gameId}`,
         body: JSON.stringify(message),
       });
+      setIsVoted(true);
+      localStorage.setItem("isVoted", true);
     }
+    setOpen(false);
   };
 
   return (
@@ -343,12 +371,44 @@ function Chat() {
           </Box>
           <Box sx={{ flex: 1, margin: 3 }}>
             <Button
+              onClick={handleClickOpen}
               variant="contained"
               endIcon={<MdWhereToVote />}
               sx={{ width: "100%", backgroundColor: "#9376E0" }}
             >
               경기장 투표하기
             </Button>
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              sx={{ "& .MuiDialog-paper": { width: "80%", maxHeight: 435 } }}
+            >
+              <DialogTitle>경기장을 투표 해주세요!</DialogTitle>
+              <DialogContent>
+                <FormControl component="fieldset">
+                  <RadioGroup
+                    value={selectedCourt}
+                    onChange={handleOptionChange}
+                  >
+                    {preferCourts.map((court) => (
+                      <FormControlLabel
+                        value={court}
+                        control={<Radio />}
+                        label={court}
+                      />
+                    ))}
+                  </RadioGroup>
+                </FormControl>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose} color="secondary">
+                  취소
+                </Button>
+                <Button onClick={sendVote} color="primary">
+                  투표하기
+                </Button>
+              </DialogActions>
+            </Dialog>
           </Box>
         </Box>
       </Box>
