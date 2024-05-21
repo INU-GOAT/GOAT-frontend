@@ -9,6 +9,8 @@ const setUser = (data) => {
   localStorage.setItem("prefer_sport", data.prefer_sport);
   localStorage.setItem("soccer_tier", data.soccer_tier);
   localStorage.setItem("tableTennis_tier", data.tableTennis_tier);
+  localStorage.setItem("status", data.status);
+  localStorage.setItem("isVoted", data.isVoted);
 };
 
 export default setUser;
