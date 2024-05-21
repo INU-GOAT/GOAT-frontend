@@ -38,9 +38,9 @@ function ChatAvatar(props) {
     tier = <PiFlowerFill fill="#FFB6C1" fontSize="30px" />;
   }
   if (props.team === 1) {
-    teamColor = "red";
+    teamColor = "	#DC143C";
   } else {
-    teamColor = "blue";
+    teamColor = "	#4169E1";
   }
   return (
     <Badge badgeContent={tier}>
