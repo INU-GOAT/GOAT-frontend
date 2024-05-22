@@ -18,7 +18,6 @@ const Timelist = ({ onChange, disabled }) => {
   }, [startTime, endTime]);
 
   const timeSlots = useMemo(() => generateTimeSlots(), [generateTimeSlots]);
-  const sliderMaxValue = timeSlots.length - 1;
 
   const [selectedTimes, setSelectedTimes] = useState([]);
 
@@ -38,9 +37,9 @@ const Timelist = ({ onChange, disabled }) => {
     if (selectedTimes.length === 2) {
       const [start, end] = selectedTimes.sort((a, b) => a - b);
       const range = timeSlots.filter(time => time >= start && time <= end);
-      onChange(range);
+      onChange(range.map(time => `${time.getHours().toString().padStart(2, '0')}${time.getMinutes().toString().padStart(2, '0')}`));
     } else {
-      onChange(selectedTimes);
+      onChange(selectedTimes.map(time => `${time.getHours().toString().padStart(2, '0')}${time.getMinutes().toString().padStart(2, '0')}`));
     }
   }, [selectedTimes, onChange, timeSlots]);
 
