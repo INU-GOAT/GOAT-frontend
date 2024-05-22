@@ -9,10 +9,11 @@ const refreshTokens = async (config) => {
     console.log(result);
     localStorage.setItem("accessToken", result.data.accessToken);
     localStorage.setItem("refreshToken", result.data.refreshToken);
-    userAxios(config);
+    config.headers.Auth = result.data.accessToken;
   } catch (error) {
     console.error(error);
     console.error("refreshTokens 실패");
+    throw error;
   }
 };
 
