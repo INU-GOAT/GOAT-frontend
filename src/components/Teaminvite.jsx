@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getUser } from '../apis/getUser';
-import { createGroup, inviteToGroup, expelGroupMember, getGroupMembers } from '../apis/group';
+import { inviteToGroup, expelGroupMember, getGroupMembers } from '../apis/group';
 import './Teaminvite.css';
 
 const Teaminvite = ({ disabled }) => {
@@ -24,13 +24,6 @@ const Teaminvite = ({ disabled }) => {
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
-  };
-
-  const createNewGroup = async () => {
-    const result = await createGroup(inputValue.trim());
-    if (!result) {
-      setError('그룹 생성 실패.');
-    }
   };
 
   const handleAddUser = async () => {

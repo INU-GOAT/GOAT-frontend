@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getGroupMembers, acceptGroupInvite, leaveGroup } from '../apis/group';
+import { getGroupMembers, leaveGroup, expelGroupMember } from '../apis/group';
 import './TeamMemberActions.css';
 
 const TeamMemberActions = ({ disabled }) => {
@@ -22,17 +22,6 @@ const TeamMemberActions = ({ disabled }) => {
 
     fetchGroupMembers();
   }, []);
-
-  const handleAcceptInvite = async (notificationId) => {
-    try {
-      const result = await acceptGroupInvite(notificationId, true);
-      if (result) {
-        setGroupMembers([...groupMembers, result]);
-      }
-    } catch (err) {
-      setError('그룹 초대 수락에 실패했습니다.');
-    }
-  };
 
   const handleLeaveGroup = async () => {
     try {
