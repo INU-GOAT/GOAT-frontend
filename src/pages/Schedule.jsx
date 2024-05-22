@@ -3,14 +3,13 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from '@fullcalendar/react';
-import axios from 'axios'; 
+import axios from 'axios';
 import './css/Schedule.css';
 
 export default class Schedule extends Component {
     state = {
         clickedDate: null,
         gameResults: [],
-        events: [], 
     };
 
     componentDidMount() {
@@ -19,29 +18,33 @@ export default class Schedule extends Component {
 
     getGameResults = async () => {
         try {
-            const response = await axios.get('http://15.165.113.9:8080/api/game/finished'); // axios와 get 사용
-            const data = response.data;
-            if (Array.isArray(data)) {
-                const events = data.map(result => ({
-                    title: result.sportName,
-                    start: result.startTime,
-                    end: result.endTime, 
-                    location: result.court,
-                    result: result.result 
-                }));
-                this.setState({ gameResults: data, events: events });
-            } else {
-                console.error("Invalid data format:", data);
-                this.setState({ gameResults: [], events: [] });
-            }
+            const response = await axios.get("http://15.165.113.9:8080/api/game/finished", {
+                headers: { auth: localStorage.getItem("accessToken") },
+            });
+            const data = Array.isArray(response.data.data) ? response.data.data : [];
+            this.setState({ gameResults: data });
         } catch (error) {
-            console.error("Error:", error);
-            this.setState({ gameResults: [], events: [] });
+            console.error("Error", error);
+            this.setState({ gameResults: [] });
         }
     };
+    
 
     dateClick = (info) => {
         this.setState({ clickedDate: info.dateStr });
+    };
+
+    getResultText = (result) => {
+        switch(result) {
+            case -1:
+                return '패';
+            case 0:
+                return '무승부';
+            case 1:
+                return '승';
+            default:
+                return '';
+        }
     };
 
     renderGameResults = () => {
@@ -69,7 +72,7 @@ export default class Schedule extends Component {
                 <h3>날짜: {this.state.clickedDate}</h3>
                 <h3>경기 종류: {result.sportName}</h3>
                 <h3>경기장: {result.court}</h3>
-                <h3>경기 결과: {result.result}</h3>
+                <h3>경기 결과: {this.getResultText(result.result)}</h3>
                 <h3>경기 시간: {new Date(result.startTime).toLocaleTimeString()}</h3>
             </div>
         ));
@@ -89,7 +92,6 @@ export default class Schedule extends Component {
                             end: 'prev,next'
                         }}
                         dateClick={this.dateClick}
-                        events={this.state.events} 
                     />
 
                     <div className='result'>
