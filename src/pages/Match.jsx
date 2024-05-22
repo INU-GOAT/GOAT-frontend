@@ -135,7 +135,7 @@ const Match = ({ latitude, longitude, preferCourt }) => {
       latitude: latitude,
       longitude: longitude,
       matchStartTimes: selectedTime.map(formatTimeToHHMM),
-      preferCourt: preferCourtName,
+      preferCourt: preferCourt,
       groupMembers: groupMembers.map(member => member.id)
     };
 
