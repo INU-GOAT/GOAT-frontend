@@ -1,39 +1,17 @@
-.timelist-container {
-  width: 100%;
-  max-width: 100%;
-  margin: 20px auto;
-  padding: 20px;
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.time-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
 }
 
-.slider {
-  width: 100%;
+.time-slot {
+  margin: 0;
 }
 
 .values {
-  font-size: 16px;
-  color: #666;
-  margin-top: 12px;
+  margin-top: 20px;
 }
 
-.MuiSlider-root {
-  color: #059669;
-}
-
-.MuiSlider-thumb {
-  background-color: #fff;
-  border: 2px solid #059669;
-}
-
-.MuiSlider-track {
-  background-color: #059669;
-}
-
-.MuiSlider-rail {
-  background-color: #ccc;
+.selected-time {
+  margin-top: 10px;
 }
