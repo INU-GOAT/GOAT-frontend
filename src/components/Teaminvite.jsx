@@ -1,32 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { getUser } from '../apis/getUser';
-import { inviteToGroup, expelGroupMember, getGroupMembers, createGroup } from '../apis/group';
+import { createGroup, inviteToGroup, expelGroupMember, getGroupMembers } from '../apis/group';
 import './Teaminvite.css';
 
-const Teaminvite = ({ disabled, onGroupCreated }) => {
+const Teaminvite = ({ disabled }) => {
   const [invitedUsers, setInvitedUsers] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [error, setError] = useState('');
   const [groupMembers, setGroupMembers] = useState([]);
-  const [groupId, setGroupId] = useState(null);
 
   useEffect(() => {
-    if (groupId) {
-      const fetchGroupMembers = async () => {
-        const members = await getGroupMembers();
-        if (members && Array.isArray(members)) {
-          setGroupMembers(members);
-        } else {
-          setGroupMembers([]);
-        }
-      };
+    const fetchGroupMembers = async () => {
+      const members = await getGroupMembers();
+      if (members && Array.isArray(members)) {
+        setGroupMembers(members);
+      } else {
+        setGroupMembers([]);
+      }
+    };
 
-      fetchGroupMembers();
-    }
-  }, [groupId]);
+    fetchGroupMembers();
+  }, []);
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
+  };
+
+  const createNewGroup = async () => {
+    const result = await createGroup(inputValue.trim());
+    if (!result) {
+      setError('그룹 생성 실패.');
+    }
   };
 
   const handleAddUser = async () => {
@@ -41,7 +45,7 @@ const Teaminvite = ({ disabled, onGroupCreated }) => {
       return;
     }
 
-    const user = users.find(u => u.nickname === inputValue.trim());
+    const user = users.find(u => u.username === inputValue.trim());
     if (!user) {
       setError('유저 닉네임이 존재하지 않습니다.');
       return;
@@ -71,22 +75,6 @@ const Teaminvite = ({ disabled, onGroupCreated }) => {
     }
   };
 
-  useEffect(() => {
-    const createNewGroup = async () => {
-      const groupData = await createGroup();
-      if (groupData) {
-        setGroupId(groupData.id);
-        if (onGroupCreated) {
-          onGroupCreated(groupData.id);
-        }
-      } else {
-        setError('그룹 생성 실패');
-      }
-    };
-
-    createNewGroup();
-  }, [onGroupCreated]);
-
   return (
     <div className="team-invite-container">
       <div className="team-invite-input-group">
@@ -96,10 +84,10 @@ const Teaminvite = ({ disabled, onGroupCreated }) => {
           onChange={handleInputChange}
           onKeyPress={handleKeyPress}
           placeholder="유저 닉네임 입력"
-          disabled={disabled || !groupId}
+          disabled={disabled}
           className="team-invite-input"
         />
-        <button onClick={handleAddUser} disabled={disabled || !groupId} className="team-invite-button">추가</button>
+        <button onClick={handleAddUser} disabled={disabled} className="team-invite-button">추가</button>
       </div>
       {error && <div className="team-invite-error">{error}</div>}
       <ul className="team-invite-list">

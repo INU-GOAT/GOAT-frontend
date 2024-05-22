@@ -7,7 +7,6 @@ import Matching from '../components/Matching';
 import TeamMemberActions from '../components/TeamMemberActions';
 import { startMatching, cancelMatching, getMatching } from '../apis/matching';
 import { getUser } from '../apis/getUser';
-import { createGroup, inviteToGroup } from '../apis/group';
 import './css/Match.css';
 
 const Match = ({ latitude, longitude, preferCourt }) => {
@@ -41,14 +40,8 @@ const Match = ({ latitude, longitude, preferCourt }) => {
     fetchUserData();
   }, []);
 
-  const handleMatchTypeClick = async (type) => {
+  const handleMatchTypeClick = (type) => {
     setMatchType(type);
-    if (type === '팀') {
-      const group = await createGroup();
-      if (!group) {
-        alert("그룹 생성에 실패했습니다.");
-      }
-    }
   };
 
   const handleSportClick = (sport) => {
