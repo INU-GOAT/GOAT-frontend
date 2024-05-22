@@ -16,6 +16,7 @@ const Match = ({ latitude, longitude, preferCourt }) => {
   const [selectedTime, setSelectedTime] = useState([]);
   const [matchingInProgress, setMatchingInProgress] = useState(false);
   const [gaming, setGaming] = useState(false);
+  const [notification, setNotification] = useState('');
   const [preferSport, setPreferSport] = useState('');
   const [matchStartTimes, setMatchStartTimes] = useState([]);
   const [preferCourtName, setPreferCourtName] = useState(preferCourt || '');
@@ -31,6 +32,7 @@ const Match = ({ latitude, longitude, preferCourt }) => {
         console.log("User data fetched:", userData);
         if (userData && userData.status === "GAMING") {
           setGaming(true);
+          setNotification('매칭이 잡혔습니다.');
           clearInterval(intervalId);
           setTimeout(() => {
             navigate('/ChatHandler');
@@ -103,6 +105,14 @@ const Match = ({ latitude, longitude, preferCourt }) => {
       groupMembers = await getGroupMembers();
       if (!groupMembers) {
         alert("그룹원 조회 실패");
+        return;
+      }
+    } else if (matchType === '솔로') {
+      const userData = await getUser();
+      if (userData) {
+        groupMembers = [{ id: userData.id }];
+      } else {
+        alert("유저 정보를 불러오지 못했습니다.");
         return;
       }
     }
@@ -179,6 +189,7 @@ const Match = ({ latitude, longitude, preferCourt }) => {
         gaming={gaming}
       />
       {gaming && <p className="game-status">게임 중입니다</p>}
+      {notification && <p className="notification">{notification}</p>}
     </div>
   );
 };
