@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 import { Map, MapMarker, MapInfoWindow } from "react-kakao-maps-sdk";
 import useKakaoLoader from "./useKakaoLoader";
-import './KaKaoMap.css';
-import { List, ListItem, ListItemText } from '@mui/material';
+import "./KaKaoMap_chat.css";
 
-const center = {
-  lat: 37.375557,
-  lng: 126.63280,
-};
+const initialSearchResult = [
+  { place_name: "송도 체육관 1", y: 37.382702, x: 126.635643 },
+  { place_name: "송도 체육관 2", y: 37.38215, x: 126.63443 },
+  { place_name: "송도 체육관 3", y: 37.381634, x: 126.636223 },
+  { place_name: "송도 체육관 4", y: 37.38083, x: 126.633209 },
+];
 
 export default function KaKaoMap({ onLocationChange }) {
   useKakaoLoader();
@@ -15,44 +16,18 @@ export default function KaKaoMap({ onLocationChange }) {
     lat: undefined,
     lng: undefined,
   });
-  
-  const [searchKeyword, setSearchKeyword] = useState('');
-  const [searchResult, setSearchResult] = useState([]);
+
+  const [searchResult, setSearchResult] = useState(initialSearchResult);
   const mapRef = useRef(null);
   const [selectedPlace, setSelectedPlace] = useState(null);
 
   useEffect(() => {
-    const handleKeyPress = (event) => {
-      if (event.key === 'Enter') {
-        if (searchKeyword.trim() === '') {
-          event.preventDefault();
-          return;
-        }
-        
-        const ps = new window.kakao.maps.services.Places();
-        ps.keywordSearch(searchKeyword, (data, status) => {
-          if (status === window.kakao.maps.services.Status.OK) {
-            setSearchResult(data);
-            fitMapToMarkers();
-          } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
-            setSearchResult([]);
-          }
-        });
-      }
-    };
-  
-    document.addEventListener('keypress', handleKeyPress);
-  
-    return () => {
-      document.removeEventListener('keypress', handleKeyPress);
-    };
-  },     // eslint-disable-next-line react-hooks/exhaustive-deps
-  [searchKeyword]);
+    fitMapToMarkers(initialSearchResult);
+  }, []);
 
   useEffect(() => {
-    fitMapToMarkers();
-  },     // eslint-disable-next-line react-hooks/exhaustive-deps
-  [searchResult]);
+    fitMapToMarkers(searchResult);
+  }, [searchResult]);
 
   const handleMarkerClick = (place) => {
     setSelectedPlace(place);
@@ -62,41 +37,14 @@ export default function KaKaoMap({ onLocationChange }) {
     });
   };
 
-  const getCurrentPosition = () => {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setPosition({
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude,
-        });
-      },
-      () => alert("위치 정보를 가져오는데 실패했습니다."),
-      {
-        enableHighAccuracy: true,
-        maximumAge: 30000,
-        timeout: 27000,
-      }
-    );
-  };
-
-  const fitMapToMarkers = () => {
-    if (mapRef.current && searchResult.length > 0) {
+  const fitMapToMarkers = (places) => {
+    if (mapRef.current && places.length > 0) {
       const bounds = new window.kakao.maps.LatLngBounds();
-      searchResult.forEach(place => {
+      places.forEach((place) => {
         bounds.extend(new window.kakao.maps.LatLng(place.y, place.x));
       });
       mapRef.current.setBounds(bounds);
     }
-  };
-
-  const handleListItemClick = (place) => {
-    setSelectedPlace(place);
-    setPosition({
-      lat: place.y,
-      lng: place.x,
-    });
-
-    onLocationChange(place.y, place.x);
   };
 
   return (
@@ -106,49 +54,24 @@ export default function KaKaoMap({ onLocationChange }) {
           className="map"
           id="map"
           ref={mapRef}
-          center={position.lat ? position : center}
+          center={position.lat ? position : { lat: 37.381634, lng: 126.635643 }}
           level={3}
-          onClick={(_, mouseEvent) => {
-            const latlng = mouseEvent.latLng;
-            setPosition({
-              lat: latlng.getLat(),
-              lng: latlng.getLng(),
-            });
-          }}
         >
           {searchResult.map((place, index) => (
             <MapMarker
               key={index}
               position={{ lat: place.y, lng: place.x }}
               onClick={() => handleMarkerClick(place)}
-            />
+            >
+              {selectedPlace &&
+                selectedPlace.place_name === place.place_name && (
+                  <MapInfoWindow position={{ lat: place.y, lng: place.x }}>
+                    <div>{place.place_name}</div>
+                  </MapInfoWindow>
+                )}
+            </MapMarker>
           ))}
-          {selectedPlace && (
-            <MapInfoWindow
-              position={{ lat: selectedPlace.y, lng: selectedPlace.x }}
-              content={selectedPlace.place_name}
-              removable={true}
-            />
-          )}
         </Map>
-        <div className="keyword">
-          <input 
-            type="text" 
-            value={searchKeyword} 
-            onChange={(e) => setSearchKeyword(e.target.value)} 
-            placeholder="장소를 검색하세요" 
-          />
-        </div>
-        <div className="search_results">
-          <h2>추천 경기장</h2>
-          <List className="search_list">
-            {searchResult.map((place, index) => (
-            <ListItem key={index} button onClick={() => handleListItemClick(place)}>
-              <ListItemText primary={place.place_name} />
-            </ListItem>
-            ))}
-          </List>
-        </div>
       </div>
     </div>
   );

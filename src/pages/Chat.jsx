@@ -7,12 +7,20 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Divider,
   FormControl,
   FormControlLabel,
   Grid,
+  InputLabel,
+  List,
+  ListItem,
+  ListItemText,
+  MenuItem,
+  OutlinedInput,
   Paper,
   Radio,
   RadioGroup,
+  Select,
   Stack,
   TextField,
   ThemeProvider,
@@ -21,13 +29,13 @@ import {
 } from "@mui/material";
 import KaKaoMapchat from "../components/KaKaoMap_chat";
 import { IoMdSend } from "react-icons/io";
-import { MdWhereToVote } from "react-icons/md";
+import { MdExitToApp, MdWhereToVote } from "react-icons/md";
 import { useEffect, useRef, useState } from "react";
 import { Client, Stomp } from "@stomp/stompjs";
 import ChatAvatar from "./../components/ChatAvatar";
 import ChatBubble from "../components/ChatBubble";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
@@ -74,18 +82,51 @@ function Chat() {
     state.state.team2,
   ]);
 
-  const [open, setOpen] = useState(false);
+  const [voteOpen, setVoteOpen] = useState(false);
   const [selectedCourt, setSelectedCourt] = useState("");
   const [isVoted, setIsVoted] = useState(localStorage.getItem("isVoted"));
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleClickVoteOpen = () => {
+    setVoteOpen(true);
+  };
+  const handleVoteClose = () => {
+    setVoteOpen(false);
+  };
+  const handleVoteOptionChange = (event) => {
+    setSelectedCourt(event.target.value);
+  };
+  const navigate = useNavigate();
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [result, setResult] = useState("");
+  const [comment, setComment] = useState("");
+  const [feedback, setFeedback] = useState("");
+
+  const handleClickFeedbackOpen = () => {
+    setFeedbackOpen(true);
+  };
+  const handleFeedbackClose = () => {
+    setFeedbackOpen(false);
+  };
+  const handleResultOptionChange = (event) => {
+    setResult(event.target.value);
+  };
+  const handleFeedbackOptionChange = (event) => {
+    setFeedback(event.target.value);
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const handleOptionChange = (event) => {
-    setSelectedCourt(event.target.value);
+  const sendFeedback = async () => {
+    try {
+      const res = await axios.patch(
+        `http://15.165.113.9:8080/api/game/${gameId}`,
+        { result: result, comment: comment, feedback: feedback },
+        { headers: { auth: localStorage.getItem("accessToken") } }
+      );
+      console.log(result.data);
+      navigate("/Main");
+    } catch (error) {
+      console.error(error);
+      alert("경기 결과를 입력해주세요");
+      console.error("진행 중인 게임 종료 실패");
+    }
   };
 
   const client = useRef();
@@ -94,6 +135,13 @@ function Chat() {
   const [chatList, setChatList] = useState([]);
   const [inputChat, setInputChat] = useState("");
   const myNickname = localStorage.getItem("nickname");
+  const [notVotedCount, setNotVotedCount] = useState(0);
+  const [votedCourts, setVotedCourts] = useState([
+    { court: "구준형 집", count: 1 },
+    { court: "구준형 집", count: 1 },
+  ]);
+  const [court, setcourt] = useState([]);
+  const [isCourt, setIsCourt] = useState(null);
 
   const getChat = async () => {
     try {
@@ -108,7 +156,27 @@ function Chat() {
       console.error("채팅내역 불러오기 실패");
     }
   };
-
+  const gameData = async () => {
+    try {
+      const result = await axios.get(`http://15.165.113.9:8080/api/game`, {
+        headers: { auth: localStorage.getItem("accessToken") },
+      });
+      console.log(result.data);
+      console.log(result.data.data);
+      setcourt([
+        {
+          court: result.data.data.court,
+          latitude: result.data.data.latitude,
+          longitude: result.data.data.longitude,
+        },
+      ]);
+      setIsCourt(true);
+    } catch (error) {
+      console.error(error);
+      console.error("진행 중인 게임 불러오기 실패");
+      alert("진행중인 게임이 존재하지 않습니다.");
+    }
+  };
   useEffect(() => {
     getChat();
 
@@ -123,10 +191,15 @@ function Chat() {
     });
 
     client.current.activate();
-    client.current.onConnect = () => {
+    client.current.onConnect = async () => {
       console.log("success");
       client.current.subscribe(`/room/${gameId}`, (chat) => {
         if (JSON.parse(chat.body).votedCourts) {
+          setVotedCourts(JSON.parse(chat.body).votedCourts);
+          setNotVotedCount(JSON.parse(chat.body).notVotedCount);
+          if (JSON.parse(chat.body).notVotedCount === 0) {
+            gameData();
+          }
         } else if (chat) {
           setChatList((prevchatList) => [
             ...prevchatList,
@@ -175,14 +248,68 @@ function Chat() {
       setIsVoted(true);
       localStorage.setItem("isVoted", true);
     }
-    setOpen(false);
+    setVoteOpen(false);
+  };
+  const ClickIsVoted = () => {
+    alert("이미 경기장을 투표하셨습니다.");
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex", minHeight: "95dvh", maxHeight: "95dvh" }}>
-        <Box sx={{ flex: 3, boxShadow: 3, borderRadius: 1, margin: 3 }}>
-          <KaKaoMapchat></KaKaoMapchat>
+        <Box
+          sx={{
+            flex: 3,
+            boxShadow: 3,
+            borderRadius: 1,
+            margin: 3,
+            overflow: "auto",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Stack alignItems={"center"}>
+            {isCourt ? (
+              <Typography variant="h3" component="h2" sx={{ mt: 3 }}>
+                {`선택된 경기장은 ${court[0].court} 입니다.`}
+              </Typography>
+            ) : (
+              <Typography variant="h3" component="h2" sx={{ mt: 3 }}>
+                선수들이 선택한 경기장
+              </Typography>
+            )}
+          </Stack>
+          {isCourt ? <KaKaoMapchat /> : <KaKaoMapchat />}
+          <Stack alignItems={"flex-end"}>
+            <Typography variant="h5" component="h3" sx={{ mb: 1, mr: 1 }}>
+              {`투표하지 않은 인원 수 : ${notVotedCount}`}
+            </Typography>
+          </Stack>
+          <Stack>
+            <List
+              sx={{
+                p: 0,
+                width: "100%",
+                borderRadius: 2,
+                border: "1px solid",
+                borderColor: "divider",
+                backgroundColor: "background.paper",
+                overflowY: "auto",
+              }}
+            >
+              {preferCourts.map((court, index) => (
+                <>
+                  <ListItem>
+                    <ListItemText
+                      primary={court.court}
+                      secondary={`득표 수 : ${votedCourts[index].count}`}
+                    />
+                  </ListItem>
+                  <Divider component="li" />
+                </>
+              ))}
+            </List>
+          </Stack>
         </Box>
 
         <Box
@@ -368,7 +495,7 @@ function Chat() {
           </Box>
           <Box sx={{ flex: 1, margin: 3 }}>
             <Button
-              onClick={handleClickOpen}
+              onClick={isVoted ? ClickIsVoted : handleClickVoteOpen}
               variant="contained"
               endIcon={<MdWhereToVote />}
               sx={{ width: "100%", backgroundColor: "#9376E0" }}
@@ -376,8 +503,8 @@ function Chat() {
               경기장 투표하기
             </Button>
             <Dialog
-              open={open}
-              onClose={handleClose}
+              open={voteOpen}
+              onClose={handleVoteClose}
               sx={{ "& .MuiDialog-paper": { width: "80%", maxHeight: 435 } }}
             >
               <DialogTitle>경기장을 투표 해주세요!</DialogTitle>
@@ -385,24 +512,95 @@ function Chat() {
                 <FormControl component="fieldset">
                   <RadioGroup
                     value={selectedCourt}
-                    onChange={handleOptionChange}
+                    onChange={handleVoteOptionChange}
                   >
                     {preferCourts.map((court) => (
                       <FormControlLabel
-                        value={court}
+                        value={court.court}
                         control={<Radio />}
-                        label={court}
+                        label={court.court}
                       />
                     ))}
                   </RadioGroup>
                 </FormControl>
               </DialogContent>
               <DialogActions>
-                <Button onClick={handleClose} color="secondary">
+                <Button onClick={handleVoteClose} color="secondary">
                   취소
                 </Button>
                 <Button onClick={sendVote} color="primary">
                   투표하기
+                </Button>
+              </DialogActions>
+            </Dialog>
+            <Button
+              onClick={handleClickFeedbackOpen}
+              variant="contained"
+              endIcon={<MdExitToApp />}
+              sx={{ width: "100%", backgroundColor: "#9376E0", mt: 2 }}
+            >
+              경기 종료하기
+            </Button>
+            <Dialog
+              open={feedbackOpen}
+              onClose={handleFeedbackClose}
+              sx={{ "& .MuiDialog-paper": { width: "80%", maxHeight: 440 } }}
+            >
+              <DialogTitle>경기는 어떠셨나요?</DialogTitle>
+              <DialogContent>
+                <Stack display={"flex"} direction={"row"} alignItems={"center"}>
+                  <h3>경기에서 </h3>
+                  <FormControl sx={{ m: 1, minWidth: 120 }}>
+                    <Select
+                      id="result"
+                      value={result}
+                      onChange={handleResultOptionChange}
+                      input={<OutlinedInput />}
+                    >
+                      <MenuItem value={1}>승리</MenuItem>
+                      <MenuItem value={0}>무승부</MenuItem>
+                      <MenuItem value={-1}>패배</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <h3>했어요. </h3>
+                </Stack>
+                <Stack
+                  sx={{ mt: 2 }}
+                  display={"flex"}
+                  direction={"row"}
+                  alignItems={"center"}
+                >
+                  <h3>경기 난이도는 </h3>
+                  <FormControl sx={{ m: 1, minWidth: 120 }}>
+                    <Select
+                      id="result"
+                      value={feedback}
+                      onChange={handleFeedbackOptionChange}
+                      input={<OutlinedInput />}
+                    >
+                      <MenuItem value={1}>쉬웠어요</MenuItem>
+                      <MenuItem value={0}>적당했어요</MenuItem>
+                      <MenuItem value={-1}>어려웠어요</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Stack>
+                <Stack sx={{ mt: 2 }}>
+                  <TextField
+                    id="outlined-multiline-static"
+                    multiline
+                    rows={4}
+                    label="경기 소감을 입력해주세요"
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                  />
+                </Stack>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleFeedbackClose} color="secondary">
+                  취소
+                </Button>
+                <Button onClick={sendFeedback} color="primary">
+                  결과 작성하기
                 </Button>
               </DialogActions>
             </Dialog>
