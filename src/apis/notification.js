@@ -8,7 +8,7 @@ notificationAxios.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
-      config.headers.Auth = `${accessToken}`;
+      config.headers.Authorization = `Bearer ${accessToken}`;
     }
     return config;
   },
