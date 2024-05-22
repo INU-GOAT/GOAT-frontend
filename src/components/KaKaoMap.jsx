@@ -129,8 +129,8 @@ export default function KaKaoMap({ onLocationChange }) {
               position={{ lat: selectedPlace.y, lng: selectedPlace.x }}
               content={selectedPlace.place_name}
               removable={true}>
-                  <div>{selectedPlace.place_name}</div>
-              </MapInfoWindow>
+                  <div className='marker_content'>{selectedPlace.place_name}</div>
+            </MapInfoWindow>
           )}
         </Map>
         <button 
