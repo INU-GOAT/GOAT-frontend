@@ -86,7 +86,7 @@ const Teaminvite = ({ disabled }) => {
       <ul className="team-invite-list">
         {groupMembers.map((member) => (
           <li key={member.id} className="team-invite-list-item">
-            {member.username}
+            {member.nickname}
             <button onClick={() => handleRemoveUser(member.id)} disabled={disabled}>추방</button>
           </li>
         ))}
