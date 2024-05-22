@@ -34,6 +34,17 @@ const Match = ({ latitude, longitude, preferCourt }) => {
           setGaming(true);
           setNotification('매칭이 잡혔습니다.');
           clearInterval(intervalId);
+
+          if (Notification.permission === 'granted') {
+            new Notification('매칭이 잡혔습니다.');
+          } else if (Notification.permission !== 'denied') {
+            Notification.requestPermission().then(permission => {
+              if (permission === 'granted') {
+                new Notification('매칭이 잡혔습니다.');
+              }
+            });
+          }
+
           setTimeout(() => {
             navigate('/ChatHandler');
           }, 3000);
@@ -188,7 +199,6 @@ const Match = ({ latitude, longitude, preferCourt }) => {
         matchingInProgress={matchingInProgress}
         gaming={gaming}
       />
-      {gaming && <p className="game-status">게임 중입니다</p>}
       {notification && <p className="notification">{notification}</p>}
     </div>
   );
