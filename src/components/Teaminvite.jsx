@@ -3,6 +3,7 @@ import { inviteToGroup, expelGroupMember, getGroupMembers } from '../apis/group'
 import './Teaminvite.css';
 
 const Teaminvite = ({ disabled }) => {
+  const [invitedUsers, setInvitedUsers] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [error, setError] = useState('');
   const [groupMembers, setGroupMembers] = useState([]);
@@ -36,7 +37,7 @@ const Teaminvite = ({ disabled }) => {
       return;
     }
 
-    setGroupMembers([...groupMembers, { nickname: inputValue.trim() }]);
+    setInvitedUsers([...invitedUsers, inputValue.trim()]);
     setInputValue('');
     setError('');
   };
@@ -71,7 +72,7 @@ const Teaminvite = ({ disabled }) => {
       {error && <div className="team-invite-error">{error}</div>}
       <ul className="team-invite-list">
         {groupMembers.map((member) => (
-          <li key={member.id || member.nickname} className="team-invite-list-item">
+          <li key={member.id} className="team-invite-list-item">
             {member.nickname}
             <button onClick={() => handleRemoveUser(member.id)} disabled={disabled}>추방</button>
           </li>
