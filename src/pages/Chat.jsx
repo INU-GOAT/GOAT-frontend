@@ -495,7 +495,7 @@ function Chat() {
           </Box>
           <Box sx={{ flex: 1, margin: 3 }}>
             <Button
-              onClick={isVoted ? ClickIsVoted : handleClickVoteOpen}
+              onClick={isVoted === true ? ClickIsVoted : handleClickVoteOpen}
               variant="contained"
               endIcon={<MdWhereToVote />}
               sx={{ width: "100%", backgroundColor: "#9376E0" }}
