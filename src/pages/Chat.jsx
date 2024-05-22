@@ -22,10 +22,8 @@ import {
 import KaKaoMapchat from "../components/KaKaoMap_chat";
 import { IoMdSend } from "react-icons/io";
 import { MdWhereToVote } from "react-icons/md";
-import SockJS from "sockjs-client";
 import { useEffect, useRef, useState } from "react";
 import { Client, Stomp } from "@stomp/stompjs";
-import { FaSeedling } from "react-icons/fa";
 import ChatAvatar from "./../components/ChatAvatar";
 import ChatBubble from "../components/ChatBubble";
 import axios from "axios";
@@ -128,9 +126,8 @@ function Chat() {
     client.current.onConnect = () => {
       console.log("success");
       client.current.subscribe(`/room/${gameId}`, (chat) => {
-        if (chat) {
-          console.log(JSON.parse(chat.body));
-
+        if (JSON.parse(chat.body).votedCourts) {
+        } else if (chat) {
           setChatList((prevchatList) => [
             ...prevchatList,
             JSON.parse(chat.body),
@@ -172,7 +169,7 @@ function Chat() {
       };
 
       client.current.publish({
-        destination: `/vote/${gameId}`,
+        destination: `/send/vote/${gameId}`,
         body: JSON.stringify(message),
       });
       setIsVoted(true);
