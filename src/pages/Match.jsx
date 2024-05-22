@@ -6,7 +6,7 @@ import Timelist from '../components/Timelist';
 import Matching from '../components/Matching';
 import TeamMemberActions from '../components/TeamMemberActions';
 import { startMatching, cancelMatching, getMatching } from '../apis/matching';
-import { getUser, updateUserStatus } from '../apis/getUser';
+import { getUser } from '../apis/getUser';
 import './css/Match.css';
 
 const Match = ({ latitude, longitude, preferCourt }) => {
@@ -88,7 +88,6 @@ const Match = ({ latitude, longitude, preferCourt }) => {
     setMatchingInProgress(true);
 
     try {
-      await updateUserStatus("MATCHING");
       const response = await startMatching(requestBody);
       if (!response) {
         setMatchingInProgress(false);
@@ -104,7 +103,6 @@ const Match = ({ latitude, longitude, preferCourt }) => {
     try {
       const response = await cancelMatching();
       if (response) {
-        await updateUserStatus("WAITING");
         setMatchingInProgress(false);
       }
       console.log('매칭 취소');
