@@ -1,14 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import LogOut from "../components/LogOut";
+import Notification from "../components/Notification";
 import "./css/Menu.css";
 
 function Menu() {
   const navigate = useNavigate();
+  const [showNotifications, setShowNotifications] = useState(false);
 
   const handleNavigation = (path) => (event) => {
     event.preventDefault();
     navigate(path);
+  };
+
+  const toggleNotifications = () => {
+    setShowNotifications(!showNotifications);
   };
 
   return (
@@ -40,6 +46,10 @@ function Menu() {
               <LogOut />
             </li>
           </ul>
+          <div className="notification-container">
+            <button className="notification-button" onClick={toggleNotifications}>알림</button>
+            {showNotifications && <Notification />}
+          </div>
         </nav>
       </header>
       <main>

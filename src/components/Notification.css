@@ -1,0 +1,25 @@
+.notification-popup {
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    width: 300px;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+  
+  .notification-popup ul {
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+  }
+  
+  .notification-popup li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .notification-popup li button {
+    float: right;
+  }

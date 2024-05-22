@@ -63,8 +63,10 @@ const Match = ({ latitude, longitude, preferCourt }) => {
     tableTennis: "탁구"
   };
 
-  const formatDateToISOString = (date) => {
-    return new Date(date).toISOString();
+  const formatTimeToHHMM = (date) => {
+    const hours = date.getUTCHours().toString().padStart(2, '0');
+    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+    return hours + minutes;
   };
 
   const onStartMatching = async () => {
@@ -87,7 +89,7 @@ const Match = ({ latitude, longitude, preferCourt }) => {
       sport: sportMap[selectedSport],
       latitude: latitude,
       longitude: longitude,
-      matchStartTimes: selectedTime.map(formatDateToISOString),
+      matchStartTimes: selectedTime.map(formatTimeToHHMM),
       preferCourt: preferCourtName,
       groupMembers: groupMembers.map(member => member.id)
     };

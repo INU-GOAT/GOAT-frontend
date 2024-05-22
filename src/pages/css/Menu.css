@@ -10,14 +10,20 @@
   z-index: 2000;
   background-color: #ffffff;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05), 0 1px 0 rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
 }
 
 .nav-items {
-  text-align: center;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
 }
 
 .nav-items > li {
-  display: inline-block;
   margin-left: 20px;
   cursor: pointer;
 }
@@ -42,4 +48,62 @@
 .nav-items > li > button:focus {
   color: rgba(0, 0, 0, 0.8);
   outline: none;
+}
+
+.notification-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.notification-button {
+  line-height: 60px;
+  padding: 0 15px;
+  color: rgba(0, 0, 0, 0.4);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
+  outline: none;
+}
+
+.notification-button:hover,
+.notification-button:focus {
+  color: rgba(0, 0, 0, 0.8);
+  outline: none;
+}
+
+.notification-popup {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  width: 300px;
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.notification-popup ul {
+  list-style: none;
+  padding: 10px;
+  margin: 0;
+}
+
+.notification-popup li {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.notification-popup li button {
+  float: right;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #007BFF;
+}
+
+.notification-popup li button:hover {
+  text-decoration: underline;
 }
