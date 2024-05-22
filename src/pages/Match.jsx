@@ -4,10 +4,9 @@ import Teaminvite from '../components/Teaminvite';
 import Sport from '../components/Sport';
 import Timelist from '../components/Timelist';
 import Matching from '../components/Matching';
-import TeamMemberActions from '../components/TeamMemberActions';
 import { startMatching, cancelMatching, getMatching } from '../apis/matching';
 import { getUser } from '../apis/getUser';
-import { inviteToGroup, getGroupMembers } from '../apis/group';
+import { getGroupMembers } from '../apis/group';
 import './css/Match.css';
 
 const Match = ({ latitude, longitude, preferCourt }) => {
@@ -41,20 +40,8 @@ const Match = ({ latitude, longitude, preferCourt }) => {
     fetchUserData();
   }, []);
 
-  const handleMatchTypeClick = async (type) => {
+  const handleMatchTypeClick = (type) => {
     setMatchType(type);
-    if (type === '팀') {
-      try {
-        const response = await inviteToGroup('initialUser');
-        if (response) {
-          console.log("그룹 생성 및 첫 유저 초대 성공");
-        } else {
-          console.error("그룹 생성 및 첫 유저 초대 실패");
-        }
-      } catch (error) {
-        console.error("그룹 생성 및 첫 유저 초대 실패", error);
-      }
-    }
   };
 
   const handleSportClick = (sport) => {
@@ -90,12 +77,19 @@ const Match = ({ latitude, longitude, preferCourt }) => {
       return;
     }
 
+    const groupMembers = await getGroupMembers();
+    if (!groupMembers) {
+      alert("그룹원 조회 실패");
+      return;
+    }
+
     const requestBody = {
       sport: sportMap[selectedSport],
       latitude: roundToTwoDecimals(latitude),
       longitude: roundToTwoDecimals(longitude),
       matchStartTimes: selectedTime.map(formatDateToISOString),
-      preferCourt: preferCourtName
+      preferCourt: preferCourtName,
+      groupMembers: groupMembers.map(member => member.id)
     };
 
     setMatchingInProgress(true);
@@ -128,13 +122,12 @@ const Match = ({ latitude, longitude, preferCourt }) => {
     <div className="container match-container">
       <h2 className="match-title">매치 생성</h2>
       <div className="match-type-buttons">
-        <MatchType matchType="솔로" isSelected={matchType === '솔로'} onClick={() => handleMatchTypeClick('솔로')} disabled={matchingInProgress} />
-        <MatchType matchType="팀" isSelected={matchType === '팀'} onClick={() => handleMatchTypeClick('팀')} disabled={matchingInProgress} />
+        <MatchType matchType="솔로" isSelected={matchType === '솔로'} onClick={handleMatchTypeClick} disabled={matchingInProgress} />
+        <MatchType matchType="팀" isSelected={matchType === '팀'} onClick={handleMatchTypeClick} disabled={matchingInProgress} />
       </div>
       {matchType === '팀' && (
         <>
           <Teaminvite disabled={matchingInProgress} />
-          <TeamMemberActions disabled={matchingInProgress} />
         </>
       )}
       <div>
