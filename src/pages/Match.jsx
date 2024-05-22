@@ -100,12 +100,6 @@ const Match = ({ latitude, longitude, preferCourt }) => {
     tableTennis: "탁구"
   };
 
-  const formatTimeToHHMM = (date) => {
-    const hours = date.getUTCHours().toString().padStart(2, '0');
-    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-    return hours + minutes;
-  };
-
   const onStartMatching = async () => {
     if (!latitude || !longitude) {
       alert("위치를 설정하세요.");
@@ -134,7 +128,7 @@ const Match = ({ latitude, longitude, preferCourt }) => {
       sport: sportMap[selectedSport],
       latitude: latitude,
       longitude: longitude,
-      matchStartTimes: selectedTime.map(formatTimeToHHMM),
+      matchStartTimes: selectedTime,
       preferCourt: preferCourt,
       groupMembers: groupMembers.map(member => member.id)
     };
