@@ -58,13 +58,9 @@ const Match = ({ latitude, longitude, preferCourt }) => {
 
   const sportMap = {
     soccer: "축구",
-    basketball: "농구",
+    basketBall: "농구",
     badminton: "배드민턴",
-    tabletennis: "탁구"
-  };
-
-  const roundToTwoDecimals = (value) => {
-    return Math.round(value * 100) / 100;
+    tableTennis: "탁구"
   };
 
   const formatDateToISOString = (date) => {
@@ -89,8 +85,8 @@ const Match = ({ latitude, longitude, preferCourt }) => {
 
     const requestBody = {
       sport: sportMap[selectedSport],
-      latitude: roundToTwoDecimals(latitude),
-      longitude: roundToTwoDecimals(longitude),
+      latitude: latitude,
+      longitude: longitude,
       matchStartTimes: selectedTime.map(formatDateToISOString),
       preferCourt: preferCourtName,
       groupMembers: groupMembers.map(member => member.id)
