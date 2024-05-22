@@ -6,7 +6,6 @@ import "./KaKaoMap_chat.css";
 export default function KaKaoMap(props) {
   useKakaoLoader();
 
-  console.log(props.court);
   const [position, setPosition] = useState({
     lat: undefined,
     lng: undefined,
