@@ -10,6 +10,7 @@ export default class Schedule extends Component {
     state = {
         clickedDate: null,
         gameResults: [],
+        calendarEvents: [],
     };
 
     componentDidMount() {
@@ -22,13 +23,17 @@ export default class Schedule extends Component {
                 headers: { auth: localStorage.getItem("accessToken") },
             });
             const data = Array.isArray(response.data.data) ? response.data.data : [];
-            this.setState({ gameResults: data });
+            const calendarEvents = data.map(result => ({
+                title: result.sportName,
+                start: result.startTime,
+                id: result.gameId,
+            }));
+            this.setState({ gameResults: data, calendarEvents });
         } catch (error) {
             console.error("Error", error);
-            this.setState({ gameResults: [] });
+            this.setState({ gameResults: [], calendarEvents: [] });
         }
     };
-    
 
     dateClick = (info) => {
         this.setState({ clickedDate: info.dateStr });
@@ -92,8 +97,9 @@ export default class Schedule extends Component {
                             end: 'prev,next'
                         }}
                         dateClick={this.dateClick}
+                        events={this.state.calendarEvents}
                     />
-
+                    
                     <div className='result'>
                         <h2>경기 결과</h2>
                         {this.renderGameResults()}
