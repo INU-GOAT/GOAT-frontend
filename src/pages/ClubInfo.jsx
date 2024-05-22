@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation } from "react-router-dom";
-import Match from './Match';
+import Match from './Match_club';
 import './css/ClubInfo.css'; 
 
 function ClubInfo() {
