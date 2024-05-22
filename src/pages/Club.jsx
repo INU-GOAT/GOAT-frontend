@@ -30,7 +30,6 @@ const handleClubClick = (clubId) => {
   const club = clubs.find(c => c.id === clubId);
   if (club) {
     setSelectedClub(club);
-    navigate("/ClubInfo", { state: club });
   }
 };
 
