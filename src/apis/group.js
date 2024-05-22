@@ -8,7 +8,7 @@ groupAxios.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
-      config.headers.Authorization = `${accessToken}`;
+      config.headers.Auth = `${accessToken}`;
     }
     return config;
   },
@@ -24,6 +24,9 @@ export const inviteToGroup = async (inviteeNickname) => {
     return response.data;
   } catch (error) {
     console.error('그룹 초대 실패:', error.response ? error.response.data : error.message);
+    if (error.response) {
+      console.error('상세 오류:', error.response.status, error.response.data);
+    }
     return null;
   }
 };
@@ -52,7 +55,7 @@ export const leaveGroup = async () => {
 
 export const expelGroupMember = async (memberId) => {
   try {
-    const response = await groupAxios.patch(`members/${memberId}`);
+    const response = await groupAxios.patch(`/members/${memberId}`);
     console.log('그룹원 추방 성공:', response.data);
     return response.data;
   } catch (error) {
