@@ -1,6 +1,4 @@
 import {
-  Avatar,
-  Badge,
   Box,
   Button,
   Dialog,
@@ -10,14 +8,11 @@ import {
   Divider,
   FormControl,
   FormControlLabel,
-  Grid,
-  InputLabel,
   List,
   ListItem,
   ListItemText,
   MenuItem,
   OutlinedInput,
-  Paper,
   Radio,
   RadioGroup,
   Select,
@@ -31,7 +26,7 @@ import KaKaoMapchat from "../components/KaKaoMap_chat";
 import { IoMdSend } from "react-icons/io";
 import { MdExitToApp, MdWhereToVote } from "react-icons/md";
 import { useEffect, useRef, useState } from "react";
-import { Client, Stomp } from "@stomp/stompjs";
+import { Client } from "@stomp/stompjs";
 import ChatAvatar from "./../components/ChatAvatar";
 import ChatBubble from "../components/ChatBubble";
 import axios from "axios";
@@ -41,12 +36,14 @@ const defaultTheme = createTheme();
 
 function Chat() {
   const state = useLocation();
+  const [loading, setLoading] = useState(true);
 
   const [team1, setTeam1] = useState([]);
   const [team2, setTeam2] = useState([]);
   const [title, setTitle] = useState("");
-  const [preferCourts, setPreferCourts] = useState([]);
-
+  const [preferCourts, setPreferCourts] = useState(null);
+  const [court, setcourt] = useState(null);
+  const [isCourt, setIsCourt] = useState(null);
   useEffect(() => {
     console.log(state.state);
     const setTeam = () => {
@@ -70,9 +67,16 @@ function Chat() {
         `${month}월 ${day}일 ${hours}시 ${minutes}분 ${sport} 경기 대화방`
       );
     };
+    const checkCourt = () => {
+      if (state.state.court) {
+        setcourt(state.state.court);
+        setIsCourt(true);
+      }
+    };
     setTeam();
     setCourts();
     getTitle();
+    checkCourt();
   }, [
     state.state,
     state.state.preferCourts,
@@ -137,8 +141,6 @@ function Chat() {
   const myNickname = localStorage.getItem("nickname");
   const [notVotedCount, setNotVotedCount] = useState(0);
   const [votedCourts, setVotedCourts] = useState([]);
-  const [court, setcourt] = useState([]);
-  const [isCourt, setIsCourt] = useState(null);
 
   const getChat = async () => {
     try {
@@ -219,6 +221,7 @@ function Chat() {
         }
       });
     };
+    setLoading(false);
     return () => {
       client.current.deactivate();
       console.log("채팅이 종료되었습니다.");
@@ -264,6 +267,9 @@ function Chat() {
   const ClickIsVoted = () => {
     alert("이미 경기장을 투표하셨습니다.");
   };
+  if (loading) {
+    return <div>로딩중</div>;
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -290,7 +296,16 @@ function Chat() {
               </Typography>
             )}
           </Stack>
-          {isCourt ? <KaKaoMapchat /> : <KaKaoMapchat court={preferCourts} />}
+          {preferCourts ? (
+            isCourt ? (
+              <KaKaoMapchat court={court} />
+            ) : (
+              <KaKaoMapchat court={preferCourts} />
+            )
+          ) : (
+            <div></div>
+          )}
+
           <Stack alignItems={"flex-end"}>
             <Typography variant="h5" component="h3" sx={{ mb: 1, mr: 1 }}>
               {`투표하지 않은 인원 수 : ${notVotedCount}`}
