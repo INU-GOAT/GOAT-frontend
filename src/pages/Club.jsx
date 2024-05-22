@@ -26,7 +26,6 @@ function Club() {
     navigate("/ClubInfo", { state: newClub }); 
   };
 
-  // Club 컴포넌트의 handleClubClick 함수 수정
 const handleClubClick = (clubId) => {
   const club = clubs.find(c => c.id === clubId);
   if (club) {
