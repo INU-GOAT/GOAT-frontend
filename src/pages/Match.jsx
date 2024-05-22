@@ -1,22 +1,44 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import MatchType from '../components/Matchtype';
 import Teaminvite from '../components/Teaminvite';
 import Sport from '../components/Sport';
 import Timelist from '../components/Timelist';
 import Matching from '../components/Matching';
 import TeamMemberActions from '../components/TeamMemberActions';
-import { startMatching, cancelMatching } from '../apis/matching';
+import { startMatching, cancelMatching, getMatching } from '../apis/matching';
 import { getUser, updateUserStatus } from '../apis/getUser';
 import './css/Match.css';
 
 const Match = ({ latitude, longitude, preferCourt }) => {
   const [matchType, setMatchType] = useState('');
   const [selectedSport, setSelectedSport] = useState('');
-  const [selectedTime, setSelectedTime] = useState('');
+  const [selectedTime, setSelectedTime] = useState([]);
   const [matchingInProgress, setMatchingInProgress] = useState(false);
   const [preferSport, setPreferSport] = useState('');
   const [matchStartTimes, setMatchStartTimes] = useState([]);
   const [preferCourtName, setPreferCourtName] = useState(preferCourt || '');
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userData = await getUser();
+        console.log("User data fetched:", userData);
+        if (userData && userData.status === "MATCHING") {
+          const matchingData = await getMatching();
+          if (matchingData) {
+            setSelectedSport(matchingData.sport);
+            setMatchStartTimes(matchingData.matchStartTimes);
+            setPreferCourtName(matchingData.preferCourt);
+            setMatchingInProgress(true);
+          }
+        }
+      } catch (error) {
+        console.error("User data fetch failed:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleMatchTypeClick = (type) => {
     setMatchType(type);
@@ -26,9 +48,9 @@ const Match = ({ latitude, longitude, preferCourt }) => {
     setSelectedSport(sport);
   };
 
-  const handleTimeChange = (time) => {
+  const handleTimeChange = useCallback((time) => {
     setSelectedTime(time);
-  };
+  }, []);
 
   const handleCourtChange = (court) => {
     setPreferCourtName(court);
@@ -59,45 +81,37 @@ const Match = ({ latitude, longitude, preferCourt }) => {
       sport: sportMap[selectedSport],
       latitude: roundToTwoDecimals(latitude),
       longitude: roundToTwoDecimals(longitude),
-      matchStartTimes: [formatDateToISOString(selectedTime)],
+      matchStartTimes: selectedTime.map(formatDateToISOString),
       preferCourt: preferCourtName
     };
 
     setMatchingInProgress(true);
 
-    const response = await startMatching(requestBody);
-    if (!response) {
+    try {
+      await updateUserStatus("MATCHING");
+      const response = await startMatching(requestBody);
+      if (!response) {
+        setMatchingInProgress(false);
+      }
+      console.log('매칭 시작');
+    } catch (error) {
+      console.error("매칭 시작 실패:", error);
       setMatchingInProgress(false);
-    } else {
-      await updateUserStatus('MATCHING');
     }
-
-    console.log('매칭 시작');
   };
 
   const onCancelMatching = async () => {
-    const response = await cancelMatching();
-    if (response) {
-      setMatchingInProgress(false);
-      await updateUserStatus('WAITING');
-    }
-
-    console.log('매칭 취소');
-  };
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const userData = await getUser();
-      if (userData && userData.status === 'MATCHING') {
-        // 매칭 상태에서 이전 매칭 정보를 가져와서 설정
-        setSelectedSport(userData.sport);
-        setSelectedTime(new Date(userData.matchStartTimes[0]));
-        setPreferCourtName(userData.preferCourt);
-        setMatchingInProgress(true);
+    try {
+      const response = await cancelMatching();
+      if (response) {
+        await updateUserStatus("WAITING");
+        setMatchingInProgress(false);
       }
-    };
-    fetchUserData();
-  }, []);
+      console.log('매칭 취소');
+    } catch (error) {
+      console.error("매칭 취소 실패:", error);
+    }
+  };
 
   return (
     <div className="container match-container">
