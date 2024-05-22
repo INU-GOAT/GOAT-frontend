@@ -3,32 +3,40 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from '@fullcalendar/react';
-import axios from 'axios';
+import axios from 'axios'; 
 import './css/Schedule.css';
 
 export default class Schedule extends Component {
     state = {
         clickedDate: null,
         gameResults: [],
+        events: [], 
     };
 
     componentDidMount() {
-        this.fetchGameResults();
+        this.getGameResults();
     }
 
-    fetchGameResults = async () => {
+    getGameResults = async () => {
         try {
-            const response = await axios.get('http://15.165.113.9:8080/api/game/finished');
+            const response = await axios.get('http://15.165.113.9:8080/api/game/finished'); // axios와 get 사용
             const data = response.data;
             if (Array.isArray(data)) {
-                this.setState({ gameResults: data });
+                const events = data.map(result => ({
+                    title: result.sportName,
+                    start: result.startTime,
+                    end: result.endTime, 
+                    location: result.court,
+                    result: result.result 
+                }));
+                this.setState({ gameResults: data, events: events });
             } else {
-                console.error("", data);
-                this.setState({ gameResults: [] });
+                console.error("Invalid data format:", data);
+                this.setState({ gameResults: [], events: [] });
             }
         } catch (error) {
-            console.error("", error);
-            this.setState({ gameResults: [] });
+            console.error("Error:", error);
+            this.setState({ gameResults: [], events: [] });
         }
     };
 
@@ -81,6 +89,7 @@ export default class Schedule extends Component {
                             end: 'prev,next'
                         }}
                         dateClick={this.dateClick}
+                        events={this.state.events} 
                     />
 
                     <div className='result'>
