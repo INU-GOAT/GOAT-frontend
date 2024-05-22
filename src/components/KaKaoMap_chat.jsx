@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 import { Map, MapMarker, MapInfoWindow } from "react-kakao-maps-sdk";
 import useKakaoLoader from "./useKakaoLoader";
-import './KaKaoMap_chat.css';
+import "./KaKaoMap_chat.css";
 
 const initialSearchResult = [
   { place_name: "송도 체육관 1", y: 37.382702, x: 126.635643 },
-  { place_name: "송도 체육관 2", y: 37.382150, x: 126.634430 },
+  { place_name: "송도 체육관 2", y: 37.38215, x: 126.63443 },
   { place_name: "송도 체육관 3", y: 37.381634, x: 126.636223 },
-  { place_name: "송도 체육관 4", y: 37.380830, x: 126.633209 },
+  { place_name: "송도 체육관 4", y: 37.38083, x: 126.633209 },
 ];
 
 export default function KaKaoMap({ onLocationChange }) {
@@ -16,7 +16,7 @@ export default function KaKaoMap({ onLocationChange }) {
     lat: undefined,
     lng: undefined,
   });
-  
+
   const [searchResult, setSearchResult] = useState(initialSearchResult);
   const mapRef = useRef(null);
   const [selectedPlace, setSelectedPlace] = useState(null);
@@ -40,7 +40,7 @@ export default function KaKaoMap({ onLocationChange }) {
   const fitMapToMarkers = (places) => {
     if (mapRef.current && places.length > 0) {
       const bounds = new window.kakao.maps.LatLngBounds();
-      places.forEach(place => {
+      places.forEach((place) => {
         bounds.extend(new window.kakao.maps.LatLng(place.y, place.x));
       });
       mapRef.current.setBounds(bounds);
@@ -58,17 +58,18 @@ export default function KaKaoMap({ onLocationChange }) {
           level={3}
         >
           {searchResult.map((place, index) => (
-            <MapMarker
-              key={index}
-              position={{ lat: place.y, lng: place.x }}
-              onClick={() => handleMarkerClick(place)}
-            >
-              {selectedPlace && selectedPlace.place_name === place.place_name && (
-                <MapInfoWindow position={{ lat: place.y, lng: place.x }}>
-                  <div>{place.place_name}</div>
-                </MapInfoWindow>
-              )}
-            </MapMarker>
+            <React.Fragment key={index}>
+              <MapMarker
+                position={{ lat: place.y, lng: place.x }}
+                onClick={() => handleMarkerClick(place)}
+              />
+              {selectedPlace &&
+                selectedPlace.place_name === place.place_name && (
+                  <MapInfoWindow position={{ lat: place.y, lng: place.x }}>
+                    <div>{place.place_name}</div>
+                  </MapInfoWindow>
+                )}
+            </React.Fragment>
           ))}
         </Map>
       </div>
