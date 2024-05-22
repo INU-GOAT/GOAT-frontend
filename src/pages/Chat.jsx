@@ -136,10 +136,7 @@ function Chat() {
   const [inputChat, setInputChat] = useState("");
   const myNickname = localStorage.getItem("nickname");
   const [notVotedCount, setNotVotedCount] = useState(0);
-  const [votedCourts, setVotedCourts] = useState([
-    { court: "구준형 집", count: 1 },
-    { court: "구준형 집", count: 1 },
-  ]);
+  const [votedCourts, setVotedCourts] = useState([]);
   const [court, setcourt] = useState([]);
   const [isCourt, setIsCourt] = useState(null);
 
@@ -292,7 +289,7 @@ function Chat() {
               </Typography>
             )}
           </Stack>
-          {isCourt ? <KaKaoMapchat /> : <KaKaoMapchat />}
+          {isCourt ? <KaKaoMapchat /> : <KaKaoMapchat court={preferCourts} />}
           <Stack alignItems={"flex-end"}>
             <Typography variant="h5" component="h3" sx={{ mb: 1, mr: 1 }}>
               {`투표하지 않은 인원 수 : ${notVotedCount}`}
@@ -315,7 +312,9 @@ function Chat() {
                   <ListItem>
                     <ListItemText
                       primary={court.court}
-                      secondary={`득표 수 : ${votedCourts[index].count}`}
+                      secondary={`득표 수 : ${
+                        votedCourts[index] ? votedCourts[index].count : null
+                      }`}
                     />
                   </ListItem>
                   <Divider component="li" />
