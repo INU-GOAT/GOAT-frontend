@@ -55,7 +55,8 @@ export const leaveGroup = async () => {
 
 export const expelGroupMember = async (memberId) => {
   try {
-    const response = await groupAxios.patch(`/members/${memberId}`);
+    const encodedMemberId = encodeURIComponent(memberId);
+    const response = await groupAxios.patch(`/members/${encodedMemberId}`);
     console.log('그룹원 추방 성공:', response.data);
     return response.data;
   } catch (error) {
