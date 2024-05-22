@@ -7,6 +7,7 @@ import Matching from '../components/Matching';
 import TeamMemberActions from '../components/TeamMemberActions';
 import { startMatching, cancelMatching, getMatching } from '../apis/matching';
 import { getUser } from '../apis/getUser';
+import { inviteToGroup } from '../apis/group';
 import './css/Match.css';
 
 const Match = ({ latitude, longitude, preferCourt }) => {
@@ -115,8 +116,8 @@ const Match = ({ latitude, longitude, preferCourt }) => {
     <div className="container match-container">
       <h2 className="match-title">매치 생성</h2>
       <div className="match-type-buttons">
-        <MatchType matchType="솔로" isSelected={matchType === '솔로'} onClick={handleMatchTypeClick} disabled={matchingInProgress} />
-        <MatchType matchType="팀" isSelected={matchType === '팀'} onClick={handleMatchTypeClick} disabled={matchingInProgress} />
+        <MatchType matchType="솔로" isSelected={matchType === '솔로'} onClick={() => handleMatchTypeClick('솔로')} disabled={matchingInProgress} />
+        <MatchType matchType="팀" isSelected={matchType === '팀'} onClick={() => handleMatchTypeClick('팀')} disabled={matchingInProgress} />
       </div>
       {matchType === '팀' && (
         <>
