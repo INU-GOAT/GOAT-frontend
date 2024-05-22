@@ -267,6 +267,9 @@ function Chat() {
   const ClickIsVoted = () => {
     alert("이미 경기장을 투표하셨습니다.");
   };
+  const ClickIsCourt = () => {
+    alert("아직 경기장이 확정되지 않았습니다.");
+  };
   if (loading) {
     return <div>로딩중</div>;
   }
@@ -562,7 +565,9 @@ function Chat() {
               </DialogActions>
             </Dialog>
             <Button
-              onClick={handleClickFeedbackOpen}
+              onClick={
+                isCourt === true ? ClickIsCourt : handleClickFeedbackOpen
+              }
               variant="contained"
               endIcon={<MdExitToApp />}
               sx={{ width: "100%", backgroundColor: "#9376E0", mt: 2 }}
@@ -614,7 +619,6 @@ function Chat() {
                 </Stack>
                 <Stack sx={{ mt: 2 }}>
                   <TextField
-                    id="outlined-multiline-static"
                     multiline
                     rows={4}
                     label="경기 소감을 입력해주세요"
