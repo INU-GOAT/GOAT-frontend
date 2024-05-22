@@ -102,7 +102,7 @@ export default function KaKaoMap({ onLocationChange }) {
     setPreferCourt({
       preferCourt: place.place_name
     })
-    //onLocationChange(place.y, place.x, place.place_name);
+    onLocationChange(place.y, place.x, place.place_name);
   };
 
   return (
