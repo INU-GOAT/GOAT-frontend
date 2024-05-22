@@ -35,6 +35,7 @@ const Match = ({ latitude, longitude, preferCourt }) => {
           setNotification('매칭이 잡혔습니다.');
           clearInterval(intervalId);
 
+          // 브라우저 알림 표시
           if (Notification.permission === 'granted') {
             new Notification('매칭이 잡혔습니다.');
           } else if (Notification.permission !== 'denied') {

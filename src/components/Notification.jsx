@@ -8,8 +8,10 @@ const Notification = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       const result = await getNotifications();
-      if (result) {
+      if (result && Array.isArray(result)) {
         setNotifications(result);
+      } else {
+        setNotifications([]);
       }
     };
 
