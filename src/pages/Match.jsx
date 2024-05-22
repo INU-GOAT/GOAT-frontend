@@ -64,11 +64,9 @@ const Match = ({ latitude, longitude, preferCourt }) => {
 
     const initiatePolling = async () => {
       const userData = await getUser();
-      if (userData) {
-        if (userData.status === "MATCHING" || userData.status === "WAITING") {
-          fetchUserData();
-          intervalId = setInterval(fetchUserData, 1000);
-        }
+      if (userData && userData.status === "MATCHING") {
+        fetchUserData();
+        intervalId = setInterval(fetchUserData, 1000);
       }
     };
 
@@ -101,8 +99,9 @@ const Match = ({ latitude, longitude, preferCourt }) => {
   };
 
   const formatTimeToHHMM = (date) => {
-    const hours = date.getUTCHours().toString().padStart(2, '0');
-    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+    const localDate = new Date(date);
+    const hours = localDate.getHours().toString().padStart(2, '0');
+    const minutes = localDate.getMinutes().toString().padStart(2, '0');
     return hours + minutes;
   };
 
@@ -116,7 +115,7 @@ const Match = ({ latitude, longitude, preferCourt }) => {
 
     if (matchType === '팀') {
       groupMembers = await getGroupMembers();
-      if (!groupMembers) {
+      if (!groupMembers || !Array.isArray(groupMembers)) {
         alert("그룹원 조회 실패");
         return;
       }

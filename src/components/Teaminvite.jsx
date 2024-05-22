@@ -30,7 +30,7 @@ const Teaminvite = ({ disabled }) => {
       return;
     }
 
-    setInvitedUsers([...invitedUsers, inputValue.trim()]);
+    setInvitedUsers([...invitedUsers, { id: user.id, nickname: inputValue.trim() }]);
     setInputValue("");
     setError("");
   };
@@ -38,7 +38,7 @@ const Teaminvite = ({ disabled }) => {
   const handleRemoveUser = async (memberId) => {
     const result = await expelGroupMember(memberId);
     if (result) {
-      setInvitedUsers(invitedUsers.filter((user) => user !== memberId));
+      setInvitedUsers(invitedUsers.filter((user) => user.id !== memberId));
     }
   };
 
@@ -70,10 +70,10 @@ const Teaminvite = ({ disabled }) => {
       </div>
       {error && <div className="team-invite-error">{error}</div>}
       <ul className="team-invite-list">
-        {invitedUsers.map((user, index) => (
-          <li key={index} className="team-invite-list-item">
-            {user}
-            <button onClick={() => handleRemoveUser(user)} disabled={disabled}>
+        {invitedUsers.map((user) => (
+          <li key={user.id} className="team-invite-list-item">
+            {user.nickname}
+            <button onClick={() => handleRemoveUser(user.id)} disabled={disabled}>
               추방
             </button>
           </li>
