@@ -159,7 +159,8 @@ function Chat() {
         `http://15.165.113.9:8080/api/game/vote/${gameId}`
       );
       console.log(result.data);
-      setVotedCourts(result.data.data);
+      setVotedCourts(result.data.data.votedCourts);
+      setNotVotedCount(result.data.data.notVotedCount);
       console.log(votedCourts);
     } catch (error) {
       console.error(error);
