@@ -3,6 +3,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from '@fullcalendar/react';
+import axios from 'axios';
 import './css/Schedule.css';
 
 export default class Schedule extends Component {
@@ -17,8 +18,8 @@ export default class Schedule extends Component {
 
     fetchGameResults = async () => {
         try {
-            const response = await fetch('http://15.165.113.9:8080/api/game/finished');
-            const data = await response.json();
+            const response = await axios.get('http://15.165.113.9:8080/api/game/finished');
+            const data = response.data;
             if (Array.isArray(data)) {
                 this.setState({ gameResults: data });
             } else {
