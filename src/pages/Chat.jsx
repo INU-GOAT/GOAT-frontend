@@ -156,6 +156,19 @@ function Chat() {
       console.error("채팅내역 불러오기 실패");
     }
   };
+  const getVote = async () => {
+    try {
+      const result = await axios.get(
+        `http://15.165.113.9:8080/api/game/vote/${gameId}`
+      );
+      console.log(result.data);
+      setVotedCourts(result.data.data);
+      console.log(votedCourts);
+    } catch (error) {
+      console.error(error);
+      console.error("투표내역 불러오기 실패");
+    }
+  };
   const gameData = async () => {
     try {
       const result = await axios.get(`http://15.165.113.9:8080/api/game`, {
@@ -179,7 +192,7 @@ function Chat() {
   };
   useEffect(() => {
     getChat();
-
+    getVote();
     client.current = new Client({
       brokerURL: "ws://15.165.113.9:8080/chat",
       debug: (str) => {
