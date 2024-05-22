@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Checkbox, FormControlLabel, FormGroup, Typography, Box } from '@mui/material';
 import './Timelist.css';
 
@@ -18,6 +18,7 @@ const Timelist = ({ onChange, disabled }) => {
   }, [startTime, endTime]);
 
   const timeSlots = useMemo(() => generateTimeSlots(), [generateTimeSlots]);
+  const sliderMaxValue = timeSlots.length - 1;
 
   const [selectedTimes, setSelectedTimes] = useState([]);
 
@@ -44,7 +45,7 @@ const Timelist = ({ onChange, disabled }) => {
   }, [selectedTimes, onChange, timeSlots]);
 
   const formatSelectedTimes = (times) => {
-    if (times.length !== 2) return '오전 00:00 ~ 오전 00:00';
+    if (times.length !== 2) return '';
 
     const [start, end] = times.sort((a, b) => a - b);
 
@@ -52,7 +53,7 @@ const Timelist = ({ onChange, disabled }) => {
   };
 
   return (
-    <div className="card-container">
+    <div className="card-container" style={{ minWidth: '360px' }}>
       <div className="card-content">
         <div>
           <h3 className="match-title">시간 설정</h3>
@@ -85,7 +86,7 @@ const Timelist = ({ onChange, disabled }) => {
           </FormGroup>
         </Box>
         <div className="values">
-          <Typography variant="body1" className="selected-time" style={{ minWidth: '250px' }}>
+          <Typography variant="body1" className="selected-time" style={{ minHeight: '24px' }}>
             선택한 시간: {formatSelectedTimes(selectedTimes)}
           </Typography>
         </div>

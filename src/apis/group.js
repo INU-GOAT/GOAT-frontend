@@ -27,9 +27,9 @@ export const inviteToGroup = async (inviteeNickname) => {
   }
 };
 
-export const acceptGroupInvite = async (groupId, notificationId, isAccepted) => {
+export const acceptGroupInvite = async (notificationId, isAccepted) => {
   try {
-    const response = await groupAxios.patch(`/${groupId}`, { notificationId, isAccepted });
+    const response = await groupAxios.patch('/members', { notificationId, isAccepted });
     return response.data;
   } catch (error) {
     console.error('그룹 초대 수락 실패:', error.response ? error.response.data : error.message);
@@ -58,9 +58,9 @@ export const getGroupMembers = async () => {
   }
 };
 
-export const leaveGroup = async (userId) => {
+export const leaveGroup = async () => {
   try {
-    const response = await groupAxios.delete('/', { data: { userId } });
+    const response = await groupAxios.delete('/');
     return response.data;
   } catch (error) {
     console.error('그룹 탈퇴 실패:', error.response ? error.response.data : error.message);
@@ -68,12 +68,12 @@ export const leaveGroup = async (userId) => {
   }
 };
 
-export const getInvites = async () => {
+export const getGroupDetails = async () => {
   try {
-    const response = await groupAxios.get('/invites');
+    const response = await groupAxios.get('/');
     return response.data;
   } catch (error) {
-    console.error('그룹 초대 조회 실패:', error.response ? error.response.data : error.message);
+    console.error('그룹 정보 조회 실패:', error.response ? error.response.data : error.message);
     return null;
   }
 };

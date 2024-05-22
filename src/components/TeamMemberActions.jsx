@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getGroupMembers, acceptGroupInvite, leaveGroup, getInvites } from '../apis/group';
+import { getGroupMembers, acceptGroupInvite, leaveGroup, getGroupDetails } from '../apis/group';
 import './TeamMemberActions.css';
 
 const TeamMemberActions = ({ disabled }) => {
@@ -25,11 +25,11 @@ const TeamMemberActions = ({ disabled }) => {
   }, []);
 
   useEffect(() => {
-    const fetchInvites = async () => {
+    const fetchGroupDetails = async () => {
       try {
-        const invites = await getInvites();
-        if (invites && Array.isArray(invites)) {
-          setInvites(invites);
+        const groupDetails = await getGroupDetails();
+        if (groupDetails && groupDetails.invites) {
+          setInvites(groupDetails.invites);
         } else {
           setInvites([]);
         }
@@ -38,14 +38,14 @@ const TeamMemberActions = ({ disabled }) => {
       }
     };
 
-    fetchInvites();
+    fetchGroupDetails();
   }, []);
 
-  const handleAcceptInvite = async (groupId, notificationId) => {
+  const handleAcceptInvite = async (notificationId) => {
     try {
-      const result = await acceptGroupInvite(groupId, notificationId, true);
+      const result = await acceptGroupInvite(notificationId, true);
       if (result) {
-        setInvites(invites.filter(invite => invite.groupId !== groupId));
+        setInvites(invites.filter(invite => invite.notificationId !== notificationId));
         setGroupMembers([...groupMembers, result]);
       }
     } catch (err) {
@@ -72,9 +72,9 @@ const TeamMemberActions = ({ disabled }) => {
           <h3>그룹 초대</h3>
           <ul className="group-invite-list">
             {invites.map((invite) => (
-              <li key={invite.groupId} className="group-invite-list-item">
+              <li key={invite.notificationId} className="group-invite-list-item">
                 {invite.groupName}
-                <button onClick={() => handleAcceptInvite(invite.groupId, invite.notificationId)} disabled={disabled}>수락</button>
+                <button onClick={() => handleAcceptInvite(invite.notificationId)} disabled={disabled}>수락</button>
               </li>
             ))}
           </ul>
