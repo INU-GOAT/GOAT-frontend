@@ -56,6 +56,13 @@
   margin-right: 0;
 }
 
+.game-status {
+  font-size: 1.2em;
+  color: red;
+  text-align: center;
+  margin-top: 20px;
+}
+
 @media (max-width: 600px) {
   .match-container {
       padding: 10px;

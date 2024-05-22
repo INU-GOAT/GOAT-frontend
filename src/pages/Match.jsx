@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import MatchType from '../components/Matchtype';
 import Teaminvite from '../components/Teaminvite';
 import Sport from '../components/Sport';
@@ -14,16 +15,27 @@ const Match = ({ latitude, longitude, preferCourt }) => {
   const [selectedSport, setSelectedSport] = useState('');
   const [selectedTime, setSelectedTime] = useState([]);
   const [matchingInProgress, setMatchingInProgress] = useState(false);
+  const [gaming, setGaming] = useState(false);
   const [preferSport, setPreferSport] = useState('');
   const [matchStartTimes, setMatchStartTimes] = useState([]);
   const [preferCourtName, setPreferCourtName] = useState(preferCourt || '');
 
+  const navigate = useNavigate();
+
   useEffect(() => {
+    let intervalId;
+
     const fetchUserData = async () => {
       try {
         const userData = await getUser();
         console.log("User data fetched:", userData);
-        if (userData && userData.status === "MATCHING") {
+        if (userData && userData.status === "GAMING") {
+          setGaming(true);
+          clearInterval(intervalId);
+          setTimeout(() => {
+            navigate('/ChatHandler');
+          }, 3000);
+        } else if (userData && userData.status === "MATCHING") {
           const matchingData = await getMatching();
           if (matchingData) {
             setSelectedSport(matchingData.sport);
@@ -37,8 +49,18 @@ const Match = ({ latitude, longitude, preferCourt }) => {
       }
     };
 
-    fetchUserData();
-  }, []);
+    const initiatePolling = async () => {
+      const userData = await getUser();
+      if (userData && userData.status === "MATCHING") {
+        fetchUserData();
+        intervalId = setInterval(fetchUserData, 1000);
+      }
+    };
+
+    initiatePolling();
+
+    return () => clearInterval(intervalId);
+  }, [navigate]);
 
   const handleMatchTypeClick = (type) => {
     setMatchType(type);
@@ -124,12 +146,12 @@ const Match = ({ latitude, longitude, preferCourt }) => {
     <div className="container match-container">
       <h2 className="match-title">매치 생성</h2>
       <div className="match-type-buttons">
-        <MatchType matchType="솔로" isSelected={matchType === '솔로'} onClick={handleMatchTypeClick} disabled={matchingInProgress} />
-        <MatchType matchType="팀" isSelected={matchType === '팀'} onClick={handleMatchTypeClick} disabled={matchingInProgress} />
+        <MatchType matchType="솔로" isSelected={matchType === '솔로'} onClick={handleMatchTypeClick} disabled={matchingInProgress || gaming} />
+        <MatchType matchType="팀" isSelected={matchType === '팀'} onClick={handleMatchTypeClick} disabled={matchingInProgress || gaming} />
       </div>
       {matchType === '팀' && (
         <>
-          <Teaminvite disabled={matchingInProgress} />
+          <Teaminvite disabled={matchingInProgress || gaming} />
         </>
       )}
       <div>
@@ -140,12 +162,12 @@ const Match = ({ latitude, longitude, preferCourt }) => {
           setSport={setSelectedSport}
           preferSport={preferSport}
           setPreferSport={setPreferSport}
-          disabled={matchingInProgress}
+          disabled={matchingInProgress || gaming}
         />
       </div>
       <br />
       <div>
-        <Timelist onChange={handleTimeChange} disabled={matchingInProgress} />
+        <Timelist onChange={handleTimeChange} disabled={matchingInProgress || gaming} />
       </div>
       <Matching 
         onStartMatching={onStartMatching}
@@ -154,7 +176,9 @@ const Match = ({ latitude, longitude, preferCourt }) => {
         selectedSport={selectedSport}
         selectedTime={selectedTime}
         matchingInProgress={matchingInProgress}
+        gaming={gaming}
       />
+      {gaming && <p className="game-status">게임 중입니다</p>}
     </div>
   );
 };
