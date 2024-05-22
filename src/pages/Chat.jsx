@@ -566,7 +566,7 @@ function Chat() {
             </Dialog>
             <Button
               onClick={
-                isCourt === true ? ClickIsCourt : handleClickFeedbackOpen
+                isCourt === true ? handleClickFeedbackOpen : ClickIsCourt
               }
               variant="contained"
               endIcon={<MdExitToApp />}
