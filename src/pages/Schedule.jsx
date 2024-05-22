@@ -13,32 +13,38 @@ export default class Schedule extends Component {
     };
 
     componentDidMount() {
-        this.fetchGameResults();
+        this.getGameResults();
     }
 
-    fetchGameResults = async () => {
+    getGameResults = async () => {
         try {
-            const response = await axios.get(
-                "http://15.165.113.9:8080/api/game/finished",
-                {
-                  headers: { auth: localStorage.getItem("accessToken") },
-                }
-              ); // axios와 get 사용
-            const data = response.data.data;
-            if (Array.isArray(data)) {
-                this.setState({ gameResults: data });
-            } else {
-                console.error("", data);
-                this.setState({ gameResults: [] });
-            }
+            const response = await axios.get("http://15.165.113.9:8080/api/game/finished", {
+                headers: { auth: localStorage.getItem("accessToken") },
+            });
+            const data = Array.isArray(response.data.data) ? response.data.data : [];
+            this.setState({ gameResults: data });
         } catch (error) {
-            console.error("", error);
+            console.error("Error", error);
             this.setState({ gameResults: [] });
         }
     };
+    
 
     dateClick = (info) => {
         this.setState({ clickedDate: info.dateStr });
+    };
+
+    getResultText = (result) => {
+        switch(result) {
+            case -1:
+                return '패';
+            case 0:
+                return '무승부';
+            case 1:
+                return '승';
+            default:
+                return '';
+        }
     };
 
     renderGameResults = () => {
@@ -66,7 +72,7 @@ export default class Schedule extends Component {
                 <h3>날짜: {this.state.clickedDate}</h3>
                 <h3>경기 종류: {result.sportName}</h3>
                 <h3>경기장: {result.court}</h3>
-                <h3>경기 결과: {result.result}</h3>
+                <h3>경기 결과: {this.getResultText(result.result)}</h3>
                 <h3>경기 시간: {new Date(result.startTime).toLocaleTimeString()}</h3>
             </div>
         ));
