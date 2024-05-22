@@ -70,7 +70,7 @@ function Chat() {
     const checkCourt = () => {
       if (state.state.court) {
         setcourt(state.state.court);
-        setIsCourt(true);
+        setIsCourt("true");
       }
     };
     setTeam();
@@ -184,7 +184,7 @@ function Chat() {
           longitude: result.data.data.longitude,
         },
       ]);
-      setIsCourt(true);
+      setIsCourt("true");
     } catch (error) {
       console.error(error);
       console.error("진행 중인 게임 불러오기 실패");
@@ -260,8 +260,8 @@ function Chat() {
         destination: `/send/vote/${gameId}`,
         body: JSON.stringify(message),
       });
-      setIsVoted(true);
-      localStorage.setItem("isVoted", true);
+      setIsVoted("true");
+      localStorage.setItem("isVoted", "true");
     }
     setVoteOpen(false);
   };
