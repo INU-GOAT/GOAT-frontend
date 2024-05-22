@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getGroupMembers, leaveGroup, expelGroupMember } from '../apis/group';
+import { getGroupMembers, leaveGroup } from '../apis/group';
 import './TeamMemberActions.css';
 
 const TeamMemberActions = ({ disabled }) => {
