@@ -1,6 +1,6 @@
 import userAxios from "./userAxios";
 
-const getUser = async () => {
+export const getUser = async () => {
   try {
     const result = await userAxios.get();
     console.log(result.data);
@@ -10,4 +10,13 @@ const getUser = async () => {
     console.error("getUser 실패");
   }
 };
-export default getUser;
+
+export const updateUserStatus = async (status) => {
+  try {
+    const response = await userAxios.patch('/status', { status });
+    return response.data;
+  } catch (error) {
+    console.error('Status update 실패:', error);
+    return null;
+  }
+};

@@ -46,3 +46,13 @@ export const cancelMatching = async () => {
     return null;
   }
 };
+
+export const completeMatching = async (groupId) => {
+  try {
+    const response = await matchingAxios.post('/complete', { groupId });
+    return response.data;
+  } catch (error) {
+    console.error('매칭 완료 처리 실패:', error.response ? error.response.data : error.message);
+    return null;
+  }
+};

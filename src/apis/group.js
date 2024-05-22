@@ -50,16 +50,17 @@ export const expelGroupMember = async (memberId) => {
 export const getGroupMembers = async () => {
   try {
     const response = await groupAxios.get('/');
-    return response.data;
+    const validGroups = response.data.filter(group => group.members.length > 1);
+    return validGroups;
   } catch (error) {
     console.error('그룹원 조회 실패:', error.response ? error.response.data : error.message);
     return null;
   }
 };
 
-export const leaveGroup = async () => {
+export const leaveGroup = async (userId) => {
   try {
-    const response = await groupAxios.delete('/');
+    const response = await groupAxios.delete('/', { data: { userId } });
     return response.data;
   } catch (error) {
     console.error('그룹 탈퇴 실패:', error.response ? error.response.data : error.message);
