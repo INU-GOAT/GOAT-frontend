@@ -34,6 +34,9 @@ function Menu() {
               <button onClick={handleNavigation("./MyPage")}>마이페이지</button>
             </li>
             <li>
+              <button onClick={handleNavigation("./ChatHandler")}>채팅방</button>
+            </li>
+            <li>
               <LogOut />
             </li>
           </ul>

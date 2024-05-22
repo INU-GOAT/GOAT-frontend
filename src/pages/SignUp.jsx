@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import userAxios from "../apis/userAxios";
-import getUser from "../apis/getUser";
+import { getUser } from '../apis/getUser';
 import setUser from "../utils/setUser";
 import { isLoginStore } from "../utils/store";
 import {

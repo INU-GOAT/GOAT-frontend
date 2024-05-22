@@ -2,11 +2,12 @@ import { CircularProgress, Stack } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import getUser from "./../apis/getUser";
+import { getUser } from "./../apis/getUser";
 import setUser from "../utils/setUser";
 
 function ChatHandler() {
   const navigate = useNavigate();
+  
   const getUserData = async () => {
     try {
       const userData = await getUser();
@@ -16,6 +17,7 @@ function ChatHandler() {
       console.error("유저정보 불러오기 실패");
     }
   };
+  
   const gameData = async () => {
     try {
       const result = await axios.get(`http://15.165.113.9:8080/api/game`, {
@@ -30,6 +32,7 @@ function ChatHandler() {
       alert("진행중인 게임이 존재하지 않습니다.");
     }
   };
+  
   const goChat = (props) => {
     const team1 = {};
     const team2 = {};
@@ -144,6 +147,7 @@ function ChatHandler() {
     },
     msg: "성공",
   };
+  
   const goChatSample = () => {
     const team1 = {};
     const team2 = {};
@@ -173,6 +177,7 @@ function ChatHandler() {
     };
     navigate("/Chat", { state: data });
   };
+
   return (
     <Stack sx={{ alignItems: "center", mt: 5 }}>
       <h1>채팅방으로 연결 중입니다.</h1>

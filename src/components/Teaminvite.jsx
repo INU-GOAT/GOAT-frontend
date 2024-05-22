@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import getUser from '../apis/getUser';
+import { getUser } from '../apis/getUser';
 import { inviteToGroup, expelGroupMember, getGroupMembers } from '../apis/group';
 import './Teaminvite.css';
 
@@ -38,7 +38,7 @@ const Teaminvite = ({ disabled }) => {
       return;
     }
 
-    const user = users.find(u => u.nickname === inputValue.trim());
+    const user = users.find(u => u.username === inputValue.trim());
     if (!user) {
       setError('유저 닉네임이 존재하지 않습니다.');
       return;
@@ -86,7 +86,7 @@ const Teaminvite = ({ disabled }) => {
       <ul className="team-invite-list">
         {groupMembers.map((member) => (
           <li key={member.id} className="team-invite-list-item">
-            {member.nickname}
+            {member.username}
             <button onClick={() => handleRemoveUser(member.id)} disabled={disabled}>추방</button>
           </li>
         ))}

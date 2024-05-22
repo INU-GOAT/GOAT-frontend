@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MatchType from '../components/Matchtype';
 import Teaminvite from '../components/Teaminvite';
 import Sport from '../components/Sport';
@@ -6,6 +6,7 @@ import Timelist from '../components/Timelist';
 import Matching from '../components/Matching';
 import TeamMemberActions from '../components/TeamMemberActions';
 import { startMatching, cancelMatching } from '../apis/matching';
+import { getUser, updateUserStatus } from '../apis/getUser';
 import './css/Match.css';
 
 const Match = ({ latitude, longitude, preferCourt }) => {
@@ -14,7 +15,6 @@ const Match = ({ latitude, longitude, preferCourt }) => {
   const [selectedTime, setSelectedTime] = useState('');
   const [matchingInProgress, setMatchingInProgress] = useState(false);
   const [preferSport, setPreferSport] = useState('');
-  const [matchingStartTime, setMatchingStartTime] = useState('');
   const [matchStartTimes, setMatchStartTimes] = useState([]);
   const [preferCourtName, setPreferCourtName] = useState(preferCourt || '');
 
@@ -59,7 +59,6 @@ const Match = ({ latitude, longitude, preferCourt }) => {
       sport: sportMap[selectedSport],
       latitude: roundToTwoDecimals(latitude),
       longitude: roundToTwoDecimals(longitude),
-      matchingStartTime: new Date().toISOString(),
       matchStartTimes: [formatDateToISOString(selectedTime)],
       preferCourt: preferCourtName
     };
@@ -69,6 +68,8 @@ const Match = ({ latitude, longitude, preferCourt }) => {
     const response = await startMatching(requestBody);
     if (!response) {
       setMatchingInProgress(false);
+    } else {
+      await updateUserStatus('MATCHING');
     }
 
     console.log('매칭 시작');
@@ -78,10 +79,25 @@ const Match = ({ latitude, longitude, preferCourt }) => {
     const response = await cancelMatching();
     if (response) {
       setMatchingInProgress(false);
+      await updateUserStatus('WAITING');
     }
 
     console.log('매칭 취소');
   };
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const userData = await getUser();
+      if (userData && userData.status === 'MATCHING') {
+        // 매칭 상태에서 이전 매칭 정보를 가져와서 설정
+        setSelectedSport(userData.sport);
+        setSelectedTime(new Date(userData.matchStartTimes[0]));
+        setPreferCourtName(userData.preferCourt);
+        setMatchingInProgress(true);
+      }
+    };
+    fetchUserData();
+  }, []);
 
   return (
     <div className="container match-container">
