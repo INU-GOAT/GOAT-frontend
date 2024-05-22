@@ -7,6 +7,7 @@ import Menu from "./pages/Menu";
 import Chat from "./pages/Chat";
 import Schedule from "./pages/Schedule";
 import Club from "./pages/Club";
+import ClubInfo from "./pages/ClubInfo";
 import LogInHandler from "./pages/LogInHandler";
 import MyPage from "./pages/MyPage";
 import isLoginStore from "./utils/store";
@@ -29,6 +30,7 @@ function App() {
               <Route path="/MyPage" element={<MyPage />} />
               <Route path="/Schedule" element={<Schedule />} />
               <Route path="/Club" element={<Club />} />
+              <Route path="/ClubInfo" element={<ClubInfo />} />
             </Route>
             <Route path="/ChatHandler" element={<ChatHandler />} />
             <Route path="*" element={<Navigate to="/Main" />} />

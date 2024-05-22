@@ -1,44 +1,22 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import MatchType from '../components/Matchtype';
 import Teaminvite from '../components/Teaminvite';
 import Sport from '../components/Sport';
 import Timelist from '../components/Timelist';
 import Matching from '../components/Matching';
-import { startMatching, cancelMatching, getMatching } from '../apis/matching';
-import { getUser } from '../apis/getUser';
-import { getGroupMembers } from '../apis/group';
-import './css/Match.css';
+import TeamMemberActions from '../components/TeamMemberActions';
+import { startMatching, cancelMatching } from '../apis/matching';
+import './css/Match_club.css';
 
 const Match = ({ latitude, longitude, preferCourt }) => {
   const [matchType, setMatchType] = useState('');
   const [selectedSport, setSelectedSport] = useState('');
-  const [selectedTime, setSelectedTime] = useState([]);
+  const [selectedTime, setSelectedTime] = useState('');
   const [matchingInProgress, setMatchingInProgress] = useState(false);
   const [preferSport, setPreferSport] = useState('');
+  const [matchingStartTime, setMatchingStartTime] = useState('');
   const [matchStartTimes, setMatchStartTimes] = useState([]);
   const [preferCourtName, setPreferCourtName] = useState(preferCourt || '');
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const userData = await getUser();
-        console.log("User data fetched:", userData);
-        if (userData && userData.status === "MATCHING") {
-          const matchingData = await getMatching();
-          if (matchingData) {
-            setSelectedSport(matchingData.sport);
-            setMatchStartTimes(matchingData.matchStartTimes);
-            setPreferCourtName(matchingData.preferCourt);
-            setMatchingInProgress(true);
-          }
-        }
-      } catch (error) {
-        console.error("User data fetch failed:", error);
-      }
-    };
-
-    fetchUserData();
-  }, []);
 
   const handleMatchTypeClick = (type) => {
     setMatchType(type);
@@ -48,9 +26,9 @@ const Match = ({ latitude, longitude, preferCourt }) => {
     setSelectedSport(sport);
   };
 
-  const handleTimeChange = useCallback((time) => {
+  const handleTimeChange = (time) => {
     setSelectedTime(time);
-  }, []);
+  };
 
   const handleCourtChange = (court) => {
     setPreferCourtName(court);
@@ -77,57 +55,44 @@ const Match = ({ latitude, longitude, preferCourt }) => {
       return;
     }
 
-    const groupMembers = await getGroupMembers();
-    if (!groupMembers) {
-      alert("그룹원 조회 실패");
-      return;
-    }
-
     const requestBody = {
       sport: sportMap[selectedSport],
       latitude: roundToTwoDecimals(latitude),
       longitude: roundToTwoDecimals(longitude),
-      matchStartTimes: selectedTime.map(formatDateToISOString),
-      preferCourt: preferCourtName,
-      groupMembers: groupMembers.map(member => member.id)
+      matchingStartTime: new Date().toISOString(),
+      matchStartTimes: [formatDateToISOString(selectedTime)],
+      preferCourt: preferCourtName
     };
 
     setMatchingInProgress(true);
 
-    try {
-      const response = await startMatching(requestBody);
-      if (!response) {
-        setMatchingInProgress(false);
-      }
-      console.log('매칭 시작');
-    } catch (error) {
-      console.error("매칭 시작 실패:", error);
+    const response = await startMatching(requestBody);
+    if (!response) {
       setMatchingInProgress(false);
     }
+
+    console.log('매칭 시작');
   };
 
   const onCancelMatching = async () => {
-    try {
-      const response = await cancelMatching();
-      if (response) {
-        setMatchingInProgress(false);
-      }
-      console.log('매칭 취소');
-    } catch (error) {
-      console.error("매칭 취소 실패:", error);
+    const response = await cancelMatching();
+    if (response) {
+      setMatchingInProgress(false);
     }
+
+    console.log('매칭 취소');
   };
 
   return (
     <div className="container match-container">
       <h2 className="match-title">매치 생성</h2>
       <div className="match-type-buttons">
-        <MatchType matchType="솔로" isSelected={matchType === '솔로'} onClick={handleMatchTypeClick} disabled={matchingInProgress} />
-        <MatchType matchType="팀" isSelected={matchType === '팀'} onClick={handleMatchTypeClick} disabled={matchingInProgress} />
+        <MatchType matchType="클럽" isSelected={matchType === '클럽'} onClick={handleMatchTypeClick} disabled={matchingInProgress} />
       </div>
-      {matchType === '팀' && (
+      {matchType === '클럽' && (
         <>
           <Teaminvite disabled={matchingInProgress} />
+          <TeamMemberActions disabled={matchingInProgress} />
         </>
       )}
       <div>

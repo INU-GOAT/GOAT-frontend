@@ -8,7 +8,7 @@ groupAxios.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
-      config.headers.Auth = accessToken;
+      config.headers.Authorization = `${accessToken}`;
     }
     return config;
   },
@@ -19,60 +19,44 @@ groupAxios.interceptors.request.use(
 
 export const inviteToGroup = async (inviteeNickname) => {
   try {
-    const response = await groupAxios.patch('/', { inviteeNickname });
+    const response = await groupAxios.patch('', { inviteeNickname });
+    console.log('그룹 초대 성공:', response.data);
     return response.data;
   } catch (error) {
-    console.error('그룹 초대 실패:', error);
-    return null;
-  }
-};
-
-export const acceptGroupInvite = async (groupId, sendTime, isAccepted) => {
-  try {
-    const response = await groupAxios.patch(`/${groupId}`, { sendTime, isAccepted });
-    return response.data;
-  } catch (error) {
-    console.error('그룹 초대 수락 실패:', error);
-    return null;
-  }
-};
-
-export const expelGroupMember = async (memberId) => {
-  try {
-    const response = await groupAxios.patch(`/members/${memberId}`);
-    return response.data;
-  } catch (error) {
-    console.error('그룹원 추방 실패:', error);
+    console.error('그룹 초대 실패:', error.response ? error.response.data : error.message);
     return null;
   }
 };
 
 export const getGroupMembers = async () => {
   try {
-    const response = await groupAxios.get('/');
+    const response = await groupAxios.get('');
+    console.log('그룹원 조회 성공:', response.data);
     return response.data;
   } catch (error) {
-    console.error('그룹원 조회 실패:', error);
+    console.error('그룹원 조회 실패:', error.response ? error.response.data : error.message);
     return null;
   }
 };
 
 export const leaveGroup = async () => {
   try {
-    const response = await groupAxios.delete('/');
+    const response = await groupAxios.delete('');
+    console.log('그룹 탈퇴 성공:', response.data);
     return response.data;
   } catch (error) {
-    console.error('그룹 탈퇴 실패:', error);
+    console.error('그룹 탈퇴 실패:', error.response ? error.response.data : error.message);
     return null;
   }
 };
 
-export const getInvites = async () => {
+export const expelGroupMember = async (memberId) => {
   try {
-    const response = await groupAxios.get('/invites');
+    const response = await groupAxios.patch(`members/${memberId}`);
+    console.log('그룹원 추방 성공:', response.data);
     return response.data;
   } catch (error) {
-    console.error('그룹 초대 조회 실패:', error);
+    console.error('그룹원 추방 실패:', error.response ? error.response.data : error.message);
     return null;
   }
 };

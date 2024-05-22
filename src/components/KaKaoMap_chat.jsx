@@ -58,18 +58,18 @@ export default function KaKaoMap({ onLocationChange }) {
           level={3}
         >
           {searchResult.map((place, index) => (
-            <MapMarker
-              key={index}
-              position={{ lat: place.y, lng: place.x }}
-              onClick={() => handleMarkerClick(place)}
-            >
+            <React.Fragment key={index}>
+              <MapMarker
+                position={{ lat: place.y, lng: place.x }}
+                onClick={() => handleMarkerClick(place)}
+              />
               {selectedPlace &&
                 selectedPlace.place_name === place.place_name && (
                   <MapInfoWindow position={{ lat: place.y, lng: place.x }}>
                     <div>{place.place_name}</div>
                   </MapInfoWindow>
                 )}
-            </MapMarker>
+            </React.Fragment>
           ))}
         </Map>
       </div>

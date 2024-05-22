@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Slider, Box } from '@mui/material';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { Checkbox, FormControlLabel, FormGroup, Typography, Box } from '@mui/material';
+import './Timelist.css';
 
 const Timelist = ({ onChange, disabled }) => {
-  const now = new Date();
-  const startTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
-  const endTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+  const now = useMemo(() => new Date(), []);
+  const startTime = useMemo(() => new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0), [now]);
+  const endTime = useMemo(() => new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59), [now]);
 
-  const generateTimeSlots = () => {
+  const generateTimeSlots = useCallback(() => {
     const timeSlots = [];
     let currentTime = new Date(startTime);
     while (currentTime <= endTime) {
@@ -14,54 +15,80 @@ const Timelist = ({ onChange, disabled }) => {
       currentTime.setMinutes(currentTime.getMinutes() + 30);
     }
     return timeSlots;
-  };
+  }, [startTime, endTime]);
 
-  const timeSlots = generateTimeSlots();
+  const timeSlots = useMemo(() => generateTimeSlots(), [generateTimeSlots]);
   const sliderMaxValue = timeSlots.length - 1;
 
-  const findInitialSliderValue = () => {
-    const closestTimeSlot = timeSlots.reduce((closest, current) => {
-      return Math.abs(current - now) < Math.abs(closest - now) ? current : closest;
-    }, timeSlots[0]);
+  const [selectedTimes, setSelectedTimes] = useState([]);
 
-    return timeSlots.indexOf(closestTimeSlot);
+  const handleCheckboxChange = (time) => (event) => {
+    const newSelectedTimes = event.target.checked
+      ? [...selectedTimes, time]
+      : selectedTimes.filter((t) => t !== time);
+
+    if (newSelectedTimes.length > 2) {
+      newSelectedTimes.shift();
+    }
+
+    setSelectedTimes(newSelectedTimes);
   };
 
-  const initialSliderValue = findInitialSliderValue();
-
-  const [sliderValue, setSliderValue] = useState(initialSliderValue);
-
   useEffect(() => {
-    onChange(timeSlots[initialSliderValue]);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const handleChange = (_, newValue) => {
-    if (!disabled) {
-      setSliderValue(newValue);
-      onChange(timeSlots[newValue]);
+    if (selectedTimes.length === 2) {
+      const [start, end] = selectedTimes.sort((a, b) => a - b);
+      const range = timeSlots.filter(time => time >= start && time <= end);
+      onChange(range);
+    } else {
+      onChange(selectedTimes);
     }
+  }, [selectedTimes, onChange, timeSlots]);
+
+  const formatSelectedTimes = (times) => {
+    if (times.length !== 2) return '';
+
+    const [start, end] = times.sort((a, b) => a - b);
+
+    return `${start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} ~ ${end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
   };
 
   return (
-    <div className="card-container">
+    <div className="card-container" style={{ minWidth: '360px' }}>
       <div className="card-content">
         <div>
           <h3 className="match-title">시간 설정</h3>
         </div>
-        <Box sx={{ width: 370 }}>
-          <Slider
-            step={1}
-            min={0}
-            max={sliderMaxValue}
-            value={sliderValue}
-            onChange={handleChange}
-            disabled={disabled}
-          />
+        <Box sx={{ height: 300, overflowY: 'auto' }}>
+          <FormGroup className="time-slots-grid">
+            {timeSlots.map((time, index) => (
+              <FormControlLabel
+                key={index}
+                control={
+                  <Checkbox
+                    checked={selectedTimes.includes(time)}
+                    onChange={handleCheckboxChange(time)}
+                    disabled={disabled}
+                    sx={{
+                      '& .MuiSvgIcon-root': {
+                        fontSize: 28,
+                        color: 'primary.main', 
+                      },
+                      '&.Mui-checked': {
+                        color: 'primary.main', 
+                      },
+                    }}
+                  />
+                }
+                label={time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                className="time-slot"
+              />
+            ))}
+          </FormGroup>
         </Box>
         <div className="values">
-          <h3 className="match-title">
-            {timeSlots[sliderValue].toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-          </h3>
+          <Typography variant="body1" className="selected-time" style={{ minHeight: '24px' }}>
+            선택한 시간: {formatSelectedTimes(selectedTimes)}
+          </Typography>
         </div>
       </div>
     </div>
