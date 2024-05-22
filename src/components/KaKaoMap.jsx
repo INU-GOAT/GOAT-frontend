@@ -121,14 +121,16 @@ export default function KaKaoMap({ onLocationChange }) {
               key={index}
               position={{ lat: place.y, lng: place.x }}
               onClick={() => handleMarkerClick(place)}
+              content={place.place_name}
             />
           ))}
           {selectedPlace && (
             <MapInfoWindow
               position={{ lat: selectedPlace.y, lng: selectedPlace.x }}
               content={selectedPlace.place_name}
-              removable={true}
-            />
+              removable={true}>
+                  <div>{selectedPlace.place_name}</div>
+              </MapInfoWindow>
           )}
         </Map>
         <button 
