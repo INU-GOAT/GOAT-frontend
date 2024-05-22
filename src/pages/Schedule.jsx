@@ -3,31 +3,40 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from '@fullcalendar/react';
+import axios from 'axios'; 
 import './css/Schedule.css';
 
 export default class Schedule extends Component {
     state = {
         clickedDate: null,
         gameResults: [],
+        events: [], 
     };
 
     componentDidMount() {
-        this.fetchGameResults();
+        this.getGameResults();
     }
 
-    fetchGameResults = async () => {
+    getGameResults = async () => {
         try {
-            const response = await fetch('http://15.165.113.9:8080/api/game/finished');
-            const data = await response.json();
+            const response = await axios.get('http://15.165.113.9:8080/api/game/finished'); // axios와 get 사용
+            const data = response.data;
             if (Array.isArray(data)) {
-                this.setState({ gameResults: data });
+                const events = data.map(result => ({
+                    title: result.sportName,
+                    start: result.startTime,
+                    end: result.endTime, 
+                    location: result.court,
+                    result: result.result 
+                }));
+                this.setState({ gameResults: data, events: events });
             } else {
-                console.error("Fetched data is not an array:", data);
-                this.setState({ gameResults: [] });
+                console.error("Invalid data format:", data);
+                this.setState({ gameResults: [], events: [] });
             }
         } catch (error) {
-            console.error("Error fetching game results:", error);
-            this.setState({ gameResults: [] });
+            console.error("Error:", error);
+            this.setState({ gameResults: [], events: [] });
         }
     };
 
@@ -57,11 +66,11 @@ export default class Schedule extends Component {
 
         return filteredResults.map(result => (
             <div key={result.gameId} className='detail'>
-                <div>날짜: {this.state.clickedDate}</div>
-                <div>경기 종류: {result.sportName}</div>
-                <div>경기장: {result.court}</div>
-                <div>경기 결과: {result.result}</div>
-                <div>경기 시간: {new Date(result.startTime).toLocaleTimeString()}</div>
+                <h3>날짜: {this.state.clickedDate}</h3>
+                <h3>경기 종류: {result.sportName}</h3>
+                <h3>경기장: {result.court}</h3>
+                <h3>경기 결과: {result.result}</h3>
+                <h3>경기 시간: {new Date(result.startTime).toLocaleTimeString()}</h3>
             </div>
         ));
     };
@@ -80,6 +89,7 @@ export default class Schedule extends Component {
                             end: 'prev,next'
                         }}
                         dateClick={this.dateClick}
+                        events={this.state.events} 
                     />
 
                     <div className='result'>

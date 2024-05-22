@@ -26,12 +26,14 @@ function Club() {
     navigate("/ClubInfo", { state: newClub }); 
   };
 
-  const handleClubClick = (clubId) => {
-    const club = clubs.find(c => c.id === clubId);
-    if (club) {
-      setSelectedClub(club);
-    }
-  };
+const handleClubClick = (clubId) => {
+  const club = clubs.find(c => c.id === clubId);
+  if (club) {
+    setSelectedClub(club);
+    navigate("/ClubInfo", { state: club });
+  }
+};
+
 
   const handleJoinRequest = () => {
     alert(`가입 신청이 ${selectedClub.name}에 제출되었습니다.`);
@@ -80,7 +82,7 @@ function Club() {
                 <div className="clubDetailsContent">
                   <p><strong>클럽명:</strong> {selectedClub.name}</p>
                   <p><strong>소개문:</strong> {selectedClub.intro}</p>
-                  <p><strong>주요 스포츠:</strong> {selectedClub.majorSport}</p>
+                  <p><strong>메이저 스포츠:</strong> {selectedClub.majorSport}</p>
                   <p><strong>클럽 인원:</strong> {selectedClub.members.join(', ')}</p>
                 </div>
                 <button className="joinButton" onClick={handleJoinRequest}>가입 신청</button>

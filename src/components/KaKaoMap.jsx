@@ -15,6 +15,7 @@ export default function KaKaoMap({ onLocationChange }) {
     lat: undefined,
     lng: undefined,
   });
+  const [preferCourt, setPreferCourt] = useState({preferCourt:""});
   
   const [searchKeyword, setSearchKeyword] = useState('');
   const [searchResult, setSearchResult] = useState([]);
@@ -60,6 +61,10 @@ export default function KaKaoMap({ onLocationChange }) {
       lat: place.y,
       lng: place.x,
     });
+    setPreferCourt({
+      preferCourt: place.place_name
+    })
+    onLocationChange(place.y, place.x, place.place_name);
   };
 
   const getCurrentPosition = () => {
@@ -95,7 +100,9 @@ export default function KaKaoMap({ onLocationChange }) {
       lat: place.y,
       lng: place.x,
     });
-
+    setPreferCourt({
+      preferCourt: place.place_name
+    })
     onLocationChange(place.y, place.x, place.place_name);
   };
 
@@ -114,6 +121,9 @@ export default function KaKaoMap({ onLocationChange }) {
               lat: latlng.getLat(),
               lng: latlng.getLng(),
             });
+            setPreferCourt({
+              preferCourt: selectedPlace.place_name
+            })
           }}
         >
           {searchResult.map((place, index) => (
@@ -121,7 +131,6 @@ export default function KaKaoMap({ onLocationChange }) {
               key={index}
               position={{ lat: place.y, lng: place.x }}
               onClick={() => handleMarkerClick(place)}
-              content={place.place_name}
             />
           ))}
           {selectedPlace && (
@@ -129,7 +138,7 @@ export default function KaKaoMap({ onLocationChange }) {
               position={{ lat: selectedPlace.y, lng: selectedPlace.x }}
               content={selectedPlace.place_name}
               removable={true}>
-                  <div>{selectedPlace.place_name}</div>
+                <div>{selectedPlace.place_name}</div>
               </MapInfoWindow>
           )}
         </Map>
