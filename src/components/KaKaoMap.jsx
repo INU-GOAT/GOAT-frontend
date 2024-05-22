@@ -121,6 +121,9 @@ export default function KaKaoMap({ onLocationChange }) {
               lat: latlng.getLat(),
               lng: latlng.getLng(),
             });
+            setPreferCourt({
+              preferCourt: selectedPlace.place_name
+            })
           }}
         >
           {searchResult.map((place, index) => (
