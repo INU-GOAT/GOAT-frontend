@@ -77,20 +77,22 @@ const Match = ({ latitude, longitude, preferCourt }) => {
       return;
     }
 
-    const groupMembers = await getGroupMembers();
-    if (!groupMembers) {
-      alert("그룹원 조회 실패");
-      return;
-    }
-
     const requestBody = {
       sport: sportMap[selectedSport],
       latitude: roundToTwoDecimals(latitude),
       longitude: roundToTwoDecimals(longitude),
       matchStartTimes: selectedTime.map(formatDateToISOString),
-      preferCourt: preferCourtName,
-      groupMembers: groupMembers.map(member => member.id)
+      preferCourt: preferCourtName
     };
+
+    if (matchType === '팀') {
+      const groupMembers = await getGroupMembers();
+      if (!groupMembers) {
+        alert("그룹원 조회 실패");
+        return;
+      }
+      requestBody.groupMembers = groupMembers.map(member => member.id);
+    }
 
     setMatchingInProgress(true);
 
