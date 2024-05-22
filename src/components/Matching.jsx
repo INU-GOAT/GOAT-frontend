@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 
 const Matching = ({ onStartMatching, onCancelMatching, matchType, selectedSport, selectedTime, matchingInProgress, gaming }) => {
   const handleStartMatching = () => {
-    if (!matchType || !selectedSport || !selectedTime) {
+    if (!matchType || !selectedSport || selectedTime.length === 0) {
       alert('매치 실패: 매치 유형, 종목, 시간을 선택하세요.');
       return;
     }

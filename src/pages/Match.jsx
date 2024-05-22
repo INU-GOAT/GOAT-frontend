@@ -35,7 +35,6 @@ const Match = ({ latitude, longitude, preferCourt }) => {
           setNotification('매칭이 잡혔습니다.');
           clearInterval(intervalId);
 
-          // 브라우저 알림 표시
           if (Notification.permission === 'granted') {
             new Notification('매칭이 잡혔습니다.');
           } else if (Notification.permission !== 'denied') {
@@ -65,9 +64,11 @@ const Match = ({ latitude, longitude, preferCourt }) => {
 
     const initiatePolling = async () => {
       const userData = await getUser();
-      if (userData && userData.status === "MATCHING") {
-        fetchUserData();
-        intervalId = setInterval(fetchUserData, 1000);
+      if (userData) {
+        if (userData.status === "MATCHING" || userData.status === "WAITING") {
+          fetchUserData();
+          intervalId = setInterval(fetchUserData, 1000);
+        }
       }
     };
 

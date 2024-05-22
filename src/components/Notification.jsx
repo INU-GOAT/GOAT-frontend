@@ -30,7 +30,7 @@ const Notification = () => {
       <ul>
         {notifications.map((notification) => (
           <li key={notification.id}>
-            {notification.comment}
+            {notification.content}
             <button onClick={() => handleDelete(notification.id)}>삭제</button>
           </li>
         ))}
