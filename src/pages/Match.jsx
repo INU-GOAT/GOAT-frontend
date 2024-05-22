@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import MatchType from '../components/Matchtype';
 import Teaminvite from '../components/Teaminvite';
 import Sport from '../components/Sport';
@@ -19,13 +20,21 @@ const Match = ({ latitude, longitude, preferCourt }) => {
   const [matchStartTimes, setMatchStartTimes] = useState([]);
   const [preferCourtName, setPreferCourtName] = useState(preferCourt || '');
 
+  const navigate = useNavigate();
+
   useEffect(() => {
+    let intervalId;
+
     const fetchUserData = async () => {
       try {
         const userData = await getUser();
         console.log("User data fetched:", userData);
         if (userData && userData.status === "GAMING") {
           setGaming(true);
+          clearInterval(intervalId);
+          setTimeout(() => {
+            navigate('/ChatHandler');
+          }, 3000);
         } else if (userData && userData.status === "MATCHING") {
           const matchingData = await getMatching();
           if (matchingData) {
@@ -40,8 +49,18 @@ const Match = ({ latitude, longitude, preferCourt }) => {
       }
     };
 
-    fetchUserData();
-  }, []);
+    const initiatePolling = async () => {
+      const userData = await getUser();
+      if (userData && userData.status === "MATCHING") {
+        fetchUserData();
+        intervalId = setInterval(fetchUserData, 1000);
+      }
+    };
+
+    initiatePolling();
+
+    return () => clearInterval(intervalId);
+  }, [navigate]);
 
   const handleMatchTypeClick = (type) => {
     setMatchType(type);
