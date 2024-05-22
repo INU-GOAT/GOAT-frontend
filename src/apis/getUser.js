@@ -16,14 +16,3 @@ export const getUser = async () => {
     };
   }
 };
-
-export const updateUserStatus = async (status) => {
-  try {
-    const result = await userAxios.patch('/status', { status });
-    console.log(result.data);
-    return result.data;
-  } catch (error) {
-    console.error("Status update 실패:", error);
-    throw error;
-  }
-};
