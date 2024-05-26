@@ -43,10 +43,6 @@ const Match = ({ latitude, longitude, preferCourt }) => {
               }
             });
           }
-
-          setTimeout(() => {
-            navigate('/ChatHandler');
-          }, 3000);
         } else if (userData && userData.status === "MATCHING") {
           const matchingData = await getMatching();
           if (matchingData) {
