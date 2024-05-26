@@ -19,7 +19,6 @@ const Match = ({ latitude, longitude, preferCourt }) => {
   const [notification, setNotification] = useState('');
   const [preferSport, setPreferSport] = useState('');
   const [matchStartTimes, setMatchStartTimes] = useState([]);
-  const [preferCourtName, setPreferCourtName] = useState(preferCourt || '');
 
   const navigate = useNavigate();
 
@@ -53,7 +52,6 @@ const Match = ({ latitude, longitude, preferCourt }) => {
           if (matchingData) {
             setSelectedSport(matchingData.sport);
             setMatchStartTimes(matchingData.matchStartTimes);
-            setPreferCourtName(matchingData.preferCourt);
             setMatchingInProgress(true);
           }
         }
@@ -88,10 +86,6 @@ const Match = ({ latitude, longitude, preferCourt }) => {
   const handleTimeChange = useCallback((time) => {
     setSelectedTime(time);
   }, []);
-
-  const handleCourtChange = (court) => {
-    setPreferCourtName(court);
-  };
 
   const sportMap = {
     soccer: "축구",
@@ -130,7 +124,7 @@ const Match = ({ latitude, longitude, preferCourt }) => {
       longitude: longitude,
       matchStartTimes: selectedTime,
       preferCourt: preferCourt,
-      groupMembers: groupMembers.map(member => member.id)
+      isClubMatching: matchType === '팀'
     };
 
     setMatchingInProgress(true);
@@ -157,6 +151,10 @@ const Match = ({ latitude, longitude, preferCourt }) => {
     } catch (error) {
       console.error("매칭 취소 실패:", error);
     }
+  };
+
+  const handleAcceptNotification = () => {
+    navigate('/ChatHandler');
   };
 
   return (
@@ -195,7 +193,12 @@ const Match = ({ latitude, longitude, preferCourt }) => {
         matchingInProgress={matchingInProgress}
         gaming={gaming}
       />
-      {notification && <p className="notification">{notification}</p>}
+      {notification && (
+        <div className="notification-popup">
+          <p>{notification}</p>
+          <button onClick={handleAcceptNotification}>수락</button>
+        </div>
+      )}
     </div>
   );
 };

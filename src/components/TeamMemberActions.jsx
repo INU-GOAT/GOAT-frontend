@@ -10,8 +10,8 @@ const TeamMemberActions = ({ disabled }) => {
     const fetchGroupMembers = async () => {
       try {
         const members = await getGroupMembers();
-        if (members && Array.isArray(members)) {
-          setGroupMembers(members);
+        if (members && Array.isArray(members.members)) {
+          setGroupMembers(members.members);
         } else {
           setGroupMembers([]);
         }
