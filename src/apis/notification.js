@@ -19,11 +19,27 @@ notificationAxios.interceptors.request.use(
 
 export const getNotifications = async () => {
   try {
-    const response = await notificationAxios.get('');
+    const response = await notificationAxios.get('/');
     console.log('알림 조회 성공:', response.data);
     return response.data;
   } catch (error) {
     console.error('알림 조회 실패:', error.response ? error.response.data : error.message);
+    return null;
+  }
+};
+
+export const connectNotificationSSE = async () => {
+  try {
+    const response = await notificationAxios.get('/connect', {
+      headers: {
+        'Accept': 'text/event-stream'
+      },
+      responseType: 'stream'
+    });
+    console.log('SSE 알림 연결 성공');
+    return response.data;
+  } catch (error) {
+    console.error('SSE 알림 연결 실패:', error.response ? error.response.data : error.message);
     return null;
   }
 };
@@ -35,6 +51,20 @@ export const deleteNotification = async (notificationId) => {
     return response.data;
   } catch (error) {
     console.error('알림 삭제 실패:', error.response ? error.response.data : error.message);
+    if (error.response && error.response.status === 401) {
+      console.error('[UNAUTHORIZED] 권한이 없습니다. 본인만 삭제할 수 있습니다.');
+    }
+    return null;
+  }
+};
+
+export const disconnectNotificationSSE = async () => {
+  try {
+    const response = await notificationAxios.delete('/disconnect');
+    console.log('SSE 알림 해제 성공:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('SSE 알림 해제 실패:', error.response ? error.response.data : error.message);
     return null;
   }
 };

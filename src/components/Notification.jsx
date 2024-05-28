@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getNotifications, deleteNotification } from "../apis/notification";
+import { getNotifications, deleteNotification, connectNotificationSSE, disconnectNotificationSSE } from "../apis/notification";
 import "./Notification.css";
 
 const Notification = () => {
@@ -16,6 +16,22 @@ const Notification = () => {
     };
 
     fetchNotifications();
+
+    const connectSSE = async () => {
+      const sse = await connectNotificationSSE();
+      if (sse) {
+        sse.onmessage = (event) => {
+          const newNotification = JSON.parse(event.data);
+          setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
+        };
+      }
+    };
+
+    connectSSE();
+
+    return () => {
+      disconnectNotificationSSE();
+    };
   }, []);
 
   const handleDelete = async (id) => {
