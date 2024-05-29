@@ -7,27 +7,17 @@ const Notification = () => {
   const [sse, setSse] = useState(null);
 
   useEffect(() => {
-    const eventSource = connectNotificationSSE();
-    if (eventSource) {
-      setSse(eventSource);
-      eventSource.onmessage = (event) => {
-        const newNotification = JSON.parse(event.data);
-        setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
-      };
+    const eventSource = connectNotificationSSE((newNotification) => {
+      setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
+    });
+    setSse(eventSource);
 
-      eventSource.onerror = (error) => {
-        console.error('SSE 연결 오류:', error);
+    return () => {
+      if (eventSource) {
         eventSource.close();
-        setSse(null);
-      };
-
-      return () => {
-        if (eventSource) {
-          eventSource.close();
-          disconnectNotificationSSE();
-        }
-      };
-    }
+        disconnectNotificationSSE();
+      }
+    };
   }, []);
 
   const fetchNotifications = async () => {
