@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import getUser from "../apis/getUser";
 import { inviteToGroup, expelGroupMember } from "../apis/group";
 import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
-import "./Teaminvite.css";
+import './Teaminvite.css';
 
 const Teaminvite = ({ disabled }) => {
   const [inputValue, setInputValue] = useState("");
@@ -36,7 +35,7 @@ const Teaminvite = ({ disabled }) => {
       return;
     }
 
-    setInvitedUsers([...invitedUsers, { id: user.id, nickname: inputValue.trim(), loading: true }]);
+    setInvitedUsers([...invitedUsers, { id: user.id, nickname: inputValue.trim(), confirmed: false }]);
     setInputValue("");
     setError("");
     setLoading(false);
@@ -74,24 +73,17 @@ const Teaminvite = ({ disabled }) => {
         >
           추가
         </button>
-        {loading && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', ml: 2 }}>
-            <CircularProgress size={24} />
-          </Box>
-        )}
+        {loading && <CircularProgress size={24} />}
       </div>
       {error && <div className="team-invite-error">{error}</div>}
       <ul className="team-invite-list">
         {invitedUsers.map((user) => (
           <li key={user.id} className="team-invite-list-item">
             {user.nickname}
-            {user.loading ? (
-              <CircularProgress size={24} />
-            ) : (
-              <button onClick={() => handleRemoveUser(user.id)} disabled={disabled}>
-                추방
-              </button>
-            )}
+            {!user.confirmed && <CircularProgress size={16} />}
+            <button onClick={() => handleRemoveUser(user.id)} disabled={disabled}>
+              추방
+            </button>
           </li>
         ))}
       </ul>

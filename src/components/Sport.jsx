@@ -25,13 +25,13 @@ const Sport = ({ sport, setSport, preferSport, setPreferSport, disabled, matchTy
         <SoccerCard
           sportState={{ sport, setSport }}
           label="축구"
-          disabled={disabled || (matchType === '솔로' && sport === 'soccer')}
+          disabled={disabled}
           value="soccer"
         />
         <BasketBallCard
           sportState={{ sport, setSport }}
           label="농구"
-          disabled={disabled || (matchType === '솔로' && sport === 'basketBall')}
+          disabled={disabled}
           value="basketBall"
         />
       </RadioGroup>
@@ -50,7 +50,7 @@ const Sport = ({ sport, setSport, preferSport, setPreferSport, disabled, matchTy
         <BadmintonCard
           sportState={{ sport, setSport }}
           label="배드민턴"
-          disabled={disabled || (matchType === '솔로' && sport === 'badminton')}
+          disabled={disabled}
           value="badminton"
         />
         <TableTennisCard

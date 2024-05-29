@@ -5,6 +5,7 @@ import Teaminvite from '../components/Teaminvite';
 import Sport from '../components/Sport';
 import Timelist from '../components/Timelist';
 import Matching from '../components/Matching';
+import TeamMemberActions from '../components/TeamMemberActions';
 import { startMatching, cancelMatching, getMatching } from '../apis/matching';
 import getUser from '../apis/getUser';
 import { getGroupMembers } from '../apis/group';
@@ -19,6 +20,7 @@ const Match = ({ latitude, longitude, preferCourt }) => {
   const [notification, setNotification] = useState('');
   const [preferSport, setPreferSport] = useState('');
   const [matchStartTimes, setMatchStartTimes] = useState([]);
+  const [isInGroup, setIsInGroup] = useState(false);
 
   const navigate = useNavigate();
 
@@ -55,6 +57,12 @@ const Match = ({ latitude, longitude, preferCourt }) => {
             setMatchStartTimes(matchingData.matchStartTimes);
           }
         }
+
+        const groupMembers = await getGroupMembers();
+        if (groupMembers && Array.isArray(groupMembers.members) && groupMembers.members.length > 0) {
+          setIsInGroup(true);
+          setMatchType('팀');
+        }
       } catch (error) {
         console.error("User data fetch failed:", error);
       }
@@ -64,6 +72,9 @@ const Match = ({ latitude, longitude, preferCourt }) => {
   }, []);
 
   const handleMatchTypeClick = (type) => {
+    if (type === '솔로' && isInGroup) {
+      return;
+    }
     setMatchType(type);
   };
 
@@ -157,12 +168,13 @@ const Match = ({ latitude, longitude, preferCourt }) => {
     <div className="container match-container">
       <h2 className="match-title">매치 생성</h2>
       <div className="match-type-buttons">
-        <MatchType matchType="솔로" isSelected={matchType === '솔로'} onClick={handleMatchTypeClick} disabled={matchingInProgress || gaming} />
+        <MatchType matchType="솔로" isSelected={matchType === '솔로'} onClick={handleMatchTypeClick} disabled={matchingInProgress || gaming || isInGroup} />
         <MatchType matchType="팀" isSelected={matchType === '팀'} onClick={handleMatchTypeClick} disabled={matchingInProgress || gaming} />
       </div>
       {matchType === '팀' && (
         <>
           <Teaminvite disabled={matchingInProgress || gaming} />
+          <TeamMemberActions disabled={matchingInProgress || gaming} />
         </>
       )}
       <div>
