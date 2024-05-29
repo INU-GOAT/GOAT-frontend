@@ -30,9 +30,37 @@ export const getNotifications = async () => {
 
 export const connectNotificationSSE = () => {
   const accessToken = localStorage.getItem("accessToken");
-  const sse = new EventSource(`http://15.165.113.9:8080/api/notification/connect?access_token=${accessToken}`);
-  console.log('SSE 알림 연결 성공');
-  return sse;
+  if (!accessToken) {
+    console.error('SSE 연결 오류: Access Token이 없습니다.');
+    return null;
+  }
+  
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', `http://15.165.113.9:8080/api/notification/connect`, true);
+  xhr.setRequestHeader('Auth', accessToken);
+  xhr.setRequestHeader('Accept', 'text/event-stream');
+
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState === 2 && xhr.status === 200) {
+      const sse = new EventSource(`http://15.165.113.9:8080/api/notification/connect?access_token=${accessToken}`);
+      console.log('SSE 알림 연결 시도:', sse.url);
+
+      sse.onopen = () => {
+        console.log('SSE 알림 연결 성공');
+      };
+
+      sse.onerror = (error) => {
+        console.error('SSE 연결 오류:', error);
+        sse.close();
+      };
+
+      return sse;
+    } else if (xhr.readyState === 4 && xhr.status !== 200) {
+      console.error('SSE 연결 오류: 서버가 연결을 거부했습니다.');
+    }
+  };
+
+  xhr.send();
 };
 
 export const deleteNotification = async (notificationId) => {
