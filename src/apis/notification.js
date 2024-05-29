@@ -8,7 +8,7 @@ notificationAxios.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
-      config.headers.Authorization = `Bearer ${accessToken}`;
+      config.headers.Auth = `${accessToken}`;
     }
     return config;
   },
@@ -53,7 +53,7 @@ export const disconnectNotificationSSE = async () => {
   try {
     const accessToken = localStorage.getItem("accessToken");
     const response = await notificationAxios.delete('/disconnect', {
-      headers: { Authorization: `Bearer ${accessToken}` }
+      headers: { Auth: accessToken }
     });
     console.log('SSE 알림 해제 성공:', response.data);
     return response.data;
