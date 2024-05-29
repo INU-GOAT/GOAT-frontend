@@ -45,7 +45,9 @@ const TeamMemberActions = ({ disabled }) => {
           </li>
         ))}
       </ul>
-      <button onClick={handleLeaveGroup} disabled={disabled} className="group-leave-button">그룹 탈퇴</button>
+      {groupMembers.length > 1 && (
+        <button onClick={handleLeaveGroup} disabled={disabled} className="group-leave-button">그룹 탈퇴</button>
+      )}
     </div>
   );
 };
