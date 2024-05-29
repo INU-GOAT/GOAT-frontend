@@ -21,14 +21,21 @@ const handleErrors = (error, defaultMessage) => {
   console.error(defaultMessage, error.response ? error.response.data : error.message);
   if (error.response) {
     const { status, data } = error.response;
-    if (status === 404) {
-      console.error('[NO_JOINING_GROUP] 가입된 그룹을 찾을 수 없습니다.');
-    } else if (status === 400) {
-      console.error('[BAD_REQUEST] 유효성 검사 예외 발생');
-    } else if (status === 409) {
-      console.error('[USER_INVITED_GROUP] 그룹에 초대할 수 없습니다. 해당 유저가 그룹 초대를 받는 중입니다.');
-    } else {
-      console.error(`Error ${status}: ${data.msg}`);
+    switch(status) {
+      case 404:
+        console.error('[NO_JOINING_GROUP] 가입된 그룹을 찾을 수 없습니다.');
+        break;
+      case 400:
+        console.error('[BAD_REQUEST] 유효성 검사 예외 발생');
+        break;
+      case 409:
+        console.error('[USER_INVITED_GROUP] 그룹에 초대할 수 없습니다. 해당 유저가 그룹 초대를 받는 중입니다.');
+        break;
+      case 500:
+        console.error('[INTERNAL_SERVER_ERROR] 서버 내부 오류가 발생했습니다.');
+        break;
+      default:
+        console.error(`Error ${status}: ${data.msg}`);
     }
   }
   return null;
@@ -36,7 +43,7 @@ const handleErrors = (error, defaultMessage) => {
 
 export const getGroupMembers = async () => {
   try {
-    const response = await groupAxios.get('/');
+    const response = await groupAxios.get();
     console.log('그룹원 조회 성공:', response.data);
     return response.data;
   } catch (error) {
@@ -46,7 +53,7 @@ export const getGroupMembers = async () => {
 
 export const leaveGroup = async () => {
   try {
-    const response = await groupAxios.delete('/');
+    const response = await groupAxios.delete();
     console.log('그룹 탈퇴 성공:', response.data);
     return response.data;
   } catch (error) {
