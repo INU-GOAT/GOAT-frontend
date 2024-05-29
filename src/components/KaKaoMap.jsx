@@ -70,14 +70,10 @@ export default function KaKaoMap({ onLocationChange }) {
   const getCurrentPosition = () => {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        const newPosition = {
+        setPosition({
           lat: pos.coords.latitude,
           lng: pos.coords.longitude,
-        };
-        setPosition(newPosition);
-        if (mapRef.current) {
-          mapRef.current.panTo(new window.kakao.maps.LatLng(newPosition.lat, newPosition.lng));
-        }
+        });
       },
       (error) => {
         switch(error.code) {
