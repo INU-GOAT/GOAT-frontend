@@ -8,7 +8,7 @@ notificationAxios.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
-      config.headers.Auth = `${accessToken}`;
+      config.headers.Authorization = `Bearer ${accessToken}`;
     }
     return config;
   },
@@ -30,11 +30,7 @@ export const getNotifications = async () => {
 
 export const connectNotificationSSE = () => {
   const accessToken = localStorage.getItem("accessToken");
-  const eventSource = new EventSource(`http://15.165.113.9:8080/api/notification/connect`, {
-    headers: {
-      Auth: accessToken
-    }
-  });
+  const eventSource = new EventSource(`http://15.165.113.9:8080/api/notification/connect?auth=${accessToken}`);
   console.log('SSE 알림 연결 성공');
   return eventSource;
 };
@@ -57,7 +53,7 @@ export const disconnectNotificationSSE = async () => {
   try {
     const accessToken = localStorage.getItem("accessToken");
     const response = await notificationAxios.delete('/disconnect', {
-      headers: { Auth: accessToken }
+      headers: { Authorization: `Bearer ${accessToken}` }
     });
     console.log('SSE 알림 해제 성공:', response.data);
     return response.data;
