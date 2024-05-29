@@ -23,8 +23,6 @@ const Match = ({ latitude, longitude, preferCourt }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    let intervalId;
-
     const fetchUserData = async () => {
       try {
         const userData = await getUser();
@@ -32,7 +30,14 @@ const Match = ({ latitude, longitude, preferCourt }) => {
         if (userData && userData.status === "GAMING") {
           setGaming(true);
           setNotification('매칭이 잡혔습니다.');
-          clearInterval(intervalId);
+
+          const matchingData = await getMatching();
+          if (matchingData) {
+            setSelectedSport(matchingData.sport);
+            setMatchStartTimes(matchingData.matchStartTimes);
+            setMatchType(matchingData.isClubMatching ? '팀' : '솔로');
+            setMatchingInProgress(true);
+          }
 
           if (Notification.permission === 'granted') {
             new Notification('매칭이 잡혔습니다.');
@@ -43,12 +48,11 @@ const Match = ({ latitude, longitude, preferCourt }) => {
               }
             });
           }
-        } else if (userData && userData.status === "MATCHING") {
+        } else if (userData && userData.status === "WAITING") {
           const matchingData = await getMatching();
           if (matchingData) {
             setSelectedSport(matchingData.sport);
             setMatchStartTimes(matchingData.matchStartTimes);
-            setMatchingInProgress(true);
           }
         }
       } catch (error) {
@@ -56,20 +60,8 @@ const Match = ({ latitude, longitude, preferCourt }) => {
       }
     };
 
-    const initiatePolling = async () => {
-      const userData = await getUser();
-      if (userData) {
-        if (userData.status === "MATCHING" || userData.status === "WAITING") {
-          fetchUserData();
-          intervalId = setInterval(fetchUserData, 1000);
-        }
-      }
-    };
-
-    initiatePolling();
-
-    return () => clearInterval(intervalId);
-  }, [navigate]);
+    fetchUserData();
+  }, []);
 
   const handleMatchTypeClick = (type) => {
     setMatchType(type);
@@ -142,6 +134,14 @@ const Match = ({ latitude, longitude, preferCourt }) => {
       const response = await cancelMatching();
       if (response) {
         setMatchingInProgress(false);
+        const userData = await getUser();
+        if (userData && userData.status === "WAITING") {
+          const matchingData = await getMatching();
+          if (matchingData) {
+            setSelectedSport(matchingData.sport);
+            setMatchStartTimes(matchingData.matchStartTimes);
+          }
+        }
       }
       console.log('매칭 취소');
     } catch (error) {
@@ -174,6 +174,7 @@ const Match = ({ latitude, longitude, preferCourt }) => {
           preferSport={preferSport}
           setPreferSport={setPreferSport}
           disabled={matchingInProgress || gaming}
+          matchType={matchType}
         />
       </div>
       <br />

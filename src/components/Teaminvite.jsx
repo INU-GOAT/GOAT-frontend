@@ -30,7 +30,7 @@ const Teaminvite = ({ disabled }) => {
       return;
     }
 
-    setInvitedUsers([...invitedUsers, { id: user.id, nickname: inputValue.trim() }]);
+    setInvitedUsers([...invitedUsers, { id: user.id, nickname: inputValue.trim(), loading: true }]);
     setInputValue("");
     setError("");
   };
@@ -46,6 +46,10 @@ const Teaminvite = ({ disabled }) => {
     if (e.key === "Enter") {
       handleAddUser();
     }
+  };
+
+  const updateUserLoadingStatus = (memberId, loading) => {
+    setInvitedUsers(invitedUsers.map((user) => user.id === memberId ? { ...user, loading } : user));
   };
 
   return (
@@ -73,9 +77,13 @@ const Teaminvite = ({ disabled }) => {
         {invitedUsers.map((user) => (
           <li key={user.id} className="team-invite-list-item">
             {user.nickname}
-            <button onClick={() => handleRemoveUser(user.id)} disabled={disabled}>
-              추방
-            </button>
+            {user.loading ? (
+              <span className="loading-spinner">로딩...</span>
+            ) : (
+              <button onClick={() => handleRemoveUser(user.id)} disabled={disabled}>
+                추방
+              </button>
+            )}
           </li>
         ))}
       </ul>
