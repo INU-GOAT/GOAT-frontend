@@ -34,7 +34,7 @@ const Match = ({ latitude, longitude, preferCourt }) => {
           setNotification('매칭이 잡혔습니다.');
 
           const matchingData = await getMatching();
-          if (matchingData) {
+          if (matchingData && matchingData.data !== -1) {
             setSelectedSport(matchingData.sport);
             setMatchStartTimes(matchingData.matchStartTimes);
             setMatchType(matchingData.isClubMatching ? '팀' : '솔로');
@@ -52,14 +52,14 @@ const Match = ({ latitude, longitude, preferCourt }) => {
           }
         } else if (userData && userData.status === "WAITING") {
           const matchingData = await getMatching();
-          if (matchingData) {
+          if (matchingData && matchingData.data !== -1) {
             setSelectedSport(matchingData.sport);
             setMatchStartTimes(matchingData.matchStartTimes);
           }
         }
 
         const groupMembers = await getGroupMembers();
-        if (groupMembers && Array.isArray(groupMembers.members) && groupMembers.members.length > 0) {
+        if (groupMembers && groupMembers.data !== -1 && Array.isArray(groupMembers.members) && groupMembers.members.length > 0) {
           setIsInGroup(true);
           setMatchType('팀');
         }
@@ -103,7 +103,7 @@ const Match = ({ latitude, longitude, preferCourt }) => {
 
     if (matchType === '팀') {
       groupMembers = await getGroupMembers();
-      if (!groupMembers) {
+      if (!groupMembers || groupMembers.data === -1) {
         alert("그룹원 조회 실패");
         return;
       }
@@ -148,7 +148,7 @@ const Match = ({ latitude, longitude, preferCourt }) => {
         const userData = await getUser();
         if (userData && userData.status === "WAITING") {
           const matchingData = await getMatching();
-          if (matchingData) {
+          if (matchingData && matchingData.data !== -1) {
             setSelectedSport(matchingData.sport);
             setMatchStartTimes(matchingData.matchStartTimes);
           }

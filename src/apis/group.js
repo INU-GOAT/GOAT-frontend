@@ -21,7 +21,7 @@ const handleErrors = (error, defaultMessage) => {
   console.error(defaultMessage, error.response ? error.response.data : error.message);
   if (error.response) {
     const { status, data } = error.response;
-    switch(status) {
+    switch (status) {
       case 404:
         console.error('[NO_JOINING_GROUP] 가입된 그룹을 찾을 수 없습니다.');
         break;
@@ -43,7 +43,7 @@ const handleErrors = (error, defaultMessage) => {
 
 export const getGroupMembers = async () => {
   try {
-    const response = await groupAxios.get('/');
+    const response = await groupAxios.get();
     console.log('그룹원 조회 성공:', response.data);
     return response.data;
   } catch (error) {
@@ -53,7 +53,7 @@ export const getGroupMembers = async () => {
 
 export const leaveGroup = async () => {
   try {
-    const response = await groupAxios.delete('/');
+    const response = await groupAxios.delete();
     console.log('그룹 탈퇴 성공:', response.data);
     return response.data;
   } catch (error) {
