@@ -30,8 +30,23 @@ export const getNotifications = async () => {
 
 export const connectNotificationSSE = () => {
   const accessToken = localStorage.getItem("accessToken");
+  if (!accessToken) {
+    console.error('SSE 연결 오류: Access Token이 없습니다.');
+    return null;
+  }
+  
   const sse = new EventSource(`http://15.165.113.9:8080/api/notification/connect?access_token=${accessToken}`);
-  console.log('SSE 알림 연결 성공');
+  console.log('SSE 알림 연결 시도:', sse.url);
+
+  sse.onopen = () => {
+    console.log('SSE 알림 연결 성공');
+  };
+
+  sse.onerror = (error) => {
+    console.error('SSE 연결 오류:', error);
+    sse.close();
+  };
+
   return sse;
 };
 
