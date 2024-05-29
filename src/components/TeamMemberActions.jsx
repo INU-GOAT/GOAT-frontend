@@ -10,8 +10,8 @@ const TeamMemberActions = ({ disabled }) => {
     const fetchGroupMembers = async () => {
       try {
         const members = await getGroupMembers();
-        if (members && Array.isArray(members)) {
-          setGroupMembers(members);
+        if (members && Array.isArray(members.members)) {
+          setGroupMembers(members.members);
         } else {
           setGroupMembers([]);
         }
@@ -45,7 +45,9 @@ const TeamMemberActions = ({ disabled }) => {
           </li>
         ))}
       </ul>
-      <button onClick={handleLeaveGroup} disabled={disabled} className="group-leave-button">그룹 탈퇴</button>
+      {groupMembers.length > 1 && (
+        <button onClick={handleLeaveGroup} disabled={disabled} className="group-leave-button">그룹 탈퇴</button>
+      )}
     </div>
   );
 };

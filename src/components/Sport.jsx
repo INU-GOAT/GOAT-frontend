@@ -2,7 +2,7 @@ import React from 'react';
 import { RadioGroup } from "@mui/material";
 import { SoccerCard, BasketBallCard, BadmintonCard, TableTennisCard } from './../components/SportsCards';
 
-const Sport = ({ sport, setSport, preferSport, setPreferSport, disabled }) => {
+const Sport = ({ sport, setSport, preferSport, setPreferSport, disabled, matchType }) => {
   const handleRadioChange = (event) => {
     setPreferSport(event.target.value);
     setSport(event.target.value);
@@ -56,7 +56,7 @@ const Sport = ({ sport, setSport, preferSport, setPreferSport, disabled }) => {
         <TableTennisCard
           sportState={{ sport, setSport }}
           label="탁구"
-          disabled={disabled}
+          disabled={disabled || matchType === '팀'}
           value="tableTennis"
         />
       </RadioGroup>

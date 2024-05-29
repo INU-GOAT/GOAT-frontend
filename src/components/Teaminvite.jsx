@@ -1,38 +1,48 @@
 import React, { useState } from "react";
-import getUser from "../apis/getUser";
+import getUser from "../apis/getUser";  // getUser API는 여전히 필요할 수 있습니다.
 import { inviteToGroup, expelGroupMember } from "../apis/group";
-import "./Teaminvite.css";
+import CircularProgress from '@mui/material/CircularProgress';
+import './Teaminvite.css';
 
 const Teaminvite = ({ disabled }) => {
   const [inputValue, setInputValue] = useState("");
   const [error, setError] = useState("");
   const [invitedUsers, setInvitedUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
 
+  const resetForm = () => {
+    setInputValue("");
+    setError("");
+    setLoading(false);
+  };
+
   const handleAddUser = async () => {
-    if (inputValue.trim() === "") {
+    if (!inputValue.trim()) {
       setError("유저 닉네임을 입력하세요.");
       return;
     }
 
+    setLoading(true);
     const user = await getUser(inputValue.trim());
     if (!user) {
       setError("유저 닉네임이 존재하지 않습니다.");
+      resetForm();
       return;
     }
 
     const result = await inviteToGroup(inputValue.trim());
     if (!result) {
       setError("그룹 초대 실패.");
+      resetForm();
       return;
     }
 
-    setInvitedUsers([...invitedUsers, { id: user.id, nickname: inputValue.trim() }]);
-    setInputValue("");
-    setError("");
+    setInvitedUsers([...invitedUsers, { id: user.id, nickname: inputValue.trim(), confirmed: false }]);
+    resetForm();
   };
 
   const handleRemoveUser = async (memberId) => {
@@ -57,22 +67,24 @@ const Teaminvite = ({ disabled }) => {
           onChange={handleInputChange}
           onKeyPress={handleKeyPress}
           placeholder="유저 닉네임 입력"
-          disabled={disabled}
+          disabled={disabled || loading}
           className="team-invite-input"
         />
         <button
           onClick={handleAddUser}
-          disabled={disabled}
+          disabled={disabled || loading}
           className="team-invite-button"
         >
           추가
         </button>
+        {loading && <CircularProgress size={24} />}
       </div>
       {error && <div className="team-invite-error">{error}</div>}
       <ul className="team-invite-list">
         {invitedUsers.map((user) => (
           <li key={user.id} className="team-invite-list-item">
             {user.nickname}
+            {!user.confirmed && <CircularProgress size={16} />}
             <button onClick={() => handleRemoveUser(user.id)} disabled={disabled}>
               추방
             </button>
