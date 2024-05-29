@@ -75,7 +75,25 @@ export default function KaKaoMap({ onLocationChange }) {
           lng: pos.coords.longitude,
         });
       },
-      () => alert("위치 정보를 가져오는데 실패했습니다."),
+      (error) => {
+        switch(error.code) {
+          case error.PERMISSION_DENIED:
+            alert("사용자가 위치 정보 제공을 거부했습니다.");
+            break;
+          case error.POSITION_UNAVAILABLE:
+            alert("위치 정보를 사용할 수 없습니다.");
+            break;
+          case error.TIMEOUT:
+            alert("위치 정보를 가져오는 시간이 초과되었습니다.");
+            break;
+          case error.UNKNOWN_ERROR:
+            alert("알 수 없는 오류가 발생했습니다.");
+            break;
+          default:
+            alert("위치 정보를 가져오는데 실패했습니다.");
+            break;
+        }
+      },
       {
         enableHighAccuracy: true,
         maximumAge: 30000,
