@@ -35,24 +35,55 @@ export const connectNotificationSSE = (onMessage) => {
     return null;
   }
 
-  const eventSource = new EventSource(`http://15.165.113.9:8080/api/notification/connect`, {
+  const url = 'http://15.165.113.9:8080/api/notification/connect';
+  fetch(url, {
     headers: {
       'Auth': accessToken,
       'Accept': 'text/event-stream'
     }
-  });
+  }).then(response => {
+    if (response.ok) {
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder('utf-8');
 
-  eventSource.onmessage = (event) => {
-    const newNotification = JSON.parse(event.data);
-    onMessage(newNotification);
-  };
+      reader.read().then(function processText({ done, value }) {
+        if (done) {
+          console.log('SSE 연결 종료');
+          return;
+        }
 
-  eventSource.onerror = (error) => {
+        const text = decoder.decode(value, { stream: true });
+        const events = text.split('\n\n');
+        events.forEach(eventString => {
+          if (eventString) {
+            const event = parseEventStream(eventString);
+            onMessage(event);
+          }
+        });
+
+        return reader.read().then(processText);
+      });
+    } else {
+      console.error('SSE 연결 오류:', response.statusText);
+    }
+  }).catch(error => {
     console.error('SSE 연결 오류:', error);
-    eventSource.close();
-  };
+  });
+};
 
-  return eventSource;
+const parseEventStream = (eventString) => {
+  const event = {};
+  const lines = eventString.split('\n');
+  lines.forEach(line => {
+    const [field, ...rest] = line.split(':');
+    const value = rest.join(':').trim();
+    if (field === 'data') {
+      event.data = JSON.parse(value);
+    } else {
+      event[field] = value;
+    }
+  });
+  return event;
 };
 
 export const deleteNotification = async (notificationId) => {
