@@ -4,11 +4,37 @@ import "./Notification.css";
 
 const Notification = () => {
   const [notifications, setNotifications] = useState([]);
+  const [sse, setSse] = useState(null);
 
   useEffect(() => {
-    const eventSource = connectNotificationSSE((newNotification) => {
-      setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
-    });
+    const fetchNotifications = async () => {
+      const result = await getNotifications();
+      if (result && Array.isArray(result)) {
+        setNotifications(result);
+      } else {
+        setNotifications([]);
+      }
+    };
+
+    fetchNotifications();
+
+    const eventSource = connectNotificationSSE();
+    setSse(eventSource);
+
+    eventSource.onmessage = (event) => {
+      try {
+        const newNotification = JSON.parse(event.data);
+        setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
+      } catch (error) {
+        console.error("SSE 데이터 파싱 오류:", error);
+      }
+    };
+
+    eventSource.onerror = (error) => {
+      console.error('SSE 연결 오류:', error);
+      eventSource.close();
+      setSse(null);
+    };
 
     return () => {
       if (eventSource) {
@@ -27,7 +53,7 @@ const Notification = () => {
 
   return (
     <div className="notification-popup">
-      <ul className="notification-list">
+      <ul>
         {notifications.map((notification) => (
           <li key={notification.id}>
             {notification.content}
