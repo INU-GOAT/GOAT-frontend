@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import getUser from "../apis/getUser";
+import getUser from "../apis/getUser";  // getUser API는 여전히 필요할 수 있습니다.
 import { inviteToGroup, expelGroupMember } from "../apis/group";
 import CircularProgress from '@mui/material/CircularProgress';
 import './Teaminvite.css';
