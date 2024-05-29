@@ -30,6 +30,7 @@ import {
 import { FaLeaf, FaSeedling } from "react-icons/fa";
 
 import { PiFlowerFill } from "react-icons/pi";
+import userAxios from "../apis/userAxios";
 
 const defaultTheme = createTheme();
 const ages = [
@@ -46,8 +47,8 @@ const ages = [
     label: "30대",
   },
   {
-    value: "30",
-    label: "30대",
+    value: "40",
+    label: "40대",
   },
   {
     value: "50",
@@ -59,11 +60,11 @@ function MyPage() {
   const myAge = localStorage.getItem("age");
   const myGender = localStorage.getItem("gender");
   const myPreferSport = localStorage.getItem("prefer_sport");
-  const [preferSport, setPreferSport] = useState(null);
   const soccerTier = localStorage.getItem("soccer_tier");
   const basketballTier = localStorage.getItem("basketball_tier");
   const badmintonTier = localStorage.getItem("badminton_tier");
   const tableTennisTier = localStorage.getItem("tableTennis_tier");
+
   const [sport, setSport] = useState(myPreferSport);
 
   const tier = (tier) => {
@@ -73,6 +74,35 @@ function MyPage() {
       return <FaLeaf fill="	#3CB371" fontSize="30px" />;
     } else {
       return <PiFlowerFill fill="#FFB6C1" fontSize="30px" />;
+    }
+  };
+
+  const editUser = async (e) => {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+
+    try {
+      const res = await userAxios.put(
+        "",
+        {
+          age: data.get("age"),
+          gender: data.get("gender"),
+          nickname: data.get("nickName"),
+          prefer_sport: sport,
+        },
+        {
+          "Content-Type": "application/json",
+        }
+      );
+      console.log(res);
+      localStorage.setItem("nickname", data.get("nickName"));
+      localStorage.setItem("age", data.get("age"));
+      localStorage.setItem("gender", data.get("gender"));
+      localStorage.setItem("prefer_sport", sport);
+      alert("회원 정보 수정 완료");
+    } catch (error) {
+      console.error(error);
+      alert("중복된 닉네임 입니다.");
     }
   };
 
@@ -95,14 +125,13 @@ function MyPage() {
         <Typography component="h1" variant="h5">
           회원 정보
         </Typography>
-        <Box component="form" noValidate sx={{ mt: 3 }}>
+        <Box component="form" noValidate onSubmit={editUser} sx={{ mt: 3 }}>
           <Stack>
             <Stack>
               <TextField
-                autoComplete="given-name"
-                name="닉네임"
+                name="nickName"
                 fullWidth
-                id="firstName"
+                id="nickName"
                 label="닉네임"
                 defaultValue={myNickname}
               />
