@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import getUser from "../apis/getUser";  // getUser API는 여전히 필요할 수 있습니다.
-import { inviteToGroup, expelGroupMember } from "../apis/group";
+import React, { useState, useEffect } from "react";
+import getUser from "../apis/getUser";
+import { inviteToGroup, expelGroupMember, acceptGroupInvitation } from "../apis/group";
 import CircularProgress from '@mui/material/CircularProgress';
 import './Teaminvite.css';
 
@@ -41,7 +41,7 @@ const Teaminvite = ({ disabled }) => {
       return;
     }
 
-    setInvitedUsers([...invitedUsers, { id: user.id, nickname: inputValue.trim(), confirmed: false }]);
+    setInvitedUsers([...invitedUsers, { id: user.id, nickname: inputValue.trim(), confirmed: false, notificationId: result.notificationId }]);
     resetForm();
   };
 
@@ -52,11 +52,29 @@ const Teaminvite = ({ disabled }) => {
     }
   };
 
+  const handleAcceptInvite = async (notificationId) => {
+    const result = await acceptGroupInvitation(notificationId, true);
+    if (result) {
+      setInvitedUsers(invitedUsers.map((user) => user.notificationId === notificationId ? { ...user, confirmed: true } : user));
+    }
+  };
+
+  const handleRejectInvite = async (notificationId) => {
+    const result = await acceptGroupInvitation(notificationId, false);
+    if (result) {
+      setInvitedUsers(invitedUsers.filter((user) => user.notificationId !== notificationId));
+    }
+  };
+
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       handleAddUser();
     }
   };
+
+  useEffect(() => {
+    setInvitedUsers([]);
+  }, [disabled]);
 
   return (
     <div className="team-invite-container">
@@ -87,6 +105,12 @@ const Teaminvite = ({ disabled }) => {
             {!user.confirmed && <CircularProgress size={16} />}
             <button onClick={() => handleRemoveUser(user.id)} disabled={disabled}>
               추방
+            </button>
+            <button onClick={() => handleAcceptInvite(user.notificationId)} disabled={disabled}>
+              수락
+            </button>
+            <button onClick={() => handleRejectInvite(user.notificationId)} disabled={disabled}>
+              거절
             </button>
           </li>
         ))}

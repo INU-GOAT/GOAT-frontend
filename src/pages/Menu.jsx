@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import LogOut from "../components/LogOut";
 import Notification from "../components/Notification";
+import { connectNotificationSSE, disconnectNotificationSSE } from "../apis/notification";
 import "./css/Menu.css";
 
 function Menu() {
   const navigate = useNavigate();
   const [showNotifications, setShowNotifications] = useState(false);
+  const [sse, setSse] = useState(null);
 
   const handleNavigation = (path) => (event) => {
     event.preventDefault();
@@ -16,6 +18,18 @@ function Menu() {
   const toggleNotifications = () => {
     setShowNotifications(!showNotifications);
   };
+
+  useEffect(() => {
+    const eventSource = connectNotificationSSE();
+    setSse(eventSource);
+
+    return () => {
+      if (eventSource) {
+        eventSource.close();
+        disconnectNotificationSSE();
+      }
+    };
+  }, []);
 
   return (
     <div id="wrap">
