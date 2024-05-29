@@ -19,7 +19,7 @@ notificationAxios.interceptors.request.use(
 
 export const getNotifications = async () => {
   try {
-    const response = await notificationAxios.get();
+    const response = await notificationAxios.get('/');
     console.log('알림 조회 성공:', response.data);
     return response.data;
   } catch (error) {
@@ -28,69 +28,13 @@ export const getNotifications = async () => {
   }
 };
 
-export const connectNotificationSSE = (onMessage) => {
+export const connectNotificationSSE = () => {
   const accessToken = localStorage.getItem("accessToken");
-  if (!accessToken) {
-    console.error('SSE 연결 오류: Access Token이 없습니다.');
-    return null;
-  }
-
-  const url = 'http://15.165.113.9:8080/api/notification/connect';
-  fetch(url, {
-    headers: {
-      'Auth': accessToken,
-      'Accept': 'text/event-stream'
-    }
-  }).then(response => {
-    if (response.ok) {
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder('utf-8');
-
-      reader.read().then(function processText({ done, value }) {
-        if (done) {
-          console.log('SSE 연결 종료');
-          return;
-        }
-
-        const text = decoder.decode(value, { stream: true });
-        const events = text.split('\n\n');
-        events.forEach(eventString => {
-          if (eventString) {
-            const event = parseEventStream(eventString);
-            if (event && event.data) {
-              try {
-                const jsonData = JSON.parse(event.data);
-                onMessage(jsonData);
-              } catch (error) {
-                console.error('JSON 파싱 오류:', error);
-              }
-            }
-          }
-        });
-
-        return reader.read().then(processText);
-      });
-    } else {
-      console.error('SSE 연결 오류:', response.statusText);
-    }
-  }).catch(error => {
-    console.error('SSE 연결 오류:', error);
+  const sse = new EventSource(`http://15.165.113.9:8080/api/notification/connect`, {
+    headers: { Auth: accessToken }
   });
-};
-
-const parseEventStream = (eventString) => {
-  const event = {};
-  const lines = eventString.split('\n');
-  lines.forEach(line => {
-    const [field, ...rest] = line.split(':');
-    const value = rest.join(':').trim();
-    if (field === 'data') {
-      event.data = value;
-    } else {
-      event[field] = value;
-    }
-  });
-  return event;
+  console.log('SSE 알림 연결 성공');
+  return sse;
 };
 
 export const deleteNotification = async (notificationId) => {
