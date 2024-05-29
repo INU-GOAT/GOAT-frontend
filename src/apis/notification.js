@@ -30,9 +30,9 @@ export const getNotifications = async () => {
 
 export const connectNotificationSSE = () => {
   const accessToken = localStorage.getItem("accessToken");
-  const eventSource = new EventSource(`http://15.165.113.9:8080/api/notification/connect?auth=${accessToken}`);
+  const sse = new EventSource(`http://15.165.113.9:8080/api/notification/connect?access_token=${accessToken}`);
   console.log('SSE 알림 연결 성공');
-  return eventSource;
+  return sse;
 };
 
 export const deleteNotification = async (notificationId) => {
@@ -51,10 +51,7 @@ export const deleteNotification = async (notificationId) => {
 
 export const disconnectNotificationSSE = async () => {
   try {
-    const accessToken = localStorage.getItem("accessToken");
-    const response = await notificationAxios.delete('/disconnect', {
-      headers: { Auth: accessToken }
-    });
+    const response = await notificationAxios.delete('/disconnect');
     console.log('SSE 알림 해제 성공:', response.data);
     return response.data;
   } catch (error) {
