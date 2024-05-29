@@ -59,9 +59,13 @@ const Match = ({ latitude, longitude, preferCourt }) => {
     const initiatePolling = async () => {
       const userData = await getUser();
       if (userData) {
-        if (userData.status === "MATCHING" || userData.status === "WAITING") {
+        if (userData.status === "WAITING") {
           fetchUserData();
-          intervalId = setInterval(fetchUserData, 1000);
+          intervalId = setInterval(fetchUserData)
+        }
+        if (userData.status === "MATCHING") {
+          fetchUserData();
+          intervalId = setInterval(fetchUserData, 5000);
         }
       }
     };
