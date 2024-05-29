@@ -4,13 +4,14 @@ import "./Notification.css";
 
 const Notification = () => {
   const [notifications, setNotifications] = useState([]);
-  const [sse, setSse] = useState(null);
 
   useEffect(() => {
-    const eventSource = connectNotificationSSE((newNotification) => {
-      setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
+    const eventSource = connectNotificationSSE((event) => {
+      if (event.data) {
+        const newNotification = event.data;
+        setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
+      }
     });
-    setSse(eventSource);
 
     return () => {
       if (eventSource) {
@@ -20,15 +21,6 @@ const Notification = () => {
     };
   }, []);
 
-  const fetchNotifications = async () => {
-    const result = await getNotifications();
-    if (result && Array.isArray(result)) {
-      setNotifications(result);
-    } else {
-      setNotifications([]);
-    }
-  };
-
   const handleDelete = async (id) => {
     const result = await deleteNotification(id);
     if (result) {
@@ -37,8 +29,7 @@ const Notification = () => {
   };
 
   return (
-    <div className="notification-container">
-      <button onClick={fetchNotifications} className="notification-button">알림 확인</button>
+    <div className="notification-popup">
       <ul className="notification-list">
         {notifications.map((notification) => (
           <li key={notification.id}>
