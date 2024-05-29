@@ -28,20 +28,15 @@ export const getNotifications = async () => {
   }
 };
 
-export const connectNotificationSSE = async () => {
-  try {
-    const response = await notificationAxios.get('/connect', {
-      headers: {
-        'Accept': 'text/event-stream'
-      },
-      responseType: 'stream'
-    });
-    console.log('SSE 알림 연결 성공');
-    return response.data;
-  } catch (error) {
-    console.error('SSE 알림 연결 실패:', error.response ? error.response.data : error.message);
-    return null;
-  }
+export const connectNotificationSSE = () => {
+  const accessToken = localStorage.getItem("accessToken");
+  const sse = new EventSource(`http://15.165.113.9:8080/api/notification/connect`, {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  });
+  console.log('SSE 알림 연결 성공');
+  return sse;
 };
 
 export const deleteNotification = async (notificationId) => {

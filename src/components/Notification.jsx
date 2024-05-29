@@ -4,6 +4,7 @@ import "./Notification.css";
 
 const Notification = () => {
   const [notifications, setNotifications] = useState([]);
+  const [sse, setSse] = useState(null);
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -16,20 +17,18 @@ const Notification = () => {
     };
 
     fetchNotifications();
+  }, []);
 
-    const connectSSE = async () => {
-      const sse = await connectNotificationSSE();
-      if (sse) {
-        sse.onmessage = (event) => {
-          const newNotification = JSON.parse(event.data);
-          setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
-        };
-      }
+  useEffect(() => {
+    const eventSource = connectNotificationSSE();
+    setSse(eventSource);
+    eventSource.onmessage = (event) => {
+      const newNotification = JSON.parse(event.data);
+      setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
     };
 
-    connectSSE();
-
     return () => {
+      eventSource.close();
       disconnectNotificationSSE();
     };
   }, []);
