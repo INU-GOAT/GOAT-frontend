@@ -21,7 +21,7 @@ const handleErrors = (error, defaultMessage) => {
   console.error(defaultMessage, error.response ? error.response.data : error.message);
   if (error.response) {
     const { status, data } = error.response;
-    switch(status) {
+    switch (status) {
       case 404:
         console.error('[NO_JOINING_GROUP] 가입된 그룹을 찾을 수 없습니다.');
         break;
