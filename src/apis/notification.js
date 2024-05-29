@@ -19,7 +19,7 @@ notificationAxios.interceptors.request.use(
 
 export const getNotifications = async () => {
   try {
-    const response = await notificationAxios.get('/');
+    const response = await notificationAxios.get();
     console.log('알림 조회 성공:', response.data);
     return response.data;
   } catch (error) {
@@ -57,7 +57,14 @@ export const connectNotificationSSE = (onMessage) => {
         events.forEach(eventString => {
           if (eventString) {
             const event = parseEventStream(eventString);
-            onMessage(event);
+            if (event && event.data) {
+              try {
+                const jsonData = JSON.parse(event.data);
+                onMessage(jsonData);
+              } catch (error) {
+                console.error('JSON 파싱 오류:', error);
+              }
+            }
           }
         });
 
@@ -78,7 +85,7 @@ const parseEventStream = (eventString) => {
     const [field, ...rest] = line.split(':');
     const value = rest.join(':').trim();
     if (field === 'data') {
-      event.data = JSON.parse(value);
+      event.data = value;
     } else {
       event[field] = value;
     }

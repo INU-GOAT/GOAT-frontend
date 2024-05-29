@@ -6,11 +6,8 @@ const Notification = () => {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
-    const eventSource = connectNotificationSSE((event) => {
-      if (event.data) {
-        const newNotification = event.data;
-        setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
-      }
+    const eventSource = connectNotificationSSE((newNotification) => {
+      setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
     });
 
     return () => {
