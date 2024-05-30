@@ -42,8 +42,11 @@ function ClubInfo() {
   }, [clubInfo.clubMaster, token]);
 
   useEffect(() => {
-    fetchClubInfo();
-    checkIfClubMaster();
+    const fetchData = async () => {
+      await fetchClubInfo();
+      checkIfClubMaster();
+    };
+    fetchData();
   }, [fetchClubInfo, checkIfClubMaster]);
 
   const handleUpdateClubInfo = async () => {
