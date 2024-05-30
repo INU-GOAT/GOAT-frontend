@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { EventSourcePolyfill } from 'eventsourcepolyfill';
+import { EventSourcePolyfill } from 'event-source-polyfill';
 
 const notificationAxios = axios.create({
   baseURL: "http://15.165.113.9:8080/api/notification",
