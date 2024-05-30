@@ -30,7 +30,11 @@ export const getNotifications = async () => {
 
 export const connectNotificationSSE = () => {
   const accessToken = localStorage.getItem("accessToken");
-  const sse = new EventSource(`http://15.165.113.9:8080/api/notification/connect?access_token=${accessToken}`);
+  const sse = new EventSource(`http://15.165.113.9:8080/api/notification/connect`, {
+    headers: {
+      'Auth': `${accessToken}`
+    }
+  });
   console.log('SSE 알림 연결 성공');
   return sse;
 };
