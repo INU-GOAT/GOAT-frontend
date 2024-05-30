@@ -23,33 +23,25 @@ function ClubInfo() {
       const response = await axios.get(`http://15.165.113.9:8080/api/clubs/${clubId}`, {
         headers: { auth: token },
       });
-      setClubInfo(response.data.data);
-      console.log("클럽 정보:", response.data.data);
+      const clubData = response.data.data;
+      setClubInfo(clubData);
+
+      // 클럽장 여부를 바로 확인하여 상태 업데이트
+      const userResponse = await axios.get("http://15.165.113.9:8080/api/users", {
+        headers: { auth: token },
+      });
+      const userData = userResponse.data.data;
+      setIsClubMaster(userData.id === clubData.clubMaster);
+      console.log("클럽 정보:", clubData);
+      console.log("클럽장 여부:", userData.id === clubData.clubMaster);
     } catch (error) {
       console.error("Error fetching club info", error);
     }
   }, [clubId, token]);
 
-  const checkIfClubMaster = useCallback(async () => {
-    try {
-      const response = await axios.get("http://15.165.113.9:8080/api/users", {
-        headers: { auth: token },
-      });
-      const userData = response.data.data;
-      setIsClubMaster(userData.id === clubInfo.clubMaster);
-      console.log("클럽장 여부:", userData.id === clubInfo.clubMaster);
-    } catch (error) {
-      console.error("Error checking club master", error);
-    }
-  }, [clubInfo.clubMaster, token]);
-
   useEffect(() => {
-    const fetchData = async () => {
-      await fetchClubInfo();
-      await checkIfClubMaster();
-    };
-    fetchData();
-  }, [fetchClubInfo, checkIfClubMaster]);
+    fetchClubInfo();
+  }, [fetchClubInfo]);
 
   const handleUpdateClubInfo = async () => {
     // 클럽 정보 수정 로직 구현
