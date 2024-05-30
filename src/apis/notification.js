@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { EventSourcePolyfill } from 'event-source-polyfill';
 
 const notificationAxios = axios.create({
   baseURL: "http://15.165.113.9:8080/api/notification",
@@ -20,53 +21,16 @@ notificationAxios.interceptors.request.use(
 export const getNotifications = async () => {
   try {
     const response = await notificationAxios.get('/');
-    console.log('알림 조회 성공:', response.data);
     return response.data;
   } catch (error) {
     console.error('알림 조회 실패:', error.response ? error.response.data : error.message);
-    return null;
+    return [];
   }
-};
-
-export const connectNotificationSSE = () => {
-  const accessToken = localStorage.getItem("accessToken");
-  if (!accessToken) {
-    console.error('SSE 연결 오류: Access Token이 없습니다.');
-    return null;
-  }
-  
-  const xhr = new XMLHttpRequest();
-  xhr.open('GET', `http://15.165.113.9:8080/api/notification/connect`, true);
-  xhr.setRequestHeader('Auth', accessToken);
-  xhr.setRequestHeader('Accept', 'text/event-stream');
-
-  xhr.onreadystatechange = () => {
-    if (xhr.readyState === 2 && xhr.status === 200) {
-      const sse = new EventSource(`http://15.165.113.9:8080/api/notification/connect?access_token=${accessToken}`);
-      console.log('SSE 알림 연결 시도:', sse.url);
-
-      sse.onopen = () => {
-        console.log('SSE 알림 연결 성공');
-      };
-
-      sse.onerror = (error) => {
-        console.error('SSE 연결 오류:', error);
-        sse.close();
-      };
-
-      return sse;
-    } else if (xhr.readyState === 4 && xhr.status !== 200) {
-      console.error('SSE 연결 오류: 서버가 연결을 거부했습니다.');
-    }
-  };
-
-  xhr.send();
 };
 
 export const deleteNotification = async (notificationId) => {
   try {
     const response = await notificationAxios.delete(`/${notificationId}`);
-    console.log('알림 삭제 성공:', response.data);
     return response.data;
   } catch (error) {
     console.error('알림 삭제 실패:', error.response ? error.response.data : error.message);
@@ -77,10 +41,44 @@ export const deleteNotification = async (notificationId) => {
   }
 };
 
-export const disconnectNotificationSSE = async () => {
+const handleSSEMessage = (onMessage, event) => {
+  const newNotification = JSON.parse(event.data);
+  onMessage(newNotification);
+
+  if (Notification.permission === "granted") {
+    new Notification(newNotification.content);
+  } else if (Notification.permission !== "denied") {
+    Notification.requestPermission().then((permission) => {
+      if (permission === "granted") {
+        new Notification(newNotification.content);
+      }
+    });
+  }
+};
+
+export const connectSSE = (onMessage) => {
+  const eventSource = new EventSourcePolyfill("http://15.165.113.9:8080/api/notification/connect", {
+    headers: {
+      Auth: `${localStorage.getItem("accessToken")}`
+    }
+  });
+  eventSource.onmessage = (event) => handleSSEMessage(onMessage, event);
+  eventSource.onerror = (error) => {
+    console.error('SSE 에러 발생:', error);
+    eventSource.close();
+  };
+  return eventSource;
+};
+
+export const disconnectSSE = (eventSource) => {
+  if (eventSource) {
+    eventSource.close();
+  }
+};
+
+export const disconnectNotifications = async () => {
   try {
     const response = await notificationAxios.delete('/disconnect');
-    console.log('SSE 알림 해제 성공:', response.data);
     return response.data;
   } catch (error) {
     console.error('SSE 알림 해제 실패:', error.response ? error.response.data : error.message);

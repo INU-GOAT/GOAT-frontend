@@ -19,7 +19,7 @@ matchingAxios.interceptors.request.use(
 
 export const getMatching = async () => {
   try {
-    const result = await matchingAxios.get();
+    const result = await matchingAxios.get('/');
     console.log('매칭 조회 성공:', result.data);
     return result.data;
   } catch (error) {

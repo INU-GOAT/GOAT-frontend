@@ -1,56 +1,71 @@
 import React, { useEffect, useState } from "react";
-import { getNotifications, deleteNotification, connectNotificationSSE, disconnectNotificationSSE } from "../apis/notification";
+import { getNotifications, deleteNotification, connectSSE, disconnectSSE } from "../apis/notification";
 import "./Notification.css";
 
-const Notification = () => {
-  const [notifications, setNotifications] = useState([]);
+const Notification = ({ onDelete }) => {
+  const [localNotifications, setLocalNotifications] = useState([]);
   const [sse, setSse] = useState(null);
 
   useEffect(() => {
-    const eventSource = connectNotificationSSE();
-    if (eventSource) {
-      setSse(eventSource);
-      eventSource.onmessage = (event) => {
-        const newNotification = JSON.parse(event.data);
-        setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
-      };
-
-      eventSource.onerror = (error) => {
-        console.error('SSE 연결 오류:', error);
-        eventSource.close();
-        setSse(null);
-      };
-
-      return () => {
-        if (eventSource) {
-          eventSource.close();
-          disconnectNotificationSSE();
+    const fetchNotifications = async () => {
+      try {
+        const result = await getNotifications();
+        if (result && Array.isArray(result)) {
+          setLocalNotifications(result);
+        } else {
+          setLocalNotifications([]);
         }
-      };
-    }
+      } catch (error) {
+        console.error("알림 조회 실패:", error.response ? error.response.data : error.message);
+      }
+    };
+
+    const handleSSEMessage = (event) => {
+      const newNotification = JSON.parse(event.data);
+      setLocalNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
+
+      if (Notification.permission === "granted") {
+        new Notification(newNotification.content);
+      } else if (Notification.permission !== "denied") {
+        Notification.requestPermission().then((permission) => {
+          if (permission === "granted") {
+            new Notification(newNotification.content);
+          }
+        });
+      }
+    };
+
+    const eventSource = connectSSE(handleSSEMessage);
+    setSse(eventSource);
+
+    fetchNotifications();
+
+    return () => {
+      if (eventSource) {
+        eventSource.close();
+        disconnectSSE(eventSource);
+      }
+    };
   }, []);
 
-  const fetchNotifications = async () => {
-    const result = await getNotifications();
-    if (result && Array.isArray(result)) {
-      setNotifications(result);
-    } else {
-      setNotifications([]);
-    }
-  };
-
   const handleDelete = async (id) => {
-    const result = await deleteNotification(id);
-    if (result) {
-      setNotifications(notifications.filter((notification) => notification.id !== id));
+    try {
+      const result = await deleteNotification(id);
+      if (result) {
+        setLocalNotifications(localNotifications.filter((notification) => notification.id !== id));
+        if (onDelete) {
+          onDelete(id);
+        }
+      }
+    } catch (error) {
+      console.error("알림 삭제 실패:", error.response ? error.response.data : error.message);
     }
   };
 
   return (
-    <div className="notification-container">
-      <button onClick={fetchNotifications} className="notification-button">알림 확인</button>
-      <ul className="notification-list">
-        {notifications.map((notification) => (
+    <div className="notification-popup">
+      <ul>
+        {localNotifications.map((notification) => (
           <li key={notification.id}>
             {notification.content}
             <button onClick={() => handleDelete(notification.id)}>삭제</button>

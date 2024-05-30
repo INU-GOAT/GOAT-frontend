@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import MatchType from '../components/Matchtype';
 import Teaminvite from '../components/Teaminvite';
 import Sport from '../components/Sport';
-import Timelist from '../components/Timelist';
+import SetTime from "./../components/SetTime";
 import Matching from '../components/Matching';
 import TeamMemberActions from '../components/TeamMemberActions';
 import { startMatching, cancelMatching } from '../apis/matching';
@@ -36,9 +36,9 @@ const Match = ({ latitude, longitude, preferCourt }) => {
 
   const sportMap = {
     soccer: "축구",
-    basketball: "농구",
+    basketBall: "농구",
     badminton: "배드민턴",
-    tabletennis: "탁구"
+    tableTennis: "탁구"
   };
 
   const roundToTwoDecimals = (value) => {
@@ -108,7 +108,10 @@ const Match = ({ latitude, longitude, preferCourt }) => {
       </div>
       <br />
       <div>
-        <Timelist onChange={handleTimeChange} disabled={matchingInProgress} />
+        <SetTime
+          setTimeArray={setSelectedTime}
+          disabled={matchingInProgress}
+        />
       </div>
       <Matching 
         onStartMatching={onStartMatching}

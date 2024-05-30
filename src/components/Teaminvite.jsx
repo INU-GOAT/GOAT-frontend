@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import getUser from "../apis/getUser";  // getUser API는 여전히 필요할 수 있습니다.
-import { inviteToGroup, expelGroupMember } from "../apis/group";
+import React, { useState, useEffect } from "react";
+import getUser from "../apis/getUser";
+import { inviteToGroup, expelGroupMember, getGroupMembers } from "../apis/group";
 import CircularProgress from '@mui/material/CircularProgress';
 import './Teaminvite.css';
 
@@ -9,19 +9,28 @@ const Teaminvite = ({ disabled }) => {
   const [error, setError] = useState("");
   const [invitedUsers, setInvitedUsers] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isGroupMaster, setIsGroupMaster] = useState(false);
+
+  useEffect(() => {
+    const checkGroupMaster = async () => {
+      const user = await getUser();
+      const group = await getGroupMembers();
+      if (group && group.members[0] === user.nickname) {
+        setIsGroupMaster(true);
+      } else {
+        setIsGroupMaster(false);
+      }
+    };
+
+    checkGroupMaster();
+  }, []);
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
 
-  const resetForm = () => {
-    setInputValue("");
-    setError("");
-    setLoading(false);
-  };
-
   const handleAddUser = async () => {
-    if (!inputValue.trim()) {
+    if (inputValue.trim() === "") {
       setError("유저 닉네임을 입력하세요.");
       return;
     }
@@ -30,19 +39,21 @@ const Teaminvite = ({ disabled }) => {
     const user = await getUser(inputValue.trim());
     if (!user) {
       setError("유저 닉네임이 존재하지 않습니다.");
-      resetForm();
+      setLoading(false);
       return;
     }
 
     const result = await inviteToGroup(inputValue.trim());
     if (!result) {
       setError("그룹 초대 실패.");
-      resetForm();
+      setLoading(false);
       return;
     }
 
     setInvitedUsers([...invitedUsers, { id: user.id, nickname: inputValue.trim(), confirmed: false }]);
-    resetForm();
+    setInputValue("");
+    setError("");
+    setLoading(false);
   };
 
   const handleRemoveUser = async (memberId) => {
@@ -67,12 +78,12 @@ const Teaminvite = ({ disabled }) => {
           onChange={handleInputChange}
           onKeyPress={handleKeyPress}
           placeholder="유저 닉네임 입력"
-          disabled={disabled || loading}
+          disabled={disabled || loading || !isGroupMaster}
           className="team-invite-input"
         />
         <button
           onClick={handleAddUser}
-          disabled={disabled || loading}
+          disabled={disabled || loading || !isGroupMaster}
           className="team-invite-button"
         >
           추가
@@ -85,7 +96,7 @@ const Teaminvite = ({ disabled }) => {
           <li key={user.id} className="team-invite-list-item">
             {user.nickname}
             {!user.confirmed && <CircularProgress size={16} />}
-            <button onClick={() => handleRemoveUser(user.id)} disabled={disabled}>
+            <button onClick={() => handleRemoveUser(user.id)} disabled={disabled || !isGroupMaster}>
               추방
             </button>
           </li>
