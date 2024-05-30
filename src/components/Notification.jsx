@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { getNotifications, deleteNotification, connectSSE, disconnectSSE } from "../apis/notification";
 import { acceptGroupInvitation } from "../apis/group";
+import { useNavigate } from "react-router-dom";
 import "./Notification.css";
 
 const Notification = ({ onDelete }) => {
   const [localNotifications, setLocalNotifications] = useState([]);
   const [sse, setSse] = useState(null);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
         const result = await getNotifications();
         console.log("Fetched notifications: ", result);
-        if (result && Array.isArray(result.data)) {
-          setLocalNotifications(result.data);
+        if (result && Array.isArray(result)) {
+          setLocalNotifications(result);
         } else {
           setLocalNotifications([]);
         }
@@ -26,6 +29,7 @@ const Notification = ({ onDelete }) => {
       const newNotification = JSON.parse(event.data);
       console.log("New Notification Received: ", newNotification);
       setLocalNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
+      setShowNotifications(true);
 
       if (Notification.permission === "granted") {
         new Notification(newNotification.content);
@@ -40,6 +44,7 @@ const Notification = ({ onDelete }) => {
 
     const eventSource = connectSSE(handleSSEMessage);
     setSse(eventSource);
+    console.log("SSE connected");
 
     fetchNotifications();
 
@@ -47,6 +52,7 @@ const Notification = ({ onDelete }) => {
       if (eventSource) {
         eventSource.close();
         disconnectSSE(eventSource);
+        console.log("SSE disconnected");
       }
     };
   }, []);
@@ -84,8 +90,12 @@ const Notification = ({ onDelete }) => {
     }
   };
 
+  const handleNavigateToChat = () => {
+    navigate("/ChatHandler");
+  };
+
   return (
-    <div className="notification-popup">
+    <div className="notification-popup" style={{ display: showNotifications ? 'block' : 'none' }}>
       <ul>
         {localNotifications.map((notification) => (
           <li key={notification.id}>
@@ -94,6 +104,11 @@ const Notification = ({ onDelete }) => {
               <>
                 <button onClick={() => handleAccept(notification.id)}>수락</button>
                 <button onClick={() => handleDecline(notification.id)}>거절</button>
+              </>
+            )}
+            {notification.type === "GAMING" && (
+              <>
+                <button onClick={handleNavigateToChat}>바로이동</button>
               </>
             )}
             <button onClick={() => handleDelete(notification.id)}>삭제</button>
