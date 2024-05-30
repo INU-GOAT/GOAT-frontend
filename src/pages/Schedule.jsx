@@ -39,10 +39,6 @@ export default class Schedule extends Component {
         this.setState({ clickedDate: info.dateStr });
     };
 
-    eventClick = (info) => {
-        info.jsEvent.preventDefault();
-    };
-
     getResultText = (result) => {
         switch(result) {
             case -1:
@@ -101,7 +97,6 @@ export default class Schedule extends Component {
                             end: 'prev,next'
                         }}
                         dateClick={this.dateClick}
-                        //eventClick={this.eventClick} // Add this line to disable event click
                         events={this.state.calendarEvents}
                     />
                     
