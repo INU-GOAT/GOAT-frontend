@@ -1,16 +1,16 @@
-.map-container {
+.chat-map-container {
   width: 100%;
   height: 100%;
   display: flex;
 }
 
-.map-wrapper {
+.chat-map-wrapper {
   width: 100%;
   height: 100%;
   flex: 1;
 }
 
-.map {
+.chat-map {
   width: 100%;
   height: 100%;
   margin-top: 0;

@@ -135,6 +135,7 @@ function Chat() {
         { headers: { auth: localStorage.getItem("accessToken") } }
       );
       console.log(result.data);
+      localStorage.removeItem("court");
       navigate("/Main");
     } catch (error) {
       console.error(error);
@@ -238,7 +239,6 @@ function Chat() {
     return () => {
       client.current.deactivate();
       console.log("채팅이 종료되었습니다.");
-      localStorage.removeItem("court");
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

@@ -51,10 +51,10 @@ export default function KaKaoMap(props) {
   };
 
   return (
-    <div className="map-container">
-      <div className="map-wrapper">
+    <div className="chat-map-container">
+      <div className="chat-map-wrapper">
         <Map
-          className="map"
+          className="chat-map"
           id="map"
           ref={mapRef}
           center={
