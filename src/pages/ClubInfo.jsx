@@ -24,6 +24,7 @@ function ClubInfo() {
         headers: { auth: token },
       });
       setClubInfo(response.data.data);
+      console.log("클럽 정보:", response.data.data);
     } catch (error) {
       console.error("Error fetching club info", error);
     }
@@ -36,6 +37,7 @@ function ClubInfo() {
       });
       const userData = response.data.data;
       setIsClubMaster(userData.id === clubInfo.clubMaster);
+      console.log("클럽장 여부:", userData.id === clubInfo.clubMaster);
     } catch (error) {
       console.error("Error checking club master", error);
     }
@@ -44,7 +46,7 @@ function ClubInfo() {
   useEffect(() => {
     const fetchData = async () => {
       await fetchClubInfo();
-      checkIfClubMaster();
+      await checkIfClubMaster();
     };
     fetchData();
   }, [fetchClubInfo, checkIfClubMaster]);
@@ -104,13 +106,17 @@ function ClubInfo() {
 
   const handleLeaveClub = async () => {
     try {
-      await axios.put("http://15.165.113.9:8080/api/users/club", {}, {
+      const response = await axios.put("http://15.165.113.9:8080/api/users/club", {}, {
         headers: { auth: token },
       });
+      console.log("클럽 탈퇴 성공:", response.data);
       // 클럽 탈퇴 후 페이지 이동 등 추가 처리
       navigate("/clubs");
     } catch (error) {
       console.error("Error leaving club", error);
+      if (error.response) {
+        console.error("서버 응답:", error.response.data);
+      }
     }
   };
 
