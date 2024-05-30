@@ -290,7 +290,13 @@ function Chat() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Box sx={{ display: "flex", minHeight: "95dvh", maxHeight: "95dvh" }}>
+      <Box
+        sx={{
+          display: "flex",
+          minHeight: { xs: "84dvh", lg: "93dvh" },
+          maxHeight: { xs: "84dvh", lg: "93dvh" },
+        }}
+      >
         <Box
           sx={{
             flex: 3,
@@ -298,7 +304,10 @@ function Chat() {
             borderRadius: 1,
             margin: 3,
             overflow: "auto",
-            display: "flex",
+            display: (theme) => ({
+              xs: value === "location" ? "flex" : "none",
+              lg: "flex",
+            }),
             flexDirection: "column",
           }}
         >
@@ -360,7 +369,10 @@ function Chat() {
         <Box
           sx={{
             flex: 2,
-            display: "flex",
+            display: (theme) => ({
+              xs: value === "chat" ? "flex" : "none",
+              lg: "flex",
+            }),
             flexDirection: "column",
             alignItems: "flex-start",
             boxShadow: 3,
@@ -420,7 +432,10 @@ function Chat() {
 
         <Box
           sx={{
-            display: "flex",
+            display: (theme) => ({
+              xs: value === "user" ? "flex" : "none",
+              lg: "flex",
+            }),
             flexDirection: "column",
             flex: 1,
           }}
@@ -653,25 +668,27 @@ function Chat() {
           </Box>
         </Box>
       </Box>
-      <BottomNavigation
-        sx={{ width: 500 }}
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-        }}
-      >
-        <BottomNavigationAction label="채팅" value="chat" icon={<MdChat />} />
-        <BottomNavigationAction
-          label="Favorites"
-          value="favorites"
-          icon={<IoMdPeople />}
-        />
-        <BottomNavigationAction
-          label="Nearby"
-          value="nearby"
-          icon={<MdLocationOn />}
-        />
-      </BottomNavigation>
+      <Box sx={{ display: { xs: "flex", lg: "none" } }}>
+        <BottomNavigation
+          sx={{ width: "100%" }}
+          value={value}
+          onChange={(event, newValue) => {
+            setValue(newValue);
+          }}
+        >
+          <BottomNavigationAction label="채팅" value="chat" icon={<MdChat />} />
+          <BottomNavigationAction
+            label="참가자"
+            value="user"
+            icon={<IoMdPeople />}
+          />
+          <BottomNavigationAction
+            label="경기장"
+            value="location"
+            icon={<MdLocationOn />}
+          />
+        </BottomNavigation>
+      </Box>
     </ThemeProvider>
   );
 }
