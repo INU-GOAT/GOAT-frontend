@@ -51,7 +51,6 @@
 }
 
 .club-members h2 {
-
   margin-bottom: 20px; 
   color: #333;
 }
@@ -93,3 +92,19 @@
   color: #555;
 }
 
+button.leave-button {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}
+
+button.leave-button:hover {
+  background-color: #ff1a1a;
+}

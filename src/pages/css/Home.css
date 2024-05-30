@@ -5,11 +5,11 @@
   box-sizing: border-box;
 }
 .bg {
-  height: 100vh;
+  min-height: 100vh;
   background-image: url("./home_background3.png");
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: top center;
+  background-position: center;
 
   background-attachment: fixed;
   display: flex;
@@ -17,7 +17,7 @@
 }
 .bg::after {
   content: "";
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -41,17 +41,11 @@
 .header h1 {
   margin-right: auto;
 }
-#kakao {
-  margin: auto;
-  position: relative;
-  padding: 5px;
-  z-index: 2;
-}
 .body {
   margin: auto;
   position: relative;
   z-index: 2;
-  height: 380px;
+  min-height: 380px;
   font-size: 30px;
   color: #eaebff;
   padding: 20px 10px 0 10px;
@@ -59,4 +53,11 @@
 }
 .body h3 {
   padding: 40px 10px 0 10px;
+}
+#kakao {
+  margin: auto;
+
+  position: relative;
+  padding: 5px;
+  z-index: 2;
 }
