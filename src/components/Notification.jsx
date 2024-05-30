@@ -23,6 +23,7 @@ const Notification = ({ onDelete }) => {
 
     const handleSSEMessage = (event) => {
       const newNotification = JSON.parse(event.data);
+      console.log("New Notification Received: ", newNotification);
       setLocalNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
 
       if (Notification.permission === "granted") {
@@ -88,7 +89,7 @@ const Notification = ({ onDelete }) => {
         {localNotifications.map((notification) => (
           <li key={notification.id}>
             {notification.content}
-            {notification.type === "invite" && (
+            {notification.type === "INVITE" && (
               <>
                 <button onClick={() => handleAccept(notification.id)}>수락</button>
                 <button onClick={() => handleDecline(notification.id)}>거절</button>

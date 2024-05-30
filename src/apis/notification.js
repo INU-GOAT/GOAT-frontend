@@ -43,6 +43,7 @@ export const deleteNotification = async (notificationId) => {
 
 const handleSSEMessage = (onMessage, event) => {
   const newNotification = JSON.parse(event.data);
+  console.log("New Notification Received: ", newNotification);
   onMessage(newNotification);
 
   if (Notification.permission === "granted") {
