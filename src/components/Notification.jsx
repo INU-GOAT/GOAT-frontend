@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getNotifications, deleteNotification, connectSSE, disconnectSSE } from "../apis/notification";
+import { acceptGroupInvitation } from "../apis/group";
 import "./Notification.css";
 
 const Notification = ({ onDelete }) => {
@@ -62,12 +63,37 @@ const Notification = ({ onDelete }) => {
     }
   };
 
+  const handleAccept = async (notificationId) => {
+    try {
+      const result = await acceptGroupInvitation(notificationId, true);
+      if (result) {
+        handleDelete(notificationId);
+      }
+    } catch (error) {
+      console.error("초대 수락 실패:", error.response ? error.response.data : error.message);
+    }
+  };
+
+  const handleDecline = async (notificationId) => {
+    try {
+      handleDelete(notificationId);
+    } catch (error) {
+      console.error("초대 거절 실패:", error.response ? error.response.data : error.message);
+    }
+  };
+
   return (
     <div className="notification-popup">
       <ul>
         {localNotifications.map((notification) => (
           <li key={notification.id}>
             {notification.content}
+            {notification.type === "invite" && (
+              <>
+                <button onClick={() => handleAccept(notification.id)}>수락</button>
+                <button onClick={() => handleDecline(notification.id)}>거절</button>
+              </>
+            )}
             <button onClick={() => handleDelete(notification.id)}>삭제</button>
           </li>
         ))}

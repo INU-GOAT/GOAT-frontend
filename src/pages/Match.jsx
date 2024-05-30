@@ -7,7 +7,7 @@ import Matching from "../components/Matching";
 import TeamMemberActions from "../components/TeamMemberActions";
 import { startMatching, cancelMatching, getMatching } from "../apis/matching";
 import getUser from "../apis/getUser";
-import { getGroupMembers } from "../apis/group";
+import { getGroupMembers, acceptGroupInvitation } from "../apis/group";
 import Notification from "../components/Notification";
 import { getNotifications, deleteNotification, connectSSE, disconnectSSE } from "../apis/notification";
 import "./css/Match.css";
@@ -200,9 +200,27 @@ const Match = ({ latitude, longitude, preferCourt }) => {
     }
   };
 
-  const handleAcceptNotification = (notificationId) => {
-    deleteNotification(notificationId);
-    navigate("/ChatHandler");
+  const handleAcceptNotification = async (notificationId) => {
+    try {
+      const result = await acceptGroupInvitation(notificationId, true);
+      if (result) {
+        const membersData = await getGroupMembers();
+        if (membersData && Array.isArray(membersData.members) && membersData.members.length > 0) {
+          setIsInGroup(true);
+          setGroupMembers(membersData.members);
+          const userData = await getUser();
+          if (membersData.members[0] === userData.nickname) {
+            setIsGroupMaster(true);
+          } else {
+            setIsGroupMaster(false);
+          }
+        }
+      }
+      await deleteNotification(notificationId);
+      navigate("/ChatHandler");
+    } catch (error) {
+      console.error("초대 수락 실패:", error.response ? error.response.data : error.message);
+    }
   };
 
   return (
@@ -261,7 +279,12 @@ const Match = ({ latitude, longitude, preferCourt }) => {
           {notifications.map((notification) => (
             <div key={notification.id} className="notification-item">
               <p>{notification.content}</p>
-              <button onClick={() => handleAcceptNotification(notification.id)}>이동</button>
+              {notification.type === "invite" && (
+                <>
+                  <button onClick={() => handleAcceptNotification(notification.id)}>수락</button>
+                  <button onClick={() => deleteNotification(notification.id)}>거절</button>
+                </>
+              )}
             </div>
           ))}
         </div>
