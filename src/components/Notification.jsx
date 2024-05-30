@@ -4,10 +4,9 @@ import { acceptGroupInvitation } from "../apis/group";
 import { useNavigate } from "react-router-dom";
 import "./Notification.css";
 
-const Notification = ({ onDelete }) => {
+const Notification = ({ onDelete, showNotifications, setShowNotifications }) => {
   const [localNotifications, setLocalNotifications] = useState([]);
   const [sse, setSse] = useState(null);
-  const [showNotifications, setShowNotifications] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -55,7 +54,7 @@ const Notification = ({ onDelete }) => {
         console.log("SSE disconnected");
       }
     };
-  }, []);
+  }, [setShowNotifications]);
 
   const handleDelete = async (id) => {
     try {
