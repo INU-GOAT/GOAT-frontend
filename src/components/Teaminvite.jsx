@@ -1,8 +1,6 @@
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
 import getUser from "../apis/getUser";
-
-import { inviteToGroup, expelGroupMember } from "../apis/group";
+import { inviteToGroup, expelGroupMember, getGroupMembers } from "../apis/group";
 import CircularProgress from '@mui/material/CircularProgress';
 import './Teaminvite.css';
 
@@ -11,6 +9,21 @@ const Teaminvite = ({ disabled }) => {
   const [error, setError] = useState("");
   const [invitedUsers, setInvitedUsers] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isGroupMaster, setIsGroupMaster] = useState(false);
+
+  useEffect(() => {
+    const checkGroupMaster = async () => {
+      const user = await getUser();
+      const group = await getGroupMembers();
+      if (group && group.members[0] === user.nickname) {
+        setIsGroupMaster(true);
+      } else {
+        setIsGroupMaster(false);
+      }
+    };
+
+    checkGroupMaster();
+  }, []);
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -65,12 +78,12 @@ const Teaminvite = ({ disabled }) => {
           onChange={handleInputChange}
           onKeyPress={handleKeyPress}
           placeholder="유저 닉네임 입력"
-          disabled={disabled || loading}
+          disabled={disabled || loading || !isGroupMaster}
           className="team-invite-input"
         />
         <button
           onClick={handleAddUser}
-          disabled={disabled || loading}
+          disabled={disabled || loading || !isGroupMaster}
           className="team-invite-button"
         >
           추가
@@ -83,7 +96,7 @@ const Teaminvite = ({ disabled }) => {
           <li key={user.id} className="team-invite-list-item">
             {user.nickname}
             {!user.confirmed && <CircularProgress size={16} />}
-            <button onClick={() => handleRemoveUser(user.id)} disabled={disabled}>
+            <button onClick={() => handleRemoveUser(user.id)} disabled={disabled || !isGroupMaster}>
               추방
             </button>
           </li>

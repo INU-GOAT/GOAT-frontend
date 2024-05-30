@@ -17,6 +17,10 @@ function Menu() {
     setShowNotifications(!showNotifications);
   };
 
+  const handleNotificationDelete = (id) => {
+    console.log(`Notification ${id} deleted`);
+  };
+
   return (
     <div id="wrap">
       <header>
@@ -48,7 +52,7 @@ function Menu() {
           </ul>
           <div className="notification-container">
             <button className="notification-button" onClick={toggleNotifications}>알림</button>
-            {showNotifications && <Notification />}
+            {showNotifications && <Notification onDelete={handleNotificationDelete} />}
           </div>
         </nav>
       </header>
