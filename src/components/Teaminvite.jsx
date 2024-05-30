@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import getUser from "../apis/getUser";
-import { inviteToGroup, expelGroupMember, acceptGroupInvitation } from "../apis/group";
+import { inviteToGroup, expelGroupMember } from "../apis/group";
 import CircularProgress from '@mui/material/CircularProgress';
 import './Teaminvite.css';
 
@@ -14,14 +14,8 @@ const Teaminvite = ({ disabled }) => {
     setInputValue(e.target.value);
   };
 
-  const resetForm = () => {
-    setInputValue("");
-    setError("");
-    setLoading(false);
-  };
-
   const handleAddUser = async () => {
-    if (!inputValue.trim()) {
+    if (inputValue.trim() === "") {
       setError("유저 닉네임을 입력하세요.");
       return;
     }
@@ -30,19 +24,21 @@ const Teaminvite = ({ disabled }) => {
     const user = await getUser(inputValue.trim());
     if (!user) {
       setError("유저 닉네임이 존재하지 않습니다.");
-      resetForm();
+      setLoading(false);
       return;
     }
 
     const result = await inviteToGroup(inputValue.trim());
     if (!result) {
       setError("그룹 초대 실패.");
-      resetForm();
+      setLoading(false);
       return;
     }
 
-    setInvitedUsers([...invitedUsers, { id: user.id, nickname: inputValue.trim(), confirmed: false, notificationId: result.notificationId }]);
-    resetForm();
+    setInvitedUsers([...invitedUsers, { id: user.id, nickname: inputValue.trim(), confirmed: false }]);
+    setInputValue("");
+    setError("");
+    setLoading(false);
   };
 
   const handleRemoveUser = async (memberId) => {
@@ -52,29 +48,11 @@ const Teaminvite = ({ disabled }) => {
     }
   };
 
-  const handleAcceptInvite = async (notificationId) => {
-    const result = await acceptGroupInvitation(notificationId, true);
-    if (result) {
-      setInvitedUsers(invitedUsers.map((user) => user.notificationId === notificationId ? { ...user, confirmed: true } : user));
-    }
-  };
-
-  const handleRejectInvite = async (notificationId) => {
-    const result = await acceptGroupInvitation(notificationId, false);
-    if (result) {
-      setInvitedUsers(invitedUsers.filter((user) => user.notificationId !== notificationId));
-    }
-  };
-
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       handleAddUser();
     }
   };
-
-  useEffect(() => {
-    setInvitedUsers([]);
-  }, [disabled]);
 
   return (
     <div className="team-invite-container">
@@ -105,12 +83,6 @@ const Teaminvite = ({ disabled }) => {
             {!user.confirmed && <CircularProgress size={16} />}
             <button onClick={() => handleRemoveUser(user.id)} disabled={disabled}>
               추방
-            </button>
-            <button onClick={() => handleAcceptInvite(user.notificationId)} disabled={disabled}>
-              수락
-            </button>
-            <button onClick={() => handleRejectInvite(user.notificationId)} disabled={disabled}>
-              거절
             </button>
           </li>
         ))}
