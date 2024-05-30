@@ -1,4 +1,6 @@
 import {
+  BottomNavigation,
+  BottomNavigationAction,
   Box,
   Button,
   Dialog,
@@ -23,8 +25,13 @@ import {
   createTheme,
 } from "@mui/material";
 import KaKaoMapchat from "../components/KaKaoMap_chat";
-import { IoMdSend } from "react-icons/io";
-import { MdExitToApp, MdWhereToVote } from "react-icons/md";
+import { IoMdPeople, IoMdSend } from "react-icons/io";
+import {
+  MdChat,
+  MdExitToApp,
+  MdLocationOn,
+  MdWhereToVote,
+} from "react-icons/md";
 import { useEffect, useRef, useState } from "react";
 import { Client } from "@stomp/stompjs";
 import ChatAvatar from "./../components/ChatAvatar";
@@ -70,6 +77,8 @@ function Chat() {
     const checkCourt = () => {
       if (state.state.court) {
         setcourt(state.state.court);
+        setIsCourt("true");
+      } else if (localStorage.getItem("court")) {
         setIsCourt("true");
       }
     };
@@ -143,6 +152,8 @@ function Chat() {
   const [notVotedCount, setNotVotedCount] = useState(0);
   const [votedCourts, setVotedCourts] = useState([]);
 
+  const [value, setValue] = useState("chat");
+
   const getChat = async () => {
     try {
       const result = await axios.get(
@@ -185,6 +196,7 @@ function Chat() {
         },
       ]);
       setIsCourt("true");
+      localStorage.setItem("court", "true");
     } catch (error) {
       console.error(error);
       console.error("진행 중인 게임 불러오기 실패");
@@ -226,6 +238,7 @@ function Chat() {
     return () => {
       client.current.deactivate();
       console.log("채팅이 종료되었습니다.");
+      localStorage.removeItem("court");
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -640,6 +653,25 @@ function Chat() {
           </Box>
         </Box>
       </Box>
+      <BottomNavigation
+        sx={{ width: 500 }}
+        value={value}
+        onChange={(event, newValue) => {
+          setValue(newValue);
+        }}
+      >
+        <BottomNavigationAction label="채팅" value="chat" icon={<MdChat />} />
+        <BottomNavigationAction
+          label="Favorites"
+          value="favorites"
+          icon={<IoMdPeople />}
+        />
+        <BottomNavigationAction
+          label="Nearby"
+          value="nearby"
+          icon={<MdLocationOn />}
+        />
+      </BottomNavigation>
     </ThemeProvider>
   );
 }

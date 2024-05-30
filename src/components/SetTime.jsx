@@ -1,4 +1,4 @@
-import { Box, Button, Slider, Typography } from "@mui/material";
+import { Box, Button, Grid, Slider, Stack, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 const createTimeMarks = () => {
   const marks = [];
@@ -59,7 +59,13 @@ const SetTime = (props) => {
   };
 
   return (
-    <div style={{ width: 500, margin: "50px auto", textAlign: "center" }}>
+    <Stack
+      sx={{
+        width: { xs: 400, lg: 500 },
+        margin: "50px auto",
+        textAlign: "center",
+      }}
+    >
       <h3 id="range-slider" style={{ fontSize: "24px", margin: "20px auto" }}>
         시간 설정
       </h3>
@@ -80,7 +86,7 @@ const SetTime = (props) => {
         선택한 시간 : {valueLabelFormat(value[0])} -{" "}
         {valueLabelFormat(value[1])}
       </Typography>
-    </div>
+    </Stack>
   );
 };
 
