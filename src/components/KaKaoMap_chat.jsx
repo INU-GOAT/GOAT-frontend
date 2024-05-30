@@ -24,6 +24,10 @@ export default function KaKaoMap(props) {
 
   useEffect(() => {
     fitMapToMarkers(searchResult);
+    setTimeout(function () {
+      mapRef.current?.relayout();
+      fitMapToMarkers(searchResult);
+    }, 3000);
   }, [searchResult]);
 
   const handleMarkerClick = (place) => {

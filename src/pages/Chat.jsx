@@ -1,4 +1,6 @@
 import {
+  BottomNavigation,
+  BottomNavigationAction,
   Box,
   Button,
   Dialog,
@@ -23,8 +25,13 @@ import {
   createTheme,
 } from "@mui/material";
 import KaKaoMapchat from "../components/KaKaoMap_chat";
-import { IoMdSend } from "react-icons/io";
-import { MdExitToApp, MdWhereToVote } from "react-icons/md";
+import { IoMdPeople, IoMdSend } from "react-icons/io";
+import {
+  MdChat,
+  MdExitToApp,
+  MdLocationOn,
+  MdWhereToVote,
+} from "react-icons/md";
 import { useEffect, useRef, useState } from "react";
 import { Client } from "@stomp/stompjs";
 import ChatAvatar from "./../components/ChatAvatar";
@@ -70,6 +77,8 @@ function Chat() {
     const checkCourt = () => {
       if (state.state.court) {
         setcourt(state.state.court);
+        setIsCourt("true");
+      } else if (localStorage.getItem("court")) {
         setIsCourt("true");
       }
     };
@@ -143,6 +152,8 @@ function Chat() {
   const [notVotedCount, setNotVotedCount] = useState(0);
   const [votedCourts, setVotedCourts] = useState([]);
 
+  const [value, setValue] = useState("chat");
+
   const getChat = async () => {
     try {
       const result = await axios.get(
@@ -185,6 +196,7 @@ function Chat() {
         },
       ]);
       setIsCourt("true");
+      localStorage.setItem("court", "true");
     } catch (error) {
       console.error(error);
       console.error("진행 중인 게임 불러오기 실패");
@@ -226,6 +238,7 @@ function Chat() {
     return () => {
       client.current.deactivate();
       console.log("채팅이 종료되었습니다.");
+      localStorage.removeItem("court");
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -277,7 +290,13 @@ function Chat() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Box sx={{ display: "flex", minHeight: "95dvh", maxHeight: "95dvh" }}>
+      <Box
+        sx={{
+          display: "flex",
+          minHeight: { xs: "84dvh", lg: "93dvh" },
+          maxHeight: { xs: "84dvh", lg: "93dvh" },
+        }}
+      >
         <Box
           sx={{
             flex: 3,
@@ -285,17 +304,28 @@ function Chat() {
             borderRadius: 1,
             margin: 3,
             overflow: "auto",
-            display: "flex",
+            display: (theme) => ({
+              xs: value === "location" ? "flex" : "none",
+              lg: "flex",
+            }),
             flexDirection: "column",
           }}
         >
           <Stack alignItems={"center"}>
             {isCourt ? (
-              <Typography variant="h3" component="h2" sx={{ mt: 3 }}>
+              <Typography
+                variant="h3"
+                component="h2"
+                sx={{ fontSize: { xs: 25, sm: 50 }, mt: 3 }}
+              >
                 {`선택된 경기장은 ${court[0].court} 입니다.`}
               </Typography>
             ) : (
-              <Typography variant="h3" component="h2" sx={{ mt: 3 }}>
+              <Typography
+                variant={"h3"}
+                component="h2"
+                sx={{ fontSize: { xs: 25, sm: 50 }, mt: 3 }}
+              >
                 선수들이 선택한 경기장
               </Typography>
             )}
@@ -347,7 +377,10 @@ function Chat() {
         <Box
           sx={{
             flex: 2,
-            display: "flex",
+            display: (theme) => ({
+              xs: value === "chat" ? "flex" : "none",
+              lg: "flex",
+            }),
             flexDirection: "column",
             alignItems: "flex-start",
             boxShadow: 3,
@@ -407,7 +440,10 @@ function Chat() {
 
         <Box
           sx={{
-            display: "flex",
+            display: (theme) => ({
+              xs: value === "user" ? "flex" : "none",
+              lg: "flex",
+            }),
             flexDirection: "column",
             flex: 1,
           }}
@@ -639,6 +675,27 @@ function Chat() {
             </Dialog>
           </Box>
         </Box>
+      </Box>
+      <Box sx={{ display: { xs: "flex", lg: "none" } }}>
+        <BottomNavigation
+          sx={{ width: "100%" }}
+          value={value}
+          onChange={(event, newValue) => {
+            setValue(newValue);
+          }}
+        >
+          <BottomNavigationAction
+            label="경기장"
+            value="location"
+            icon={<MdLocationOn />}
+          />
+          <BottomNavigationAction label="채팅" value="chat" icon={<MdChat />} />
+          <BottomNavigationAction
+            label="참가자"
+            value="user"
+            icon={<IoMdPeople />}
+          />
+        </BottomNavigation>
       </Box>
     </ThemeProvider>
   );

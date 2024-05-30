@@ -25,7 +25,11 @@ function ChatHandler() {
       });
       console.log(result.data);
       console.log(result.data.data);
-      goChat(result.data);
+      if (result.data.data.clubGame) {
+        goClubChat(result.data);
+      } else {
+        goChat(result.data);
+      }
     } catch (error) {
       console.error(error);
       console.error("진행 중인 게임 불러오기 실패");
@@ -33,7 +37,7 @@ function ChatHandler() {
       navigate("/Main");
     }
   };
-
+  const goClubChat = (props) => {};
   const goChat = (props) => {
     const team1 = {};
     const team2 = {};
