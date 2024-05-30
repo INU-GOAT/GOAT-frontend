@@ -12,8 +12,8 @@ const Notification = ({ onDelete }) => {
       try {
         const result = await getNotifications();
         console.log("Fetched notifications: ", result);
-        if (result && Array.isArray(result)) {
-          setLocalNotifications(result);
+        if (result && Array.isArray(result.data)) {
+          setLocalNotifications(result.data);
         } else {
           setLocalNotifications([]);
         }
@@ -90,7 +90,7 @@ const Notification = ({ onDelete }) => {
         {localNotifications.map((notification) => (
           <li key={notification.id}>
             {notification.content}
-            {notification.type === "INVITE" && (
+            {notification.type === "GROUP_INVITE" && (
               <>
                 <button onClick={() => handleAccept(notification.id)}>수락</button>
                 <button onClick={() => handleDecline(notification.id)}>거절</button>
