@@ -24,6 +24,7 @@ function ClubInfo() {
         headers: { auth: token },
       });
       setClubInfo(response.data.data);
+      console.log("클럽 정보:", response.data.data);
     } catch (error) {
       console.error("Error fetching club info", error);
     }
@@ -36,6 +37,7 @@ function ClubInfo() {
       });
       const userData = response.data.data;
       setIsClubMaster(userData.id === clubInfo.clubMaster);
+      console.log("클럽장 여부:", userData.id === clubInfo.clubMaster);
     } catch (error) {
       console.error("Error checking club master", error);
     }
@@ -44,7 +46,7 @@ function ClubInfo() {
   useEffect(() => {
     const fetchData = async () => {
       await fetchClubInfo();
-      checkIfClubMaster();
+      await checkIfClubMaster();
     };
     fetchData();
   }, [fetchClubInfo, checkIfClubMaster]);
