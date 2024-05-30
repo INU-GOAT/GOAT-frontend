@@ -40,6 +40,7 @@ const Notification = ({ onDelete }) => {
 
     const eventSource = connectSSE(handleSSEMessage);
     setSse(eventSource);
+    console.log("SSE connected");
 
     fetchNotifications();
 
@@ -47,6 +48,7 @@ const Notification = ({ onDelete }) => {
       if (eventSource) {
         eventSource.close();
         disconnectSSE(eventSource);
+        console.log("SSE disconnected");
       }
     };
   }, []);
@@ -83,6 +85,10 @@ const Notification = ({ onDelete }) => {
       console.error("초대 거절 실패:", error.response ? error.response.data : error.message);
     }
   };
+
+  if (localNotifications.length === 0) {
+    return null;
+  }
 
   return (
     <div className="notification-popup">
