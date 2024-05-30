@@ -20,18 +20,20 @@ function ClubInfo() {
 
   const fetchClubInfo = useCallback(async () => {
     try {
+      // Fetch club information
       const response = await axios.get(`http://15.165.113.9:8080/api/clubs/${clubId}`, {
         headers: { auth: token },
       });
       const clubData = response.data.data;
       setClubInfo(clubData);
 
-      // 클럽장 여부를 바로 확인하여 상태 업데이트
+      // Fetch user information to determine if the user is the club master
       const userResponse = await axios.get("http://15.165.113.9:8080/api/users", {
         headers: { auth: token },
       });
       const userData = userResponse.data.data;
       setIsClubMaster(userData.id === clubData.clubMaster);
+
       console.log("클럽 정보:", clubData);
       console.log("클럽장 여부:", userData.id === clubData.clubMaster);
     } catch (error) {
