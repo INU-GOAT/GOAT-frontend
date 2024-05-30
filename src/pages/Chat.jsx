@@ -313,11 +313,19 @@ function Chat() {
         >
           <Stack alignItems={"center"}>
             {isCourt ? (
-              <Typography variant="h3" component="h2" sx={{ mt: 3 }}>
+              <Typography
+                variant="h3"
+                component="h2"
+                sx={{ fontSize: { xs: 25, sm: 50 }, mt: 3 }}
+              >
                 {`선택된 경기장은 ${court[0].court} 입니다.`}
               </Typography>
             ) : (
-              <Typography variant="h3" component="h2" sx={{ mt: 3 }}>
+              <Typography
+                variant={"h3"}
+                component="h2"
+                sx={{ fontSize: { xs: 25, sm: 50 }, mt: 3 }}
+              >
                 선수들이 선택한 경기장
               </Typography>
             )}
@@ -676,16 +684,16 @@ function Chat() {
             setValue(newValue);
           }}
         >
+          <BottomNavigationAction
+            label="경기장"
+            value="location"
+            icon={<MdLocationOn />}
+          />
           <BottomNavigationAction label="채팅" value="chat" icon={<MdChat />} />
           <BottomNavigationAction
             label="참가자"
             value="user"
             icon={<IoMdPeople />}
-          />
-          <BottomNavigationAction
-            label="경기장"
-            value="location"
-            icon={<MdLocationOn />}
           />
         </BottomNavigation>
       </Box>

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import axios from 'axios';
+import axios from "axios";
 import LogOut from "../components/LogOut";
 import Notification from "../components/Notification";
-import "./css/Menu.css";
 
 function Menu() {
   const navigate = useNavigate();
@@ -73,15 +72,24 @@ function Menu() {
               <button onClick={handleNavigation("/MyPage")}>마이페이지</button>
             </li>
             <li>
-              <button onClick={handleNavigation("/ChatHandler")}>채팅방</button>
+              <button onClick={handleNavigation("./ChatHandler")}>
+                채팅방
+              </button>
             </li>
             <li>
               <LogOut />
             </li>
           </ul>
           <div className="notification-container">
-            <button className="notification-button" onClick={toggleNotifications}>알림</button>
-            {showNotifications && <Notification onDelete={handleNotificationDelete} />}
+            <button
+              className="notification-button"
+              onClick={toggleNotifications}
+            >
+              알림
+            </button>
+            {showNotifications && (
+              <Notification onDelete={handleNotificationDelete} />
+            )}
           </div>
         </nav>
       </header>

@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
+import axios from "axios";
 import "./css/Club.css";
-import Sport from '../components/Sport';
+import Sport from "../components/Sport";
 
 function Club() {
-  const [clubname, setClubname] = useState('');
-  const [intro, setIntro] = useState('');
-  const [selectedSport, setSelectedSport] = useState('');
-  const [preferSport, setPreferSport] = useState('');
+  const [clubname, setClubname] = useState("");
+  const [intro, setIntro] = useState("");
+  const [selectedSport, setSelectedSport] = useState("");
+  const [preferSport, setPreferSport] = useState("");
   const [matchingInProgress, setMatchingInProgress] = useState(false);
 
   const [clubs, setClubs] = useState([]);
@@ -34,20 +34,24 @@ function Club() {
     e.preventDefault();
 
     const sportMapping = {
-      soccer: '축구',
-      basketBall: '농구',
-      badminton: '배드민턴',
-      tableTennis: '탁구'
+      soccer: "축구",
+      basketBall: "농구",
+      badminton: "배드민턴",
+      tableTennis: "탁구",
     };
 
     try {
-      const response = await axios.post("http://15.165.113.9:8080/api/clubs", {
-        name: clubname,
-        sport: sportMapping[selectedSport] || selectedSport,
-        clubMaster: localStorage.getItem("userId")
-      }, {
-        headers: { auth: localStorage.getItem("accessToken") },
-      });
+      const response = await axios.post(
+        "http://15.165.113.9:8080/api/clubs",
+        {
+          name: clubname,
+          sport: sportMapping[selectedSport] || selectedSport,
+          clubMaster: localStorage.getItem("userId"),
+        },
+        {
+          headers: { auth: localStorage.getItem("accessToken") },
+        }
+      );
       const newClub = response.data.data;
       setClubs([...clubs, newClub]);
       navigate("/ClubInfo", { state: { clubId: newClub.id } });
@@ -60,7 +64,7 @@ function Club() {
   };
 
   const handleClubClick = (clubId) => {
-    const club = clubs.find(c => c.id === clubId);
+    const club = clubs.find((c) => c.id === clubId);
     if (club) {
       setSelectedClub(club);
     }
@@ -68,9 +72,13 @@ function Club() {
 
   const handleJoinRequest = async () => {
     try {
-      await axios.post(`http://15.165.113.9:8080/api/clubs/applicant/${selectedClub.id}`, {}, {
-        headers: { auth: localStorage.getItem("accessToken") },
-      });
+      await axios.post(
+        `http://15.165.113.9:8080/api/clubs/applicant/${selectedClub.id}`,
+        {},
+        {
+          headers: { auth: localStorage.getItem("accessToken") },
+        }
+      );
       alert(`가입 신청이 ${selectedClub.name}에 제출되었습니다.`);
     } catch (error) {
       console.error("Error joining club", error);
@@ -101,10 +109,7 @@ function Club() {
             setPreferSport={setPreferSport}
             disabled={matchingInProgress}
           />
-          <input 
-            type="submit"
-            className="submit"
-          />
+          <input type="submit" className="submit" />
         </form>
       </div>
       <div className="clublist">
@@ -117,12 +122,25 @@ function Club() {
               {selectedClub && selectedClub.id === club.id && (
                 <div className="clubDetails">
                   <div className="clubDetailsContent">
-                    <p><strong>클럽명:</strong> {selectedClub.name}</p>
-                    <p><strong>소개문:</strong> {selectedClub.intro}</p>
-                    <p><strong>메이저 스포츠:</strong> {selectedClub.majorSport}</p>
-                    <p><strong>클럽 인원:</strong> {selectedClub.members ? selectedClub.members.join(', ') : '없음'}</p>
+                    <p>
+                      <strong>클럽명:</strong> {selectedClub.name}
+                    </p>
+                    <p>
+                      <strong>소개문:</strong> {selectedClub.intro}
+                    </p>
+                    <p>
+                      <strong>메이저 스포츠:</strong> {selectedClub.majorSport}
+                    </p>
+                    <p>
+                      <strong>클럽 인원:</strong>{" "}
+                      {selectedClub.members
+                        ? selectedClub.members.join(", ")
+                        : "없음"}
+                    </p>
                   </div>
-                  <button className="joinButton" onClick={handleJoinRequest}>가입 신청</button>
+                  <button className="joinButton" onClick={handleJoinRequest}>
+                    가입 신청
+                  </button>
                 </div>
               )}
             </div>
