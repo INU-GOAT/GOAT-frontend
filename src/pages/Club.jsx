@@ -26,7 +26,7 @@ function Club() {
       });
       setClubs(response.data.data || []);
     } catch (error) {
-      console.error("Error fetching clubs", error);
+      console.error("Error", error);
     }
   };
 
