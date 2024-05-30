@@ -15,7 +15,7 @@ function ClubInfo() {
   const [longitude, setLongitude] = useState(null);
   const [preferCourt, setPreferCourt] = useState('');
 
-  const clubId = location.state?.clubId || location.state?.id; 
+  const clubId = location.state?.clubId || location.state?.id;
   const token = localStorage.getItem("accessToken");
 
   const fetchClubInfo = useCallback(async () => {
