@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from 'axios';
 import "./css/Club.css";
-import Sport from "../components/Sport";
+import Sport from '../components/Sport';
 
 function Club() {
-  const [clubname, setClubname] = useState("");
-  const [intro, setIntro] = useState("");
-  const [selectedSport, setSelectedSport] = useState("");
-  const [preferSport, setPreferSport] = useState("");
+  const [clubname, setClubname] = useState('');
+  const [intro, setIntro] = useState('');
+  const [selectedSport, setSelectedSport] = useState('');
+  const [preferSport, setPreferSport] = useState('');
   const [matchingInProgress, setMatchingInProgress] = useState(false);
 
   const [clubs, setClubs] = useState([]);
@@ -34,10 +34,10 @@ function Club() {
     e.preventDefault();
 
     const sportMapping = {
-      soccer: "축구",
-      basketBall: "농구",
-      badminton: "배드민턴",
-      tableTennis: "탁구",
+      soccer: '축구',
+      basketBall: '농구',
+      badminton: '배드민턴',
+      tableTennis: '탁구'
     };
 
     try {
@@ -100,7 +100,10 @@ function Club() {
             setPreferSport={setPreferSport}
             disabled={matchingInProgress}
           />
-          <input type="submit" className="submit" />
+          <input 
+            type="submit"
+            className="submit"
+          />
         </form>
       </div>
       <div className="clublist">
@@ -118,9 +121,7 @@ function Club() {
                     <p><strong>메이저 스포츠:</strong> {club.majorSport}</p>
                     <p><strong>클럽 인원:</strong> {club.members ? club.members.join(', ') : '없음'}</p>
                   </div>
-                  <button className="joinButton" onClick={handleJoinRequest}>
-                    가입 신청
-                  </button>
+                  <button className="joinButton" onClick={handleJoinRequest}>가입 신청</button>
                 </div>
               )}
             </div>
