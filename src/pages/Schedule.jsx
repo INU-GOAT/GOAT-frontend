@@ -101,7 +101,7 @@ export default class Schedule extends Component {
                             end: 'prev,next'
                         }}
                         dateClick={this.dateClick}
-                        eventClick={this.eventClick} // Add this line to disable event click
+                        //eventClick={this.eventClick} // Add this line to disable event click
                         events={this.state.calendarEvents}
                     />
                     
