@@ -29,8 +29,8 @@ const handleErrors = (error, defaultMessage) => {
         console.error('[BAD_REQUEST] 유효성 검사 예외 발생');
         return { error: '[BAD_REQUEST] 유효성 검사 예외 발생' };
       case 409:
-        console.error('[USER_INVITED_GROUP] 그룹에 초대할 수 없습니다. 해당 유저가 그룹 초대를 받는 중입니다.');
-        return { error: '[USER_INVITED_GROUP] 그룹에 초대할 수 없습니다. 해당 유저가 그룹 초대를 받는 중입니다.' };
+        console.error('[USER_BELONG_GROUP] 그룹에 초대할 수 없습니다. 해당 유저가 이미 그룹에 속해 있습니다.');
+        return { error: '[USER_BELONG_GROUP] 그룹에 초대할 수 없습니다. 해당 유저가 이미 그룹에 속해 있습니다.' };
       case 500:
         console.error('[INTERNAL_SERVER_ERROR] 서버 내부 오류가 발생했습니다.');
         return { error: '[INTERNAL_SERVER_ERROR] 서버 내부 오류가 발생했습니다.' };

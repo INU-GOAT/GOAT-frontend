@@ -1,25 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import getUser from "../apis/getUser";
 import { getGroupMembers, leaveGroup, expelGroupMember } from '../apis/group';
 import './TeamMemberActions.css';
 
 const TeamMemberActions = ({ disabled }) => {
   const [groupMembers, setGroupMembers] = useState([]);
   const [error, setError] = useState('');
-  const [isGroupMaster, setIsGroupMaster] = useState(false);
 
   useEffect(() => {
     const fetchGroupMembers = async () => {
       try {
         const members = await getGroupMembers();
-        const user = await getUser();
         if (members && Array.isArray(members.members)) {
           setGroupMembers(members.members);
-          if (members.members[0] === user.nickname) {
-            setIsGroupMaster(true);
-          } else {
-            setIsGroupMaster(false);
-          }
         } else {
           setGroupMembers([]);
         }
@@ -34,7 +26,7 @@ const TeamMemberActions = ({ disabled }) => {
   const handleLeaveGroup = async () => {
     try {
       const result = await leaveGroup();
-      if (result) {
+      if (!result.error) {
         setGroupMembers([]);
       }
     } catch (err) {
@@ -44,7 +36,7 @@ const TeamMemberActions = ({ disabled }) => {
 
   const handleRemoveUser = async (memberId) => {
     const result = await expelGroupMember(memberId);
-    if (result) {
+    if (!result.error) {
       setGroupMembers(groupMembers.filter((member) => member.id !== memberId));
     }
   };
@@ -57,11 +49,9 @@ const TeamMemberActions = ({ disabled }) => {
         {groupMembers.map((member) => (
           <li key={member.id} className="group-member-list-item">
             {member.nickname}
-            {isGroupMaster && (
-              <button onClick={() => handleRemoveUser(member.id)} disabled={disabled}>
-                추방
-              </button>
-            )}
+            <button onClick={() => handleRemoveUser(member.id)} disabled={disabled}>
+              추방
+            </button>
           </li>
         ))}
       </ul>

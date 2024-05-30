@@ -61,7 +61,7 @@ const SetTime = (props) => {
   return (
     <Stack
       sx={{
-        width: { xs: 400, lg: 500 },
+        width: { xs: 300, sm: 400, lg: 500 },
         margin: "50px auto",
         textAlign: "center",
       }}
