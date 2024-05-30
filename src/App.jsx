@@ -13,6 +13,7 @@ import MyPage from "./pages/MyPage";
 import isLoginStore from "./utils/store";
 import { useEffect } from "react";
 import UserResponse from "./apis/UserResponse";
+import ChatHandler from "./pages/ChatHandler";
 
 function App() {
   const { isLogin, setIsLogin } = isLoginStore();
@@ -31,6 +32,7 @@ function App() {
               <Route path="/Club" element={<Club />} />
               <Route path="/ClubInfo" element={<ClubInfo />} />
             </Route>
+            <Route path="/ChatHandler" element={<ChatHandler />} />
             <Route path="*" element={<Navigate to="/Main" />} />
           </>
         ) : (
