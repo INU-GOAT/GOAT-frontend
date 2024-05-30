@@ -27,9 +27,17 @@ const Notification = () => {
       setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
     };
 
-    return () => {
+    eventSource.onerror = (error) => {
+      console.error('SSE 연결 오류:', error);
       eventSource.close();
-      disconnectNotificationSSE();
+      setSse(null);
+    };
+
+    return () => {
+      if (eventSource) {
+        eventSource.close();
+        disconnectNotificationSSE();
+      }
     };
   }, []);
 
