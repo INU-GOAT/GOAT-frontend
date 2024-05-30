@@ -12,7 +12,7 @@ function Club() {
   const [matchingInProgress, setMatchingInProgress] = useState(false);
 
   const [clubs, setClubs] = useState([]);
-  const [selectedClubId, setSelectedClubId] = useState(null);
+  const [selectedClubId, setSelectedClubId] = useState(null); // selectedClub 대신 selectedClubId 사용
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,7 +43,7 @@ function Club() {
     try {
       const response = await axios.post("http://15.165.113.9:8080/api/clubs", {
         name: clubname,
-        intro: intro,
+        intro: intro,  // 소개문 필드를 포함시킵니다.
         sport: sportMapping[selectedSport] || selectedSport,
         clubMaster: localStorage.getItem("userId")
       }, {
@@ -61,7 +61,7 @@ function Club() {
   };
 
   const handleClubClick = (clubId) => {
-    navigate("/ClubInfo", { state: { clubId } }); // 클럽 클릭 시 ClubInfo로 이동하며 클럽 ID 전달
+    setSelectedClubId(clubId); // selectedClub 대신 selectedClubId 설정
   };
 
   const handleJoinRequest = async () => {
