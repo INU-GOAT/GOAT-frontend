@@ -26,14 +26,13 @@ function Club() {
       });
       setClubs(response.data.data || []);
     } catch (error) {
-      console.error("Error", error);
+      console.error("Error fetching clubs", error);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 선택된 종목을 한글로 변환하는 함수
     const sportMapping = {
       soccer: '축구',
       basketBall: '농구',
@@ -44,13 +43,14 @@ function Club() {
     try {
       const response = await axios.post("http://15.165.113.9:8080/api/clubs", {
         name: clubname,
-        sport: sportMapping[selectedSport] || selectedSport,  // 한글로 변환된 값을 사용
+        sport: sportMapping[selectedSport] || selectedSport,
+        clubMaster: localStorage.getItem("userId")
       }, {
         headers: { auth: localStorage.getItem("accessToken") },
       });
       const newClub = response.data.data;
       setClubs([...clubs, newClub]);
-      navigate("/ClubInfo", { state: newClub });
+      navigate("/ClubInfo", { state: { clubId: newClub.id } });
     } catch (error) {
       console.error("Error creating club", error);
       if (error.response) {
@@ -114,18 +114,18 @@ function Club() {
             <div className="clubItem" onClick={() => handleClubClick(club.id)}>
               <h3>{club.name}</h3>
               <p>{club.intro}</p>
-            </div>
-            {selectedClub && selectedClub.id === club.id && (
-              <div className="clubDetails">
-                <div className="clubDetailsContent">
-                  <p><strong>클럽명:</strong> {selectedClub.name}</p>
-                  <p><strong>소개문:</strong> {selectedClub.intro}</p>
-                  <p><strong>메이저 스포츠:</strong> {selectedClub.majorSport}</p>
-                  <p><strong>클럽 인원:</strong> {selectedClub.members.join(', ')}</p>
+              {selectedClub && selectedClub.id === club.id && (
+                <div className="clubDetails">
+                  <div className="clubDetailsContent">
+                    <p><strong>클럽명:</strong> {selectedClub.name}</p>
+                    <p><strong>소개문:</strong> {selectedClub.intro}</p>
+                    <p><strong>메이저 스포츠:</strong> {selectedClub.majorSport}</p>
+                    <p><strong>클럽 인원:</strong> {selectedClub.members ? selectedClub.members.join(', ') : '없음'}</p>
+                  </div>
+                  <button className="joinButton" onClick={handleJoinRequest}>가입 신청</button>
                 </div>
-                <button className="joinButton" onClick={handleJoinRequest}>가입 신청</button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         ))}
       </div>
