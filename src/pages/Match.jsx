@@ -6,14 +6,12 @@ import Sport from "../components/Sport";
 import Matching from "../components/Matching";
 import TeamMemberActions from "../components/TeamMemberActions";
 import { startMatching, cancelMatching, getMatching } from "../apis/matching";
+import getUser from "../apis/getUser";
 import { getGroupMembers } from "../apis/group";
 import Notification from "../components/Notification";
 import { getNotifications, deleteNotification, connectSSE, disconnectSSE } from "../apis/notification";
 import "./css/Match.css";
 import SetTime from "./../components/SetTime";
-import { CircularProgress, Stack } from "@mui/material";
-import axios from "axios";
-import setUser from "../utils/setUser";
 
 const Match = ({ latitude, longitude, preferCourt }) => {
   const [matchType, setMatchType] = useState("");
@@ -30,25 +28,11 @@ const Match = ({ latitude, longitude, preferCourt }) => {
 
   const navigate = useNavigate();
 
-  const getUserData = async () => {
-    try {
-      const userData = await axios.get('http://your-api-endpoint/user', {
-        headers: { auth: localStorage.getItem("accessToken") }
-      });
-      setUser(userData);
-      return userData;
-    } catch (error) {
-      console.error("유저 정보를 불러오는 데 실패했습니다:", error);
-      throw error;
-    }
-  };
-
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userData = await getUserData();
+        const userData = await getUser();
         console.log("User data fetched:", userData);
-
         if (userData && userData.status === "GAMING") {
           setGaming(true);
           setNotifications([{ id: 0, content: "매칭이 잡혔습니다." }]);
@@ -127,7 +111,7 @@ const Match = ({ latitude, longitude, preferCourt }) => {
     if (type === "팀") {
       try {
         const membersData = await getGroupMembers();
-        const userData = await getUserData();
+        const userData = await getUser();
 
         if (membersData.error) {
           console.error(membersData.error);
@@ -178,7 +162,7 @@ const Match = ({ latitude, longitude, preferCourt }) => {
       }
       members = membersData.members;
     } else if (matchType === "솔로") {
-      const userData = await getUserData();
+      const userData = await getUser();
       if (userData) {
         members = [{ id: userData.id }];
       } else {
@@ -215,7 +199,7 @@ const Match = ({ latitude, longitude, preferCourt }) => {
       const response = await cancelMatching();
       if (response) {
         setMatchingInProgress(false);
-        const userData = await getUserData();
+        const userData = await getUser();
         if (userData && userData.status === "WAITING") {
           const matchingData = await getMatching();
           if (matchingData) {
