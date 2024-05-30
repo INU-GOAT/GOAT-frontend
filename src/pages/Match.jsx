@@ -113,7 +113,8 @@ const Match = ({ latitude, longitude, preferCourt }) => {
         const membersData = await getGroupMembers();
         const userData = await getUser();
 
-        if (!membersData || !Array.isArray(membersData.members) || membersData.members.length === 0) {
+        if (membersData.error) {
+          console.error(membersData.error);
           setIsInGroup(false);
           setGroupMembers([]);
           setIsGroupMaster(false);
@@ -154,11 +155,12 @@ const Match = ({ latitude, longitude, preferCourt }) => {
     let members = [];
 
     if (matchType === "팀") {
-      members = await getGroupMembers();
-      if (!members || members.length === 0) {
+      const membersData = await getGroupMembers();
+      if (membersData.error || !membersData.members) {
         alert("그룹원 조회 실패");
         return;
       }
+      members = membersData.members;
     } else if (matchType === "솔로") {
       const userData = await getUser();
       if (userData) {
