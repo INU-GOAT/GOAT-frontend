@@ -15,19 +15,21 @@ function ClubInfo() {
   const [longitude, setLongitude] = useState(null);
   const [preferCourt, setPreferCourt] = useState('');
 
-  const clubId = location.state?.clubId;
+  const clubId = location.state?.clubId || location.state?.id; 
   const token = localStorage.getItem("accessToken");
 
   const fetchClubInfo = useCallback(async () => {
+    if (!clubId) {
+      console.error("클럽 ID가 유효하지 않습니다.");
+      return;
+    }
     try {
-      // Fetch club information
       const response = await axios.get(`http://15.165.113.9:8080/api/clubs/${clubId}`, {
         headers: { auth: token },
       });
       const clubData = response.data.data;
       setClubInfo(clubData);
 
-      // Fetch user information to determine if the user is the club master
       const userResponse = await axios.get("http://15.165.113.9:8080/api/users", {
         headers: { auth: token },
       });
@@ -37,7 +39,7 @@ function ClubInfo() {
       console.log("클럽 정보:", clubData);
       console.log("클럽장 여부:", userData.id === clubData.clubMaster);
     } catch (error) {
-      console.error("Error fetching club info", error);
+      console.error("Error fetching clubinfo", error);
     }
   }, [clubId, token]);
 
@@ -45,8 +47,19 @@ function ClubInfo() {
     fetchClubInfo();
   }, [fetchClubInfo]);
 
-  const handleUpdateClubInfo = async () => {
-    // 클럽 정보 수정 로직 구현
+  const handleUpdateClubName = async () => {
+    try {
+      const response = await axios.put(`http://15.165.113.9:8080/api/clubs/${clubId}`, {
+        name: clubInfo.name,
+      }, {
+        headers: { auth: token },
+      });
+      alert('클럽명이 성공적으로 업데이트되었습니다.');
+      setClubInfo(response.data.data);
+    } catch (error) {
+      console.error("Error updating clubname", error);
+      alert('클럽명 업데이트 중 오류가 발생했습니다.');
+    }
   };
 
   const handleDeleteClub = async () => {
@@ -54,7 +67,6 @@ function ClubInfo() {
       await axios.delete(`http://15.165.113.9:8080/api/clubs/${clubId}`, {
         headers: { auth: token },
       });
-      // 클럽 삭제 후 페이지 이동 등 추가 처리
       navigate("/clubs");
     } catch (error) {
       console.error("Error deleting club", error);
@@ -67,7 +79,6 @@ function ClubInfo() {
         headers: { auth: token },
         params: { memberId }
       });
-      // 클럽 구성원 추방 후 상태 업데이트 등 추가 처리
       fetchClubInfo();
     } catch (error) {
       console.error("Error kicking member", error);
@@ -91,7 +102,6 @@ function ClubInfo() {
         headers: { auth: token },
         params: { applicantId, accept }
       });
-      // 가입 신청 처리 후 상태 업데이트 등 추가 처리
       fetchJoinRequests();
     } catch (error) {
       console.error("Error handling join request", error);
@@ -104,7 +114,6 @@ function ClubInfo() {
         headers: { auth: token },
       });
       console.log("클럽 탈퇴 성공:", response.data);
-      // 클럽 탈퇴 후 페이지 이동 등 추가 처리
       navigate("/clubs");
     } catch (error) {
       console.error("Error leaving club", error);
@@ -118,9 +127,13 @@ function ClubInfo() {
     <div className="main">
       <div className="club-info">
         <h2>클럽 정보</h2>
-        <p>클럽명: {clubInfo.name}</p>
-        <p>소개문: {clubInfo.intro}</p>
-        <p>주요 스포츠: {clubInfo.sport}</p>
+        <p>클럽명: {isClubMaster ? (
+          <input value={clubInfo.name || ''} onChange={(e) => setClubInfo({ ...clubInfo, name: e.target.value })} />
+        ) : (
+          <span>{clubInfo.name}</span>
+        )}</p>
+        <p>소개문: <span>{clubInfo.intro}</span></p>
+        <p>주요 스포츠: <span>{clubInfo.sport}</span></p>
         <p>클럽장: {clubInfo.clubMaster}</p>
         <p>승/무/패: {clubInfo.win}/{clubInfo.draw}/{clubInfo.lose}</p>
         <div className="club-members">
@@ -142,7 +155,7 @@ function ClubInfo() {
         </div>
         {isClubMaster ? (
           <>
-            <button onClick={handleUpdateClubInfo}>클럽 정보 변경</button>
+            <button onClick={handleUpdateClubName}>클럽명 변경</button>
             <button onClick={handleDeleteClub}>클럽 삭제</button>
             <div className="join-requests">
               <h2>클럽 가입 신청 목록</h2>
@@ -162,7 +175,7 @@ function ClubInfo() {
             </div>
           </>
         ) : (
-          <button onClick={handleLeaveClub}>클럽 탈퇴</button>
+          <button className="leave-button" onClick={handleLeaveClub}>클럽 탈퇴</button>
         )}
       </div>
       <div className="main-container">
