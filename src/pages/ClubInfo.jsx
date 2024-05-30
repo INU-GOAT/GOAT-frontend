@@ -104,13 +104,17 @@ function ClubInfo() {
 
   const handleLeaveClub = async () => {
     try {
-      await axios.put("http://15.165.113.9:8080/api/users/club", {}, {
+      const response = await axios.put("http://15.165.113.9:8080/api/users/club", {}, {
         headers: { auth: token },
       });
+      console.log("클럽 탈퇴 성공:", response.data);
       // 클럽 탈퇴 후 페이지 이동 등 추가 처리
       navigate("/clubs");
     } catch (error) {
       console.error("Error leaving club", error);
+      if (error.response) {
+        console.error("서버 응답:", error.response.data);
+      }
     }
   };
 
