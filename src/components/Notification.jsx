@@ -11,6 +11,7 @@ const Notification = ({ onDelete }) => {
     const fetchNotifications = async () => {
       try {
         const result = await getNotifications();
+        console.log("Fetched notifications: ", result);
         if (result && Array.isArray(result)) {
           setLocalNotifications(result);
         } else {
