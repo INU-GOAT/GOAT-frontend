@@ -16,23 +16,23 @@
   padding: 0 20px;
 }
 
-.nav-items {
+.nav-items-center {
   list-style: none;
   display: flex;
   align-items: center;
   margin: 0 auto;
 }
 
-.nav-items > li {
+.nav-items-center > li {
   margin-left: 20px;
   cursor: pointer;
 }
 
-.nav-items > li:first-child {
+.nav-items-center > li:first-child {
   margin-left: 0;
 }
 
-.nav-items > li > button {
+.nav-items-center > li > button {
   line-height: 60px;
   padding: 0 15px;
   color: rgba(0, 0, 0, 0.4);
@@ -44,14 +44,13 @@
   outline: none;
 }
 
-.nav-items > li > button:hover,
-.nav-items > li > button:focus {
+.nav-items-center > li > button:hover,
+.nav-items-center > li > button:focus {
   color: rgba(0, 0, 0, 0.8);
   outline: none;
 }
 
 .notification-container {
-  position: relative;
   display: flex;
   align-items: center;
 }
@@ -77,7 +76,7 @@
 .notification-popup {
   position: absolute;
   top: 60px;
-  right: 0;
+  right: 20px;
   width: 300px;
   background-color: white;
   border: 1px solid #ccc;
@@ -108,9 +107,8 @@
   text-decoration: underline;
 }
 
-/* 반응형 디자인 추가 */
 @media (max-width: 768px) {
-  .nav-items {
+  .nav-items-center {
     display: none;
     flex-direction: column;
     width: 100%;
@@ -123,16 +121,16 @@
     z-index: 1000;
   }
 
-  .nav-items.show {
+  .nav-items-center.show {
     display: flex;
   }
 
-  .nav-items > li {
+  .nav-items-center > li {
     margin: 0;
     width: 100%;
   }
 
-  .nav-items > li > button {
+  .nav-items-center > li > button {
     width: 100%;
     text-align: left;
     padding: 10px 20px;
@@ -151,6 +149,18 @@
   .menu-button:hover,
   .menu-button:focus {
     color: rgba(0, 0, 0, 0.8);
+  }
+
+  .notification-container {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+  }
+
+  .notification-button {
+    line-height: normal;
+    padding: 10px;
+    font-size: 16px;
   }
 }
 
