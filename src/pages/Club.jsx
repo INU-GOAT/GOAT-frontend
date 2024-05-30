@@ -44,6 +44,9 @@ function Club() {
       navigate("/ClubInfo", { state: newClub });
     } catch (error) {
       console.error("Error creating club", error);
+      if (error.response) {
+        console.error("Server response:", error.response.data);
+      }
     }
   };
 
