@@ -36,13 +36,6 @@ const Teaminvite = ({ disabled }) => {
     }
 
     setLoading(true);
-    const user = await getUser(inputValue.trim());
-    if (!user) {
-      setError("유저 닉네임이 존재하지 않습니다.");
-      setLoading(false);
-      return;
-    }
-
     const result = await inviteToGroup(inputValue.trim());
     if (!result) {
       setError("그룹 초대 실패.");
@@ -50,7 +43,7 @@ const Teaminvite = ({ disabled }) => {
       return;
     }
 
-    setInvitedUsers([...invitedUsers, { id: user.id, nickname: inputValue.trim(), confirmed: false }]);
+    setInvitedUsers([...invitedUsers, { id: result.id, nickname: inputValue.trim(), confirmed: false }]);
     setInputValue("");
     setError("");
     setLoading(false);
