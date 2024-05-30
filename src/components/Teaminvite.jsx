@@ -27,7 +27,7 @@ const Teaminvite = ({ disabled, isGroupMaster }) => {
       return;
     }
 
-    setInvitedUsers([...invitedUsers, { id: result.id, nickname: inputValue.trim(), confirmed: false }]);
+    setInvitedUsers([...invitedUsers, { id: result.notificationId, nickname: inputValue.trim(), confirmed: false }]);
     setInputValue("");
     setError("");
     setLoading(false);
@@ -70,7 +70,7 @@ const Teaminvite = ({ disabled, isGroupMaster }) => {
       {error && <div className="team-invite-error">{error}</div>}
       <ul className="team-invite-list">
         {invitedUsers.map((user) => (
-          <li key={user.nickname} className="team-invite-list-item">
+          <li key={user.id} className="team-invite-list-item">
             {user.nickname}
             {!user.confirmed && <CircularProgress size={16} />}
             <button onClick={() => handleRemoveUser(user.id)} disabled={disabled}>
