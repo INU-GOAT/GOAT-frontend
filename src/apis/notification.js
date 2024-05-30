@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { EventSourcePolyfill } from 'eventsourcepolyfill';
 
 const notificationAxios = axios.create({
   baseURL: "http://15.165.113.9:8080/api/notification",
@@ -56,7 +57,11 @@ const handleSSEMessage = (onMessage, event) => {
 };
 
 export const connectSSE = (onMessage) => {
-  const eventSource = new EventSource("http://15.165.113.9:8080/api/notification/connect");
+  const eventSource = new EventSourcePolyfill("http://15.165.113.9:8080/api/notification/connect", {
+    headers: {
+      Auth: `${localStorage.getItem("accessToken")}`
+    }
+  });
   eventSource.onmessage = (event) => handleSSEMessage(onMessage, event);
   eventSource.onerror = (error) => {
     console.error('SSE 에러 발생:', error);

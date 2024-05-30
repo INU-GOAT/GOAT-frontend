@@ -89,8 +89,7 @@ const Match = ({ latitude, longitude, preferCourt }) => {
       }
     };
 
-    const handleSSEMessage = (event) => {
-      const newNotification = JSON.parse(event.data);
+    const handleSSEMessage = (newNotification) => {
       setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
     };
 
@@ -114,22 +113,20 @@ const Match = ({ latitude, longitude, preferCourt }) => {
         const membersData = await getGroupMembers();
         const userData = await getUser();
 
-        if (membersData && Array.isArray(membersData.members)) {
+        if (!membersData || !Array.isArray(membersData.members) || membersData.members.length === 0) {
+          setIsInGroup(false);
+          setGroupMembers([]);
+          setIsGroupMaster(false);
+        } else {
           if (!membersData.members.includes(userData.nickname)) {
             membersData.members.unshift(userData.nickname);
           }
           setIsInGroup(true);
           setGroupMembers(membersData.members);
           setIsGroupMaster(membersData.members[0] === userData.nickname);
-        } else {
-          alert("가입된 그룹이 없습니다.");
-          setIsInGroup(false);
-          setGroupMembers([]);
-          return;
         }
       } catch (error) {
         console.error("그룹 멤버 조회 실패:", error);
-        alert("그룹 멤버 조회 실패");
         return;
       }
     }
@@ -158,7 +155,7 @@ const Match = ({ latitude, longitude, preferCourt }) => {
 
     if (matchType === "팀") {
       members = await getGroupMembers();
-      if (!members) {
+      if (!members || members.length === 0) {
         alert("그룹원 조회 실패");
         return;
       }
@@ -237,7 +234,7 @@ const Match = ({ latitude, longitude, preferCourt }) => {
           disabled={matchingInProgress || gaming}
         />
       </div>
-      {matchType === "팀" && (
+      {matchType === "팀" && isInGroup && (
         <>
           <Teaminvite disabled={matchingInProgress || gaming} />
           <TeamMemberActions disabled={matchingInProgress || gaming} />
