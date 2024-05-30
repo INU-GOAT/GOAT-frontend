@@ -15,7 +15,7 @@ function ClubInfo() {
   const [longitude, setLongitude] = useState(null);
   const [preferCourt, setPreferCourt] = useState('');
 
-  const clubId = location.state?.clubId;
+  const clubId = location.state?.clubId || location.state?.id; // 경로 상태에서 clubId 또는 id 사용
   const token = localStorage.getItem("accessToken");
 
   const fetchClubInfo = useCallback(async () => {
@@ -24,12 +24,14 @@ function ClubInfo() {
       return;
     }
     try {
+      // Fetch club information
       const response = await axios.get(`http://15.165.113.9:8080/api/clubs/${clubId}`, {
         headers: { auth: token },
       });
       const clubData = response.data.data;
       setClubInfo(clubData);
 
+      // Fetch user information to determine if the user is the club master
       const userResponse = await axios.get("http://15.165.113.9:8080/api/users", {
         headers: { auth: token },
       });
@@ -39,7 +41,7 @@ function ClubInfo() {
       console.log("클럽 정보:", clubData);
       console.log("클럽장 여부:", userData.id === clubData.clubMaster);
     } catch (error) {
-      console.error("Error fetching clubinfo", error);
+      console.error("Error fetching club info", error);
     }
   }, [clubId, token]);
 
@@ -57,7 +59,7 @@ function ClubInfo() {
       alert('클럽명이 성공적으로 업데이트되었습니다.');
       setClubInfo(response.data.data);
     } catch (error) {
-      console.error("Error updating clubname", error);
+      console.error("Error updating club name", error);
       alert('클럽명 업데이트 중 오류가 발생했습니다.');
     }
   };
