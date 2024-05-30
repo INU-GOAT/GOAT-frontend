@@ -32,10 +32,19 @@ function Club() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // 선택된 종목을 한글로 변환하는 함수
+    const sportMapping = {
+      soccer: '축구',
+      basketBall: '농구',
+      badminton: '배드민턴',
+      tableTennis: '탁구'
+    };
+
     try {
       const response = await axios.post("http://15.165.113.9:8080/api/clubs", {
         name: clubname,
-        sport: selectedSport,
+        sport: sportMapping[selectedSport] || selectedSport,  // 한글로 변환된 값을 사용
       }, {
         headers: { auth: localStorage.getItem("accessToken") },
       });
