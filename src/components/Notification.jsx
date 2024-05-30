@@ -105,7 +105,7 @@ const Notification = ({ onDelete, showNotifications, setShowNotifications }) => 
                 <button onClick={() => handleDecline(notification.id)}>거절</button>
               </>
             )}
-            {notification.type === "GAMING" && (
+            {notification.type === "MATCHING" && (
               <>
                 <button onClick={handleNavigateToChat}>바로이동</button>
               </>
