@@ -107,3 +107,55 @@
 .notification-popup li button:hover {
   text-decoration: underline;
 }
+
+/* 반응형 디자인 추가 */
+@media (max-width: 768px) {
+  .nav-items {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    align-items: flex-start;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+
+  .nav-items.show {
+    display: flex;
+  }
+
+  .nav-items > li {
+    margin: 0;
+    width: 100%;
+  }
+
+  .nav-items > li > button {
+    width: 100%;
+    text-align: left;
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+
+  .menu-button {
+    display: block;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    color: rgba(0, 0, 0, 0.4);
+  }
+
+  .menu-button:hover,
+  .menu-button:focus {
+    color: rgba(0, 0, 0, 0.8);
+  }
+}
+
+@media (min-width: 769px) {
+  .menu-button {
+    display: none;
+  }
+}
