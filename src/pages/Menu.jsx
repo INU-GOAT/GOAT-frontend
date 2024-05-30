@@ -72,7 +72,7 @@ function Menu() {
           </ul>
           <div className="notification-container">
             <button className="notification-button" onClick={toggleNotifications}>알림</button>
-            {showNotifications && <Notification onDelete={handleNotificationDelete} />}
+            <Notification onDelete={handleNotificationDelete} showNotifications={showNotifications} setShowNotifications={setShowNotifications} />
           </div>
         </nav>
       </header>
