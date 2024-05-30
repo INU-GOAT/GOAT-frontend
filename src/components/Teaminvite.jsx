@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import getUser from "../apis/getUser";  // getUser API는 여전히 필요할 수 있습니다.
 import { inviteToGroup, expelGroupMember } from "../apis/group";
 import CircularProgress from '@mui/material/CircularProgress';
 import './Teaminvite.css';
 
-const Teaminvite = ({ disabled }) => {
+const Teaminvite = ({ disabled, isGroupMaster }) => {
   const [inputValue, setInputValue] = useState("");
   const [error, setError] = useState("");
   const [invitedUsers, setInvitedUsers] = useState([]);
@@ -14,40 +13,29 @@ const Teaminvite = ({ disabled }) => {
     setInputValue(e.target.value);
   };
 
-  const resetForm = () => {
-    setInputValue("");
-    setError("");
-    setLoading(false);
-  };
-
   const handleAddUser = async () => {
-    if (!inputValue.trim()) {
+    if (inputValue.trim() === "") {
       setError("유저 닉네임을 입력하세요.");
       return;
     }
 
     setLoading(true);
-    const user = await getUser(inputValue.trim());
-    if (!user) {
-      setError("유저 닉네임이 존재하지 않습니다.");
-      resetForm();
-      return;
-    }
-
     const result = await inviteToGroup(inputValue.trim());
-    if (!result) {
-      setError("그룹 초대 실패.");
-      resetForm();
+    if (result.error) {
+      setError("그룹 초대 실패: " + result.error);
+      setLoading(false);
       return;
     }
 
-    setInvitedUsers([...invitedUsers, { id: user.id, nickname: inputValue.trim(), confirmed: false }]);
-    resetForm();
+    setInvitedUsers([...invitedUsers, { id: result.notificationId, nickname: inputValue.trim(), confirmed: false }]);
+    setInputValue("");
+    setError("");
+    setLoading(false);
   };
 
   const handleRemoveUser = async (memberId) => {
     const result = await expelGroupMember(memberId);
-    if (result) {
+    if (!result.error) {
       setInvitedUsers(invitedUsers.filter((user) => user.id !== memberId));
     }
   };

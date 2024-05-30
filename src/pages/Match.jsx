@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import MatchType from "../components/Matchtype";
 import Teaminvite from "../components/Teaminvite";
 import Sport from "../components/Sport";
-import Timelist from "../components/Timelist";
 import Matching from "../components/Matching";
 import TeamMemberActions from "../components/TeamMemberActions";
 import { startMatching, cancelMatching, getMatching } from "../apis/matching";
 import getUser from "../apis/getUser";
-import { getGroupMembers } from "../apis/group";
+import { getGroupMembers, acceptGroupInvitation } from "../apis/group";
+import Notification from "../components/Notification";
+import { getNotifications, deleteNotification, connectSSE, disconnectSSE } from "../apis/notification";
 import "./css/Match.css";
 import SetTime from "./../components/SetTime";
 
@@ -18,10 +19,12 @@ const Match = ({ latitude, longitude, preferCourt }) => {
   const [selectedTime, setSelectedTime] = useState([]);
   const [matchingInProgress, setMatchingInProgress] = useState(false);
   const [gaming, setGaming] = useState(false);
-  const [notification, setNotification] = useState("");
+  const [notifications, setNotifications] = useState([]);
   const [preferSport, setPreferSport] = useState("");
   const [matchStartTimes, setMatchStartTimes] = useState([]);
   const [isInGroup, setIsInGroup] = useState(false);
+  const [groupMembers, setGroupMembers] = useState([]);
+  const [isGroupMaster, setIsGroupMaster] = useState(false);
 
   const navigate = useNavigate();
 
@@ -32,10 +35,10 @@ const Match = ({ latitude, longitude, preferCourt }) => {
         console.log("User data fetched:", userData);
         if (userData && userData.status === "GAMING") {
           setGaming(true);
-          setNotification("매칭이 잡혔습니다.");
+          setNotifications([{ id: 0, content: "매칭이 잡혔습니다." }]);
 
           const matchingData = await getMatching();
-          if (matchingData && matchingData.data !== -1) {
+          if (matchingData) {
             setSelectedSport(matchingData.sport);
             setMatchStartTimes(matchingData.matchStartTimes);
             setMatchType(matchingData.isClubMatching ? "팀" : "솔로");
@@ -53,45 +56,68 @@ const Match = ({ latitude, longitude, preferCourt }) => {
           }
         } else if (userData && userData.status === "WAITING") {
           const matchingData = await getMatching();
-          if (matchingData && matchingData.data !== -1) {
+          if (matchingData) {
             setSelectedSport(matchingData.sport);
             setMatchStartTimes(matchingData.matchStartTimes);
           }
         }
+
       } catch (error) {
         console.error("User data fetch failed:", error);
       }
     };
 
+    const fetchNotifications = async () => {
+      try {
+        const notifications = await getNotifications();
+        setNotifications(notifications);
+      } catch (error) {
+        console.error("Failed to fetch notifications:", error);
+      }
+    };
+
+    const handleSSEMessage = (newNotification) => {
+      setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
+    };
+
+    const sse = connectSSE(handleSSEMessage);
+
     fetchUserData();
+    fetchNotifications();
+
+    return () => {
+      disconnectSSE(sse);
+    };
   }, []);
 
-  const handleMatchTypeClick = async (type) => {
-    if (type === "솔로" && isInGroup) {
-      return;
-    }
-
-    if (type === "팀") {
+  useEffect(() => {
+    const fetchGroupData = async () => {
       try {
-        const groupMembers = await getGroupMembers();
-        if (
-          groupMembers &&
-          groupMembers.data !== -1 &&
-          Array.isArray(groupMembers.members) &&
-          groupMembers.members.length > 0
-        ) {
+        const membersData = await getGroupMembers();
+        if (membersData && Array.isArray(membersData.members) && membersData.members.length > 0) {
           setIsInGroup(true);
+          setGroupMembers(membersData.members);
+          const userData = await getUser();
+          if (membersData.members[0] === userData.nickname) {
+            setIsGroupMaster(true);
+          } else {
+            setIsGroupMaster(false);
+          }
         } else {
-          alert("가입된 그룹이 없습니다.");
-          return;
+          setIsInGroup(false);
+          setGroupMembers([]);
         }
       } catch (error) {
-        console.error("그룹 멤버 조회 실패:", error);
-        alert("그룹 멤버 조회 실패");
-        return;
+        console.error("Failed to fetch group data:", error);
       }
-    }
+    };
 
+    if (isInGroup) {
+      fetchGroupData();
+    }
+  }, [isInGroup]);
+
+  const handleMatchTypeClick = (type) => {
     setMatchType(type);
   };
 
@@ -112,18 +138,19 @@ const Match = ({ latitude, longitude, preferCourt }) => {
       return;
     }
 
-    let groupMembers = [];
+    let members = [];
 
     if (matchType === "팀") {
-      groupMembers = await getGroupMembers();
-      if (!groupMembers || groupMembers.data === -1) {
+      const membersData = await getGroupMembers();
+      if (membersData.error || !membersData.members) {
         alert("그룹원 조회 실패");
         return;
       }
+      members = membersData.members;
     } else if (matchType === "솔로") {
       const userData = await getUser();
       if (userData) {
-        groupMembers = [{ id: userData.id }];
+        members = [{ id: userData.id }];
       } else {
         alert("유저 정보를 불러오지 못했습니다.");
         return;
@@ -161,7 +188,7 @@ const Match = ({ latitude, longitude, preferCourt }) => {
         const userData = await getUser();
         if (userData && userData.status === "WAITING") {
           const matchingData = await getMatching();
-          if (matchingData && matchingData.data !== -1) {
+          if (matchingData) {
             setSelectedSport(matchingData.sport);
             setMatchStartTimes(matchingData.matchStartTimes);
           }
@@ -173,8 +200,27 @@ const Match = ({ latitude, longitude, preferCourt }) => {
     }
   };
 
-  const handleAcceptNotification = () => {
-    navigate("/ChatHandler");
+  const handleAcceptNotification = async (notificationId) => {
+    try {
+      const result = await acceptGroupInvitation(notificationId, true);
+      if (result) {
+        const membersData = await getGroupMembers();
+        if (membersData && Array.isArray(membersData.members) && membersData.members.length > 0) {
+          setIsInGroup(true);
+          setGroupMembers(membersData.members);
+          const userData = await getUser();
+          if (membersData.members[0] === userData.nickname) {
+            setIsGroupMaster(true);
+          } else {
+            setIsGroupMaster(false);
+          }
+        }
+      }
+      await deleteNotification(notificationId);
+      navigate("/ChatHandler");
+    } catch (error) {
+      console.error("초대 수락 실패:", error.response ? error.response.data : error.message);
+    }
   };
 
   return (
@@ -185,7 +231,7 @@ const Match = ({ latitude, longitude, preferCourt }) => {
           matchType="솔로"
           isSelected={matchType === "솔로"}
           onClick={handleMatchTypeClick}
-          disabled={matchingInProgress || gaming || isInGroup}
+          disabled={matchingInProgress || gaming}
         />
         <MatchType
           matchType="팀"
@@ -196,8 +242,8 @@ const Match = ({ latitude, longitude, preferCourt }) => {
       </div>
       {matchType === "팀" && (
         <>
-          <Teaminvite disabled={matchingInProgress || gaming} />
-          <TeamMemberActions disabled={matchingInProgress || gaming} />
+          <Teaminvite disabled={matchingInProgress || gaming} isGroupMaster={isGroupMaster} />
+          <TeamMemberActions disabled={!isGroupMaster || matchingInProgress || gaming} />
         </>
       )}
       <div>
@@ -208,7 +254,7 @@ const Match = ({ latitude, longitude, preferCourt }) => {
           setSport={setSelectedSport}
           preferSport={preferSport}
           setPreferSport={setPreferSport}
-          disabled={matchingInProgress || gaming}
+          disabled={matchingInProgress || gaming || (!isGroupMaster && isInGroup)}
           matchType={matchType}
         />
       </div>
@@ -216,7 +262,7 @@ const Match = ({ latitude, longitude, preferCourt }) => {
       <div>
         <SetTime
           setTimeArray={setSelectedTime}
-          disabled={matchingInProgress || gaming}
+          disabled={matchingInProgress || gaming || (!isGroupMaster && isInGroup)}
         />
       </div>
       <Matching
@@ -228,10 +274,19 @@ const Match = ({ latitude, longitude, preferCourt }) => {
         matchingInProgress={matchingInProgress}
         gaming={gaming}
       />
-      {notification && (
-        <div className="notification-popup">
-          <p>{notification}</p>
-          <button onClick={handleAcceptNotification}>수락</button>
+      {notifications.length > 0 && (
+        <div className="notifications-popup">
+          {notifications.map((notification) => (
+            <div key={notification.id} className="notification-item">
+              <p>{notification.content}</p>
+              {notification.type === "invite" && (
+                <>
+                  <button onClick={() => handleAcceptNotification(notification.id)}>수락</button>
+                  <button onClick={() => deleteNotification(notification.id)}>거절</button>
+                </>
+              )}
+            </div>
+          ))}
         </div>
       )}
     </div>

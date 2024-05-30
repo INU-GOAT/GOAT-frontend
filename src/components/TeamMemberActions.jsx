@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getGroupMembers, leaveGroup } from '../apis/group';
+import { getGroupMembers, leaveGroup, expelGroupMember } from '../apis/group';
 import './TeamMemberActions.css';
 
 const TeamMemberActions = ({ disabled }) => {
@@ -26,11 +26,18 @@ const TeamMemberActions = ({ disabled }) => {
   const handleLeaveGroup = async () => {
     try {
       const result = await leaveGroup();
-      if (result) {
+      if (!result.error) {
         setGroupMembers([]);
       }
     } catch (err) {
       setError('그룹 탈퇴에 실패했습니다.');
+    }
+  };
+
+  const handleRemoveUser = async (memberId) => {
+    const result = await expelGroupMember(memberId);
+    if (!result.error) {
+      setGroupMembers(groupMembers.filter((member) => member.id !== memberId));
     }
   };
 
@@ -42,6 +49,9 @@ const TeamMemberActions = ({ disabled }) => {
         {groupMembers.map((member) => (
           <li key={member.id} className="group-member-list-item">
             {member.nickname}
+            <button onClick={() => handleRemoveUser(member.id)} disabled={disabled}>
+              추방
+            </button>
           </li>
         ))}
       </ul>

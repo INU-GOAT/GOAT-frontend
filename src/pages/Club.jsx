@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { useNavigate,useLocation } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 import "./css/Club.css";
 import Sport from '../components/Sport';
 
@@ -10,32 +11,61 @@ function Club() {
   const [preferSport, setPreferSport] = useState('');
   const [matchingInProgress, setMatchingInProgress] = useState(false);
 
-  const [clubs, setClubs] = useState([
-    { id: 1, name: '축구 클럽', intro: '우리는 축구를 사랑합니다.', majorSport:'soccer', members: ['김철수', '이영희'] },
-    { id: 2, name: '농구 클럽', intro: '농구는 우리의 열정입니다.', majorSport:'basketball', members: ['박지성', '홍길동'] },
-  ]);
-
+  const [clubs, setClubs] = useState([]);
   const [selectedClub, setSelectedClub] = useState(null);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(`submit! ${clubname} ${intro} ${selectedSport}`);
-    const newClub = { id: clubs.length + 1, name: clubname, intro, members: ['김철수', '이영희', '박지성'], majorSport: selectedSport };
-    setClubs([...clubs, newClub]);
-    navigate("/ClubInfo", { state: newClub }); 
+  useEffect(() => {
+    getClubs();
+  }, []);
+
+  const getClubs = async () => {
+    try {
+      const response = await axios.get("http://15.165.113.9:8080/api/clubs", {
+        headers: { auth: localStorage.getItem("accessToken") },
+      });
+      setClubs(response.data.data || []);
+    } catch (error) {
+      console.error("Error fetching clubs", error);
+    }
   };
 
-const handleClubClick = (clubId) => {
-  const club = clubs.find(c => c.id === clubId);
-  if (club) {
-    setSelectedClub(club);
-  }
-};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("http://15.165.113.9:8080/api/clubs", {
+        name: clubname,
+        sport: selectedSport,
+      }, {
+        headers: { auth: localStorage.getItem("accessToken") },
+      });
+      const newClub = response.data.data;
+      setClubs([...clubs, newClub]);
+      navigate("/ClubInfo", { state: newClub });
+    } catch (error) {
+      console.error("Error creating club", error);
+      if (error.response) {
+        console.error("Server response:", error.response.data);
+      }
+    }
+  };
 
+  const handleClubClick = (clubId) => {
+    const club = clubs.find(c => c.id === clubId);
+    if (club) {
+      setSelectedClub(club);
+    }
+  };
 
-  const handleJoinRequest = () => {
-    alert(`가입 신청이 ${selectedClub.name}에 제출되었습니다.`);
+  const handleJoinRequest = async () => {
+    try {
+      await axios.post(`http://15.165.113.9:8080/api/clubs/applicant/${selectedClub.id}`, {}, {
+        headers: { auth: localStorage.getItem("accessToken") },
+      });
+      alert(`가입 신청이 ${selectedClub.name}에 제출되었습니다.`);
+    } catch (error) {
+      console.error("Error joining club", error);
+    }
   };
 
   return (
