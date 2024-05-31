@@ -24,7 +24,7 @@ function Menu() {
   const handleNavigation = (path) => (event) => {
     event.preventDefault();
     navigate(path);
-    setMenuOpen(false); // 메뉴 항목을 클릭하면 드롭다운 메뉴를 닫습니다.
+    setMenuOpen(false);
   };
 
   const toggleMenu = () => {
