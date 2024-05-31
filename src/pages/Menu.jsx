@@ -24,7 +24,7 @@ function Menu() {
   const handleNavigation = (path) => (event) => {
     event.preventDefault();
     navigate(path);
-    setMenuOpen(false);
+    setMenuOpen(false); // 메뉴 항목을 클릭하면 드롭다운 메뉴를 닫습니다.
   };
 
   const toggleMenu = () => {
@@ -72,7 +72,7 @@ function Menu() {
           </ul>
           <div className="notification-container">
             <button className="notification-button" onClick={toggleNotifications}>알림</button>
-            {showNotifications && <Notification onDelete={handleNotificationDelete} />}
+            <Notification onDelete={handleNotificationDelete} showNotifications={showNotifications} setShowNotifications={setShowNotifications} />
           </div>
         </nav>
       </header>
