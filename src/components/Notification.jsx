@@ -28,7 +28,7 @@ const Notification = ({ onDelete, showNotifications, setShowNotifications }) => 
       const newNotification = JSON.parse(event.data);
       console.log("New Notification Received: ", newNotification);
       setLocalNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
-      setShowNotifications(true);
+      setShowNotifications(true); // 알림창을 자동으로 팝업
 
       if (Notification.permission === "granted") {
         new Notification(newNotification.content);
