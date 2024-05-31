@@ -153,7 +153,7 @@ function Chat() {
   const [notVotedCount, setNotVotedCount] = useState(0);
   const [votedCourts, setVotedCourts] = useState([]);
 
-  const [value, setValue] = useState("chat");
+  const [value, setValue] = useState("location");
 
   const getChat = async () => {
     try {
